@@ -15,7 +15,7 @@
     "cache",
     "mobile"
   ],
-  "author": "Vladimir Timofeev (vovkasm@gmail.com)",
+  "author": "Vladimir Timofeev <vovkasm@gmail.com>",
   "homepage": "https://github.com/vovkasm/react-native-web-image",
   "bugs": {
     "url": "https://github.com/vovkasm/react-native-web-image/issues"
