@@ -13,7 +13,7 @@ public class WebImagePackage implements ReactPackage {
 
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
-        return Collections.<NativeModule>singletonList(new WebImageModule(reactContext));
+        return Collections.emptyList();
     }
 
     @Override
@@ -23,6 +23,6 @@ public class WebImagePackage implements ReactPackage {
 
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
-        return Collections.emptyList();
+        return Collections.<ViewManager>singletonList(new WebImageViewManager());
     }
 }
