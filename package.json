@@ -1,0 +1,11 @@
+{
+  "name": "react-native-web-image",
+  "version": "0.0.1",
+  "description": "React Native module to show images from web with cache",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Vladimir Timofeev",
+  "license": "MIT"
+}
