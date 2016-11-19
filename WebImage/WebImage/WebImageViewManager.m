@@ -23,7 +23,9 @@
 RCT_EXPORT_MODULE()
 
 - (UIView*)view {
-    return [[UIImageView alloc] init];
+    UIImageView* view = [[UIImageView alloc] init];
+    view.contentMode = UIViewContentModeScaleAspectFit;
+    return view;
 }
 
 RCT_CUSTOM_VIEW_PROPERTY(source, WebImageSource, UIImageView) {
