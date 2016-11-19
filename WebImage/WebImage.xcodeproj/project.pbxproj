@@ -8,7 +8,47 @@
 
 /* Begin PBXBuildFile section */
 		A28797311DE0C1E90081BDFA /* WebImageViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A28797301DE0C1E90081BDFA /* WebImageViewManager.m */; };
+		A28797471DE0CAB10081BDFA /* libSDWebImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A287973E1DE0CA5B0081BDFA /* libSDWebImage.a */; };
+		A287974A1DE0CE9B0081BDFA /* WebImageSource.m in Sources */ = {isa = PBXBuildFile; fileRef = A28797491DE0CE9B0081BDFA /* WebImageSource.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A287973D1DE0CA5B0081BDFA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A28797341DE0CA5B0081BDFA /* SDWebImage.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 53761325155AD0D5005750A4;
+			remoteInfo = SDWebImage;
+		};
+		A287973F1DE0CA5B0081BDFA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A28797341DE0CA5B0081BDFA /* SDWebImage.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 537D95C117ECC1FE0097C263;
+			remoteInfo = "SDWebImage+WebP";
+		};
+		A28797411DE0CA5B0081BDFA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A28797341DE0CA5B0081BDFA /* SDWebImage.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 531041E0157EAFA400BBABC3;
+			remoteInfo = "SDWebImage+MKAnnotation";
+		};
+		A28797431DE0CA5B0081BDFA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A28797341DE0CA5B0081BDFA /* SDWebImage.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4A2CADFF1AB4BB5300B6BC39;
+			remoteInfo = WebImage;
+		};
+		A28797451DE0CA5B0081BDFA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A28797341DE0CA5B0081BDFA /* SDWebImage.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 00733A4C1BC487C000A5A117;
+			remoteInfo = "WebImage tvOS";
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		A287971B1DE0C0A60081BDFA /* CopyFiles */ = {
@@ -26,6 +66,9 @@
 		A287971D1DE0C0A60081BDFA /* libWebImage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libWebImage.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A28797301DE0C1E90081BDFA /* WebImageViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebImageViewManager.m; sourceTree = "<group>"; };
 		A28797321DE0C2000081BDFA /* WebImageViewManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WebImageViewManager.h; sourceTree = "<group>"; };
+		A28797341DE0CA5B0081BDFA /* SDWebImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDWebImage.xcodeproj; path = Vendor/SDWebImage/SDWebImage.xcodeproj; sourceTree = "<group>"; };
+		A28797481DE0CE9B0081BDFA /* WebImageSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebImageSource.h; sourceTree = "<group>"; };
+		A28797491DE0CE9B0081BDFA /* WebImageSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebImageSource.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,6 +76,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A28797471DE0CAB10081BDFA /* libSDWebImage.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -42,6 +86,7 @@
 		A28797141DE0C0A60081BDFA = {
 			isa = PBXGroup;
 			children = (
+				A28797331DE0CA420081BDFA /* Vendor */,
 				A287971F1DE0C0A60081BDFA /* WebImage */,
 				A287971E1DE0C0A60081BDFA /* Products */,
 			);
@@ -60,8 +105,30 @@
 			children = (
 				A28797301DE0C1E90081BDFA /* WebImageViewManager.m */,
 				A28797321DE0C2000081BDFA /* WebImageViewManager.h */,
+				A28797481DE0CE9B0081BDFA /* WebImageSource.h */,
+				A28797491DE0CE9B0081BDFA /* WebImageSource.m */,
 			);
 			path = WebImage;
+			sourceTree = "<group>";
+		};
+		A28797331DE0CA420081BDFA /* Vendor */ = {
+			isa = PBXGroup;
+			children = (
+				A28797341DE0CA5B0081BDFA /* SDWebImage.xcodeproj */,
+			);
+			name = Vendor;
+			sourceTree = "<group>";
+		};
+		A28797351DE0CA5B0081BDFA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A287973E1DE0CA5B0081BDFA /* libSDWebImage.a */,
+				A28797401DE0CA5B0081BDFA /* libSDWebImage+WebP.a */,
+				A28797421DE0CA5B0081BDFA /* libSDWebImage+MKAnnotation.a */,
+				A28797441DE0CA5B0081BDFA /* WebImage.framework */,
+				A28797461DE0CA5B0081BDFA /* WebImage.framework */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -109,6 +176,12 @@
 			mainGroup = A28797141DE0C0A60081BDFA;
 			productRefGroup = A287971E1DE0C0A60081BDFA /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = A28797351DE0CA5B0081BDFA /* Products */;
+					ProjectRef = A28797341DE0CA5B0081BDFA /* SDWebImage.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				A287971C1DE0C0A60081BDFA /* WebImage */,
@@ -116,12 +189,51 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXReferenceProxy section */
+		A287973E1DE0CA5B0081BDFA /* libSDWebImage.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libSDWebImage.a;
+			remoteRef = A287973D1DE0CA5B0081BDFA /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A28797401DE0CA5B0081BDFA /* libSDWebImage+WebP.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libSDWebImage+WebP.a";
+			remoteRef = A287973F1DE0CA5B0081BDFA /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A28797421DE0CA5B0081BDFA /* libSDWebImage+MKAnnotation.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libSDWebImage+MKAnnotation.a";
+			remoteRef = A28797411DE0CA5B0081BDFA /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A28797441DE0CA5B0081BDFA /* WebImage.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = WebImage.framework;
+			remoteRef = A28797431DE0CA5B0081BDFA /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A28797461DE0CA5B0081BDFA /* WebImage.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = WebImage.framework;
+			remoteRef = A28797451DE0CA5B0081BDFA /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
 /* Begin PBXSourcesBuildPhase section */
 		A28797191DE0C0A60081BDFA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				A28797311DE0C1E90081BDFA /* WebImageViewManager.m in Sources */,
+				A287974A1DE0CE9B0081BDFA /* WebImageSource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
