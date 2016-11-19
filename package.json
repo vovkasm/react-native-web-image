@@ -1,11 +1,28 @@
 {
   "name": "react-native-web-image",
   "version": "0.0.1",
-  "description": "React Native module to show images from web with cache",
+  "description": "An image component for react-native with persistent disk and memory caching",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Vladimir Timofeev",
+  "keywords": [
+    "react-native",
+    "react-component",
+    "ios",
+    "android",
+    "cache-image",
+    "cache",
+    "mobile"
+  ],
+  "author": "Vladimir Timofeev (vovkasm@gmail.com)",
+  "homepage": "https://github.com/vovkasm/react-native-web-image",
+  "bugs": {
+    "url": "https://github.com/vovkasm/react-native-web-image/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/vovkasm/react-native-web-image.git"
+  },
   "license": "MIT"
 }
