@@ -35,7 +35,7 @@ class WebImageViewManager extends SimpleViewManager<ImageView> {
         if (source == null) return;
         final String uriProp = source.getString("uri");
         final Uri uri = Uri.parse(uriProp);
-        final String resizeModeProp = source.getString("resizeMode");
+        final String resizeModeProp = source.hasKey("resizeMode") ? source.getString("resizeMode") : ResizeMode.contain;
 
         final DrawableTypeRequest request = Glide.with(view.getContext()).load(uri);
         DrawableRequestBuilder builder = null;
