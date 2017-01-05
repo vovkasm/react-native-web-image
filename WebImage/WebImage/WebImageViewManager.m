@@ -13,7 +13,7 @@
 
 + (WebImageSource*)WebImageSource:(id)json {
     json = [self NSDictionary:json];
-    return [[WebImageSource alloc] initWithURI:json[@"uri"]];
+    return [[WebImageSource alloc] initWithDictionary:json];
 }
 
 @end
@@ -31,6 +31,13 @@ RCT_EXPORT_MODULE()
 RCT_CUSTOM_VIEW_PROPERTY(source, WebImageSource, UIImageView) {
     if (json) {
         WebImageSource* src = [RCTConvert WebImageSource:json];
+        
+        if ([@"cover" isEqualToString:src.resizeMode]) {
+            view.contentMode = UIViewContentModeScaleAspectFill;
+        } else if ([@"contain" isEqualToString:src.resizeMode]) {
+            view.contentMode = UIViewContentModeScaleAspectFit;
+        }
+
         [view sd_setImageWithURL:src.uri];
     }
 }

@@ -5,6 +5,21 @@ const resolveAssetSource = require('react-native/Libraries/Image/resolveAssetSou
 
 const URISourcePropType = PropTypes.shape({
   uri: PropTypes.string,
+
+  /**
+     * Determines how to resize the image when the frame doesn't match the raw
+     * image dimensions.
+     *
+     * 'cover': Scale the image uniformly (maintain the image's aspect ratio)
+     * so that both dimensions (width and height) of the image will be equal
+     * to or larger than the corresponding dimension of the view (minus padding).
+     *
+     * 'contain': Scale the image uniformly (maintain the image's aspect ratio)
+     * so that both dimensions (width and height) of the image will be equal to
+     * or less than the corresponding dimension of the view (minus padding).
+     *
+     */
+  resizeMode: PropTypes.oneOf(['cover', 'contain']),
 })
 const SourcePropType = PropTypes.oneOfType([URISourcePropType, PropTypes.number]);
 
