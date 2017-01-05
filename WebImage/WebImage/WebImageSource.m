@@ -10,13 +10,4 @@
     return self;
 }
 
-- (instancetype)initWithDictionary:(NSDictionary*)json {
-    self = [super init];
-    if (self) {
-        _uri = [json[@"uri"] copy];
-        _resizeMode = [json[@"resizeMode"] copy];
-    }
-    return self;
-}
-
 @end
