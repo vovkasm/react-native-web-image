@@ -70,11 +70,11 @@ const styles = StyleSheet.create({
 <WebImage source={source}/>
 ```
 
-Attribute  | Type   | Required | Description
------------|--------|---------------------
-source     | Object | Yes      | Describes image source (mimics original Image element)
-source.uri | String | Yes      | URL of the image
-resizeMode | Enum{'cover','contain','stretch','center'} | No | Determine resize mode for image. Default: 'contain'
+| Attribute  | Type   | Required | Description |
+| ---------- | ------ | -------- | ----------- |
+| source     | Object | Yes      | Describes image source (mimics original Image element) |
+| source.uri | String | Yes      | URL of the image |
+| resizeMode | Enum{'cover','contain','stretch','center'} | No | Determine resize mode for image. Default: 'contain' |
 
 #### Resize modes
 
