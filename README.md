@@ -62,9 +62,41 @@ const styles = StyleSheet.create({
 })
 ```
 
+## API
+
+### WebImage element
+
+```javascript
+<WebImage source={source}/>
+```
+
+Attribute  | Type   | Required | Description
+-----------|--------|---------------------
+source     | Object | Yes      | Describes image source (mimics original Image element)
+source.uri | String | Yes      | URL of the image
+resizeMode | Enum{'cover','contain','stretch','center'} | No | Determine resize mode for image. Default: 'contain'
+
+#### Resize modes
+
+* **contain** - Scale the image uniformly (maintain the image's aspect ratio)
+  so that both dimensions (width and height) of the image will be equal to or
+  less than the corresponding dimension of the view (minus padding).
+* **cover** - Scale the image uniformly so that both dimensions (width and
+  height) of the image will be equal to or larger than the corresponding
+  dimension of the view (minus padding).
+* **stretch** - Scale width and height independently, aspect ration will not be
+  preserved.
+* **center** - Scale the image down so that it is completely visible, if bigger
+  than the area of the view. The image will not be scaled up. The image will be
+  placed at the center of the view.
+
 ## Author
 
 [Vladimir Timofeev](https://github.com/vovkasm)
+
+## Contributors
+
+* [iisue](https://github.com/iisue)
 
 ## License
 
