@@ -15,6 +15,12 @@ npm install --save react-native-web-image
 react-native link
 ```
 
+| version | react-native |
+| ------- | ------------ |
+| 0.0.3 (planned) | &gt;=0.40.0 |
+| 0.0.2   | &lt;0.40.0 (tested with 0.37.0) |
+| 0.0.1   | &lt;0.40.0 (tested with 0.37.0) |
+
 ## Usage
 
 ```javascript
