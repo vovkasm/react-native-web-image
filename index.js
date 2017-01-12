@@ -4,15 +4,15 @@ import { requireNativeComponent, View } from 'react-native'
 const resolveAssetSource = require('react-native/Libraries/Image/resolveAssetSource')
 
 const URISourcePropType = PropTypes.shape({
-  uri: PropTypes.string,
+  uri: PropTypes.string
 })
-const SourcePropType = PropTypes.oneOfType([URISourcePropType, PropTypes.number]);
+const SourcePropType = PropTypes.oneOfType([URISourcePropType, PropTypes.number])
 
 class WebImage extends React.Component {
   static propTypes = {
     ...View.propTypes,
     source: SourcePropType.isRequired,
-    
+
     /**
      * Determines how to resize the image when the frame doesn't match the raw
      * image dimensions.
@@ -32,20 +32,20 @@ class WebImage extends React.Component {
      * if bigger than the area of the view.
      * The image will not be scaled up.
      */
-    resizeMode: PropTypes.oneOf(['cover', 'contain', 'stretch', 'center']),
+    resizeMode: PropTypes.oneOf(['cover', 'contain', 'stretch', 'center'])
   }
 
-  render() {
+  render () {
     const { source, ...props } = this.props
     const resolvedSource = resolveAssetSource(source)
 
-    return <WebImageView {...props} source={resolvedSource}/>
+    return <WebImageView {...props} source={resolvedSource} />
   }
 }
 
 WebImage.defaultProps = {
-    resizeMode: 'contain',
-};
+  resizeMode: 'contain'
+}
 
 var WebImageView = requireNativeComponent('WebImageView', WebImage)
 
