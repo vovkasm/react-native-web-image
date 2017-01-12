@@ -3,7 +3,7 @@
 
 #import <SDWebImage/UIImageView+WebCache.h>
 
-#import "RCTViewManager.h"
+#import <React/RCTViewManager.h>
 
 @interface WebImageViewManager : RCTViewManager
 

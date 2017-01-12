@@ -15,6 +15,14 @@
     "cache",
     "mobile"
   ],
+  "files": [
+    ".babelrc",
+    "android",
+    "WebImage",
+    "index.js",
+    "LICENSE",
+    "README.md"
+  ],
   "author": "Vladimir Timofeev <vovkasm@gmail.com>",
   "homepage": "https://github.com/vovkasm/react-native-web-image",
   "bugs": {
@@ -24,5 +32,20 @@
     "type": "git",
     "url": "git://github.com/vovkasm/react-native-web-image.git"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "babel-eslint": "^7.0.0",
+    "babel-preset-react-native": "^1.9.0",
+    "eslint": "^3.3.1",
+    "eslint-config-standard": "^6.2.1",
+    "eslint-config-standard-react": "^4.2.0",
+    "eslint-plugin-classes": "^0.1.1",
+    "eslint-plugin-import": "^2.0",
+    "eslint-plugin-promise": "^3.4.0",
+    "eslint-plugin-react": "^6.8.0",
+    "eslint-plugin-react-native": "^2.0.0",
+    "eslint-plugin-standard": "^2.0.1",
+    "react": "15.4.2",
+    "react-native": "0.40.0"
+  }
 }
