@@ -4,7 +4,10 @@
   "description": "An image component for react-native with persistent disk and memory caching",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npm run start-sample --",
+    "start-sample": "react-native start --root samples/SampleApp",
+    "run-sample-android": "react-native run-android --root samples/SampleApp",
+    "run-sample-ios": "react-native run-ios --project-path samples/SampleApp/ios"
   },
   "keywords": [
     "react-native",
