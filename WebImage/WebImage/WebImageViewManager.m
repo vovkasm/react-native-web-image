@@ -1,7 +1,6 @@
 #import "WebImageViewManager.h"
 #import "WebImageSource.h"
-
-#import <SDWebImage/UIImageView+WebCache.h>
+#import "WebImageView.h"
 
 #import <React/RCTViewManager.h>
 
@@ -14,7 +13,7 @@
 + (WebImageSource*)WebImageSource:(id)json {
 
     json = [self NSDictionary:json];
-    return [[WebImageSource alloc] initWithURI:json[@"uri"]];
+    return [[WebImageSource alloc] initWithURIString:json[@"uri"]];
 }
 
 @end
@@ -24,16 +23,15 @@
 RCT_EXPORT_MODULE()
 
 - (UIView*)view {
-    UIImageView* view = [[UIImageView alloc] init];
+    WebImageView* view = [[WebImageView alloc] init];
     view.contentMode = UIViewContentModeScaleAspectFit;
     view.clipsToBounds = YES;
     return view;
 }
 
-RCT_CUSTOM_VIEW_PROPERTY(source, WebImageSource, UIImageView) {
+RCT_CUSTOM_VIEW_PROPERTY(source, WebImageSource, WebImageView) {
     if (json) {
-        WebImageSource* src = [RCTConvert WebImageSource:json];
-        [view sd_setImageWithURL:src.uri];
+        view.source = [RCTConvert WebImageSource:json];
     }
 }
 
@@ -50,5 +48,7 @@ RCT_CUSTOM_VIEW_PROPERTY(resizeMode, NSString, UIImageView) {
         }
     }
 }
+
+RCT_EXPORT_VIEW_PROPERTY(onError, RCTDirectEventBlock);
 
 @end

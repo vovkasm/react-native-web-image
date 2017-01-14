@@ -2,8 +2,8 @@
 
 @interface WebImageSource : NSObject
 
-@property (nonatomic) NSString* uri;
+@property (nonatomic) NSURL* uri;
 
-- (instancetype)initWithURI:(NSString*)uri;
+- (instancetype)initWithURIString:(NSString*)uri;
 
 @end

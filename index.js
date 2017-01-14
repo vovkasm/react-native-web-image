@@ -32,7 +32,14 @@ class WebImage extends React.Component {
      * if bigger than the area of the view.
      * The image will not be scaled up.
      */
-    resizeMode: PropTypes.oneOf(['cover', 'contain', 'stretch', 'center'])
+    resizeMode: PropTypes.oneOf(['cover', 'contain', 'stretch', 'center']),
+
+    /**
+     * Callback called on error. With event.nativeEvent object with props:
+     *   error - error message
+     *   uri - URL that result this error
+     */
+    onError: PropTypes.func
   }
 
   render () {

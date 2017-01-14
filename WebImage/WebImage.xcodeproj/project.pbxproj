@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A254B3E81E2AC847000BE088 /* WebImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = A254B3E71E2AC847000BE088 /* WebImageView.m */; };
 		A28797311DE0C1E90081BDFA /* WebImageViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A28797301DE0C1E90081BDFA /* WebImageViewManager.m */; };
 		A28797471DE0CAB10081BDFA /* libSDWebImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A287973E1DE0CA5B0081BDFA /* libSDWebImage.a */; };
 		A287974A1DE0CE9B0081BDFA /* WebImageSource.m in Sources */ = {isa = PBXBuildFile; fileRef = A28797491DE0CE9B0081BDFA /* WebImageSource.m */; };
@@ -63,6 +64,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		A254B3E61E2AC847000BE088 /* WebImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebImageView.h; sourceTree = "<group>"; };
+		A254B3E71E2AC847000BE088 /* WebImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebImageView.m; sourceTree = "<group>"; };
 		A287971D1DE0C0A60081BDFA /* libWebImage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libWebImage.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A28797301DE0C1E90081BDFA /* WebImageViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebImageViewManager.m; sourceTree = "<group>"; };
 		A28797321DE0C2000081BDFA /* WebImageViewManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WebImageViewManager.h; sourceTree = "<group>"; };
@@ -103,8 +106,10 @@
 		A287971F1DE0C0A60081BDFA /* WebImage */ = {
 			isa = PBXGroup;
 			children = (
-				A28797301DE0C1E90081BDFA /* WebImageViewManager.m */,
 				A28797321DE0C2000081BDFA /* WebImageViewManager.h */,
+				A28797301DE0C1E90081BDFA /* WebImageViewManager.m */,
+				A254B3E61E2AC847000BE088 /* WebImageView.h */,
+				A254B3E71E2AC847000BE088 /* WebImageView.m */,
 				A28797481DE0CE9B0081BDFA /* WebImageSource.h */,
 				A28797491DE0CE9B0081BDFA /* WebImageSource.m */,
 			);
@@ -233,6 +238,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A28797311DE0C1E90081BDFA /* WebImageViewManager.m in Sources */,
+				A254B3E81E2AC847000BE088 /* WebImageView.m in Sources */,
 				A287974A1DE0CE9B0081BDFA /* WebImageSource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
