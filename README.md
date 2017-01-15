@@ -15,11 +15,10 @@ npm install --save react-native-web-image
 react-native link
 ```
 
-| version | react-native |
-| ------- | ------------ |
-| 0.0.3   | &gt;=0.40.0  |
-| 0.0.2   | &lt;0.40.0 (tested with 0.37.0) |
-| 0.0.1   | &lt;0.40.0 (tested with 0.37.0) |
+| version       | react-native |
+| ------------- | ------------ |
+| 0.0.3 - 0.0.4 | &gt;=0.40.0  |
+| &lt;=0.0.2    | &lt;0.40.0 (tested with 0.37.0) |
 
 ## Usage
 
@@ -76,11 +75,12 @@ const styles = StyleSheet.create({
 <WebImage source={source}/>
 ```
 
-| Attribute  | Type   | Required | Description |
-| ---------- | ------ | -------- | ----------- |
-| source     | Object | Yes      | Describes image source (mimics original Image element) |
-| source.uri | String | Yes      | URL of the image |
-| resizeMode | Enum{'cover','contain','stretch','center'} | No | Determine resize mode for image. Default: 'contain' |
+| Attribute  | Type     | Description |
+| ---------- | -------- | ----------- |
+| source     | Object   | Describes image source (mimics original Image element) |
+| source.uri | String   | (**Required**) URL of the image |
+| resizeMode | Enum{'cover','contain','stretch','center'} | Determine resize mode for image. Default: 'contain' |
+| onError    | Function | Will be called on error |
 
 #### Resize modes
 
@@ -95,6 +95,11 @@ const styles = StyleSheet.create({
 * **center** - Scale the image down so that it is completely visible, if bigger
   than the area of the view. The image will not be scaled up. The image will be
   placed at the center of the view.
+
+#### onError(event)
+
+* `event.error` - String representation of error (platform dependent)
+* `event.uri` - URI which leads to error
 
 ## Author
 
