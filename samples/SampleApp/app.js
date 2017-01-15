@@ -78,7 +78,7 @@ export default class App extends React.Component {
         title='image with onError handler, see logs'
         source={{uri: 'https://httpbin.org/status/404'}}
         width={100} height={100}
-        onError={(e) => { console.log('WebImage onError handler: ', e.nativeEvent) }}
+        onError={(e) => { console.log('WebImage onError handler: ', e) }}
       />
     </ScrollView>
   }

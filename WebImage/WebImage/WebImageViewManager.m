@@ -49,6 +49,6 @@ RCT_CUSTOM_VIEW_PROPERTY(resizeMode, NSString, UIImageView) {
     }
 }
 
-RCT_EXPORT_VIEW_PROPERTY(onError, RCTDirectEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onWebImageError, RCTDirectEventBlock);
 
 @end

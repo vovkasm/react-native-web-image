@@ -46,7 +46,11 @@ class WebImage extends React.Component {
     const { source, ...props } = this.props
     const resolvedSource = resolveAssetSource(source)
 
-    return <WebImageView {...props} source={resolvedSource} />
+    return <WebImageView {...props} source={resolvedSource} onWebImageError={this._onError} />
+  }
+
+  _onError = (e) => {
+    this.props.onError && this.props.onError(e.nativeEvent)
   }
 }
 
@@ -54,6 +58,8 @@ WebImage.defaultProps = {
   resizeMode: 'contain'
 }
 
-var WebImageView = requireNativeComponent('WebImageView', WebImage)
+var WebImageView = requireNativeComponent('WebImageView', WebImage, {
+  nativeOnly: {onWebImageError: true}
+})
 
 export default WebImage
