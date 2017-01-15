@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.0.4 (unreleased)
+## 0.0.4 (2017-01-15)
 
 * [feature] onError handler
 
