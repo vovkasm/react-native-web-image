@@ -1,6 +1,6 @@
 {
   "name": "react-native-web-image",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "An image component for react-native with persistent disk and memory caching",
   "main": "index.js",
   "scripts": {
