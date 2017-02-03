@@ -14,7 +14,7 @@ const Sample = (props) => {
   return <View style={styles.container}>
     <Text style={styles.welcome}>{title}</Text>
     <View style={[styles.imgContainer, containerStyle]}>
-      <WebImage style={styles.img} {...other} />
+      <WebImage style={[styles.img, props.imageStyle]} {...other} />
     </View>
   </View>
 }
@@ -22,7 +22,8 @@ Sample.propTypes = {
   title: PropTypes.string.isRequired,
   width: PropTypes.number,
   height: PropTypes.number,
-  resizeMode: PropTypes.string
+  resizeMode: PropTypes.string,
+  imageStyle: PropTypes.object
 }
 
 export default class App extends React.Component {
@@ -79,6 +80,19 @@ export default class App extends React.Component {
         source={{uri: 'https://httpbin.org/status/404'}}
         width={100} height={100}
         onError={(e) => { console.log('WebImage onError handler: ', e) }}
+      />
+      <Sample
+        title='image with borders'
+        source={{uri: 'https://placeholdit.imgix.net/~text?txtsize=58&txt=200x200&w=200&h=200'}}
+        height={120}
+        imageStyle={{
+          borderWidth: 2,
+          borderTopWidth: 6,
+          borderRightWidth: 6,
+          borderColor: 'green',
+          borderBottomLeftRadius: 15,
+          borderTopRightRadius: 90
+        }}
       />
     </ScrollView>
   }
