@@ -313,16 +313,16 @@ public class RoundedDrawable extends Drawable {
                 mCornerInnerRadii[2*corner.index+1] = Math.max(radius - mBorderSizes[1], 0f);
                 break;
             case TOP_RIGHT:
-                mCornerInnerRadii[2*corner.index] = Math.max(radius - mBorderSizes[1], 0f);
-                mCornerInnerRadii[2*corner.index+1] = Math.max(radius - mBorderSizes[2], 0f);
+                mCornerInnerRadii[2*corner.index] = Math.max(radius - mBorderSizes[2], 0f);
+                mCornerInnerRadii[2*corner.index+1] = Math.max(radius - mBorderSizes[1], 0f);
                 break;
             case BOTTOM_RIGHT:
                 mCornerInnerRadii[2*corner.index] = Math.max(radius - mBorderSizes[2], 0f);
                 mCornerInnerRadii[2*corner.index+1] = Math.max(radius - mBorderSizes[3], 0f);
                 break;
             case BOTTOM_LEFT:
-                mCornerInnerRadii[2*corner.index] = Math.max(radius - mBorderSizes[3], 0f);
-                mCornerInnerRadii[2*corner.index+1] = Math.max(radius - mBorderSizes[0], 0f);
+                mCornerInnerRadii[2*corner.index] = Math.max(radius - mBorderSizes[0], 0f);
+                mCornerInnerRadii[2*corner.index+1] = Math.max(radius - mBorderSizes[3], 0f);
                 break;
         }
     }
