@@ -42,6 +42,13 @@ public class WebImageView extends ImageView {
         super.setImageDrawable(mDrawable);
     }
 
+    @Override
+    public void setBackgroundColor(@ColorInt int color) {
+        if (mDrawable instanceof RoundedDrawable) {
+            ((RoundedDrawable) mDrawable).setColor(color);
+        }
+    }
+
     public void setBorderColor(@ColorInt int color) {
         mBorderColor = color;
         updateDrawableAttrs();

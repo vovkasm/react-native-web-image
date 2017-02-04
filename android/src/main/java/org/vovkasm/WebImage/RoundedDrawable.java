@@ -50,6 +50,8 @@ public class RoundedDrawable extends Drawable {
     private @ColorInt int mBorderColor = DEFAULT_BORDER_COLOR;
     private ScaleType mScaleType = ScaleType.FIT_CENTER;
 
+    private int mColor = Color.TRANSPARENT;
+
     public RoundedDrawable(Bitmap bitmap) {
         mBitmap = bitmap;
 
@@ -314,6 +316,11 @@ public class RoundedDrawable extends Drawable {
     public void setBorderColor(@ColorInt int color) {
         mBorderColor = color;
         mBorderPaint.setColor(mBorderColor);
+    }
+
+    public void setColor(int color) {
+        mColor = color;
+        invalidateSelf();
     }
 
     public ScaleType getScaleType() {
