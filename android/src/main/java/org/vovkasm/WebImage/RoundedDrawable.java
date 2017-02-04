@@ -47,7 +47,7 @@ public class RoundedDrawable extends Drawable {
     private float[] mCornerInnerRadii = new float[]{0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f};
     private float[] mBorderSizes = new float[]{0f, 0f, 0f, 0f};
 
-    private ColorStateList mBorderColor = ColorStateList.valueOf(DEFAULT_BORDER_COLOR);
+    private @ColorInt int mBorderColor = DEFAULT_BORDER_COLOR;
     private ScaleType mScaleType = ScaleType.FIT_CENTER;
 
     public RoundedDrawable(Bitmap bitmap) {
@@ -64,7 +64,7 @@ public class RoundedDrawable extends Drawable {
         mBorderPaint = new Paint();
         mBorderPaint.setStyle(Paint.Style.FILL);
         mBorderPaint.setAntiAlias(true);
-        mBorderPaint.setColor(mBorderColor.getColorForState(getState(), DEFAULT_BORDER_COLOR));
+        mBorderPaint.setColor(mBorderColor);
     }
 
     public static RoundedDrawable fromBitmap(Bitmap bitmap) {
@@ -311,14 +311,9 @@ public class RoundedDrawable extends Drawable {
         mBorderSizes[side] = width;
     }
 
-    public RoundedDrawable setBorderColor(@ColorInt int color) {
-        return setBorderColor(ColorStateList.valueOf(color));
-    }
-
-    public RoundedDrawable setBorderColor(ColorStateList colors) {
-        mBorderColor = colors != null ? colors : ColorStateList.valueOf(0);
-        mBorderPaint.setColor(mBorderColor.getColorForState(getState(), DEFAULT_BORDER_COLOR));
-        return this;
+    public void setBorderColor(@ColorInt int color) {
+        mBorderColor = color;
+        mBorderPaint.setColor(mBorderColor);
     }
 
     public ScaleType getScaleType() {
