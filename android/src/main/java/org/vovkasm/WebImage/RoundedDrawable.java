@@ -118,26 +118,6 @@ public class RoundedDrawable extends Drawable {
         return bitmap;
     }
 
-    public Bitmap getSourceBitmap() {
-        return mBitmap;
-    }
-
-    @Override
-    public boolean isStateful() {
-        return mBorderColor.isStateful();
-    }
-
-    @Override
-    protected boolean onStateChange(int[] state) {
-        int newColor = mBorderColor.getColorForState(state, 0);
-        if (mBorderPaint.getColor() != newColor) {
-            mBorderPaint.setColor(newColor);
-            return true;
-        } else {
-            return super.onStateChange(state);
-        }
-    }
-
     private void updateShaderMatrix() {
         float scale;
         float dx;
@@ -331,16 +311,8 @@ public class RoundedDrawable extends Drawable {
         mBorderSizes[side] = width;
     }
 
-    public int getBorderColor() {
-        return mBorderColor.getDefaultColor();
-    }
-
     public RoundedDrawable setBorderColor(@ColorInt int color) {
         return setBorderColor(ColorStateList.valueOf(color));
-    }
-
-    public ColorStateList getBorderColors() {
-        return mBorderColor;
     }
 
     public RoundedDrawable setBorderColor(ColorStateList colors) {
@@ -364,60 +336,4 @@ public class RoundedDrawable extends Drawable {
         return this;
     }
 
-    public Shader.TileMode getTileModeX() {
-        return mTileModeX;
-    }
-
-    public RoundedDrawable setTileModeX(Shader.TileMode tileModeX) {
-        if (mTileModeX != tileModeX) {
-            mTileModeX = tileModeX;
-            mRebuildShader = true;
-            invalidateSelf();
-        }
-        return this;
-    }
-
-    public Shader.TileMode getTileModeY() {
-        return mTileModeY;
-    }
-
-    public RoundedDrawable setTileModeY(Shader.TileMode tileModeY) {
-        if (mTileModeY != tileModeY) {
-            mTileModeY = tileModeY;
-            mRebuildShader = true;
-            invalidateSelf();
-        }
-        return this;
-    }
-
-    private static boolean only(int index, boolean[] booleans) {
-        for (int i = 0, len = booleans.length; i < len; i++) {
-            if (booleans[i] != (i == index)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private static boolean any(float[] values) {
-        for (float val : values) {
-            if (val > 0f) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private static boolean all(boolean[] booleans) {
-        for (boolean b : booleans) {
-            if (b) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public Bitmap toBitmap() {
-        return drawableToBitmap(this);
-    }
 }
