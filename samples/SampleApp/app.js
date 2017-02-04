@@ -28,7 +28,28 @@ Sample.propTypes = {
 
 export default class App extends React.Component {
   render () {
+    const borderStyle = {
+      width: 100,
+      height: 100,
+      backgroundColor: 'gray',
+      borderLeftWidth: 20,
+      borderLeftColor: 'green',
+      borderRightWidth: 20,
+      borderRightColor: 'green',
+      borderTopWidth: 10,
+      borderTopColor: 'blue',
+      borderBottomWidth: 10,
+      borderBottomColor: 'blue',
+      borderRadius: 30,
+      borderColor: 'black'
+    }
     return <ScrollView>
+      <View style={[styles.container, {padding: 4}]}>
+        <View style={borderStyle} />
+      </View>
+      <View style={[styles.container, {padding: 4}]}>
+        <WebImage style={borderStyle} source={{uri: 'https://placeholdit.imgix.net/~text?txtsize=58&txt=200x200&w=200&h=200'}} />
+      </View>
       <Sample
         title='[200x150] in [auto x 120] block'
         source={{uri: 'https://placeholdit.imgix.net/~text?txtsize=33&txt=200x150&w=200&h=150'}}
@@ -80,19 +101,6 @@ export default class App extends React.Component {
         source={{uri: 'https://httpbin.org/status/404'}}
         width={100} height={100}
         onError={(e) => { console.log('WebImage onError handler: ', e) }}
-      />
-      <Sample
-        title='image with borders'
-        source={{uri: 'https://placeholdit.imgix.net/~text?txtsize=58&txt=200x200&w=200&h=200'}}
-        height={120}
-        imageStyle={{
-          borderWidth: 2,
-          borderTopWidth: 6,
-          borderRightWidth: 6,
-          borderColor: 'green',
-          borderBottomLeftRadius: 15,
-          borderTopRightRadius: 90
-        }}
       />
     </ScrollView>
   }
