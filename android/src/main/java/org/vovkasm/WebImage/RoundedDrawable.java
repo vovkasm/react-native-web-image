@@ -322,7 +322,7 @@ public class RoundedDrawable extends Drawable {
         return mScaleType;
     }
 
-    public RoundedDrawable setScaleType(ScaleType scaleType) {
+    public void setScaleType(ScaleType scaleType) {
         if (scaleType == null) {
             scaleType = ScaleType.FIT_CENTER;
         }
@@ -330,7 +330,6 @@ public class RoundedDrawable extends Drawable {
             mScaleType = scaleType;
             updateShaderMatrix();
         }
-        return this;
     }
 
 }
