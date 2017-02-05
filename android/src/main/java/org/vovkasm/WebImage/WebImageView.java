@@ -53,6 +53,7 @@ public class WebImageView extends ImageView {
 
     @Override
     public void setScaleType(ScaleType scaleType) {
+        super.setScaleType(scaleType);
         if (mScaleType == scaleType) {
             return;
         }
