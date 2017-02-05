@@ -72,7 +72,11 @@ class WebImageViewManager extends SimpleViewManager<WebImageView> {
         if (source == null) return;
         final String uriProp = source.getString("uri");
         final Uri uri = Uri.parse(uriProp);
-        Glide.with(view.getContext()).load(uri).listener(LISTENER).into(view);
+        Glide.with(view.getContext())
+                .load(uri)
+                .listener(LISTENER)
+                .dontTransform()
+                .into(view);
     }
 
     @ReactProp(name="resizeMode")
