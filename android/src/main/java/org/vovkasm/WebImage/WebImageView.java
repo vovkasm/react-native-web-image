@@ -23,6 +23,8 @@ public class WebImageView extends ImageView {
     private float[] mBorderSizes = new float[]{YogaConstants.UNDEFINED, YogaConstants.UNDEFINED, YogaConstants.UNDEFINED, YogaConstants.UNDEFINED};
     private Drawable mDrawable;
 
+    private ScaleType mScaleType = ScaleType.FIT_CENTER;
+
     public WebImageView(Context context) {
         super(context);
         updateDrawableAttrs();
@@ -47,6 +49,21 @@ public class WebImageView extends ImageView {
         if (mDrawable instanceof RoundedDrawable) {
             ((RoundedDrawable) mDrawable).setColor(color);
         }
+    }
+
+    @Override
+    public void setScaleType(ScaleType scaleType) {
+        if (mScaleType == scaleType) {
+            return;
+        }
+        mScaleType = scaleType;
+        updateDrawableAttrs();
+        invalidate();
+    }
+
+    @Override
+    public ScaleType getScaleType() {
+        return mScaleType;
     }
 
     public void setBorderColor(@ColorInt int color) {
@@ -111,6 +128,7 @@ public class WebImageView extends ImageView {
                 }
             }
 
+            roundedDrawable.setScaleType(getScaleType());
             roundedDrawable.setBorderColor(mBorderColor);
 
             if (YogaConstants.isUndefined(mBorderRadii[0])) {
