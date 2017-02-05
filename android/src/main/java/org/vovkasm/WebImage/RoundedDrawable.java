@@ -1,6 +1,5 @@
 package org.vovkasm.WebImage;
 
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapShader;
