@@ -132,7 +132,7 @@ public class WebImageView extends ImageView {
             roundedDrawable.setScaleType(getScaleType());
             roundedDrawable.setBorderColor(mBorderColor);
 
-            for (Corner corner : Corner.values()) {
+            for (RoundedDrawable.Corner corner : RoundedDrawable.Corner.values()) {
                 if (YogaConstants.isUndefined(mBorderRadii[corner.index])) {
                     roundedDrawable.setCornerRadius(corner, mBorderRadius);
                 } else {

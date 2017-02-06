@@ -22,9 +22,18 @@ import android.util.Log;
 import android.widget.ImageView.ScaleType;
 
 public class RoundedDrawable extends Drawable {
-
     public static final String TAG = "RoundedDrawable";
     public static final int DEFAULT_BORDER_COLOR = Color.BLACK;
+
+    public static enum Corner {
+        TOP_LEFT(0), TOP_RIGHT(1), BOTTOM_RIGHT(2), BOTTOM_LEFT(3);
+
+        public int index;
+
+        Corner(final int index) {
+            this.index = index;
+        }
+    }
 
     private final RectF mBounds = new RectF();
     private final RectF mDrawableRect = new RectF();
