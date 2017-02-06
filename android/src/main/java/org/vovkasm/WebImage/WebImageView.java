@@ -16,7 +16,8 @@ public class WebImageView extends ImageView {
     public static final float DEFAULT_BORDER_RADIUS = 0f;
     public static final float DEFAULT_BORDER_WIDTH = 0f;
 
-    private int mBorderColor = DEFAULT_BORDER_COLOR;
+    private @ColorInt int mBorderColor = DEFAULT_BORDER_COLOR;
+    private @ColorInt int mBorderColors[] = new int[]{DEFAULT_BORDER_COLOR, DEFAULT_BORDER_COLOR, DEFAULT_BORDER_COLOR, DEFAULT_BORDER_COLOR};
     private float mBorderRadius = DEFAULT_BORDER_RADIUS;
     private float[] mBorderRadii = new float[]{YogaConstants.UNDEFINED, YogaConstants.UNDEFINED, YogaConstants.UNDEFINED, YogaConstants.UNDEFINED};
     private float mBorderWidth = DEFAULT_BORDER_WIDTH;
@@ -68,7 +69,19 @@ public class WebImageView extends ImageView {
     }
 
     public void setBorderColor(@ColorInt int color) {
+        if (mBorderColor == color) {
+            return;
+        }
         mBorderColor = color;
+        updateDrawableAttrs();
+        invalidate();
+    }
+
+    public void setBorderColor(@ColorInt int color, int side) {
+        if (mBorderColors[side] == color) {
+            return;
+        }
+        mBorderColors[side] = color;
         updateDrawableAttrs();
         invalidate();
     }
@@ -130,7 +143,13 @@ public class WebImageView extends ImageView {
             }
 
             roundedDrawable.setScaleType(getScaleType());
-            roundedDrawable.setBorderColor(mBorderColor);
+            for (RoundedDrawable.Side side : RoundedDrawable.Side.values()) {
+                if (mBorderColors[side.index] == Color.TRANSPARENT) {
+                    roundedDrawable.setBorderColor(side, mBorderColor);
+                } else {
+                    roundedDrawable.setBorderColor(side, mBorderColors[side.index]);
+                }
+            }
 
             for (RoundedDrawable.Corner corner : RoundedDrawable.Corner.values()) {
                 if (YogaConstants.isUndefined(mBorderRadii[corner.index])) {

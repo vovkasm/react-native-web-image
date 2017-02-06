@@ -25,12 +25,21 @@ public class RoundedDrawable extends Drawable {
     public static final String TAG = "RoundedDrawable";
     public static final int DEFAULT_BORDER_COLOR = Color.BLACK;
 
-    public static enum Corner {
+    public enum Corner {
         TOP_LEFT(0), TOP_RIGHT(1), BOTTOM_RIGHT(2), BOTTOM_LEFT(3);
 
         public int index;
 
         Corner(final int index) {
+            this.index = index;
+        }
+    }
+    public enum Side {
+        LEFT(0), TOP(1), RIGHT(2), BOTTOM(3);
+
+        public int index;
+
+        Side(final int index) {
             this.index = index;
         }
     }
@@ -52,8 +61,8 @@ public class RoundedDrawable extends Drawable {
     private float[] mCornerRadii = new float[]{0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f};
     private float[] mCornerInnerRadii = new float[]{0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f};
     private float[] mBorderSizes = new float[]{0f, 0f, 0f, 0f};
+    private @ColorInt int[] mBorderColors = new int[]{ DEFAULT_BORDER_COLOR, DEFAULT_BORDER_COLOR, DEFAULT_BORDER_COLOR, DEFAULT_BORDER_COLOR };
 
-    private @ColorInt int mBorderColor = DEFAULT_BORDER_COLOR;
     private ScaleType mScaleType = ScaleType.FIT_CENTER;
 
     private int mColor = Color.TRANSPARENT;
@@ -72,7 +81,7 @@ public class RoundedDrawable extends Drawable {
         mBorderPaint = new Paint();
         mBorderPaint.setStyle(Paint.Style.FILL);
         mBorderPaint.setAntiAlias(true);
-        mBorderPaint.setColor(mBorderColor);
+        mBorderPaint.setColor(mBorderColors[0]);
     }
 
     public static RoundedDrawable fromBitmap(Bitmap bitmap) {
@@ -238,7 +247,50 @@ public class RoundedDrawable extends Drawable {
         Path borderPath = new Path();
         borderPath.addRoundRect(mBorderOuterRect, mCornerRadii, Path.Direction.CW);
         borderPath.addRoundRect(mBorderInnerRect, mCornerInnerRadii, Path.Direction.CCW);
+        // Draw top border
+        Path mask = new Path();
+        mask.moveTo(mBorderOuterRect.centerX(), mBorderOuterRect.centerY());
+        mask.lineTo(mBorderOuterRect.left, mBorderOuterRect.top);
+        mask.lineTo(mBorderOuterRect.right, mBorderOuterRect.top);
+        mask.lineTo(mBorderOuterRect.centerX(), mBorderOuterRect.centerY());
+        canvas.save();
+        canvas.clipPath(mask);
+        mBorderPaint.setColor(mBorderColors[Side.TOP.index]);
         canvas.drawPath(borderPath, mBorderPaint);
+        canvas.restore();
+        // Draw bottom border
+        mask.rewind();
+        mask.moveTo(mBorderOuterRect.centerX(), mBorderOuterRect.centerY());
+        mask.lineTo(mBorderOuterRect.right, mBorderOuterRect.bottom);
+        mask.lineTo(mBorderOuterRect.left, mBorderOuterRect.bottom);
+        mask.lineTo(mBorderOuterRect.centerX(), mBorderOuterRect.centerY());
+        canvas.save();
+        canvas.clipPath(mask);
+        mBorderPaint.setColor(mBorderColors[Side.BOTTOM.index]);
+        canvas.drawPath(borderPath, mBorderPaint);
+        canvas.restore();
+        // Draw left border
+        mask.rewind();
+        mask.moveTo(mBorderOuterRect.centerX(), mBorderOuterRect.centerY());
+        mask.lineTo(mBorderOuterRect.left, mBorderOuterRect.bottom);
+        mask.lineTo(mBorderOuterRect.left, mBorderOuterRect.top);
+        mask.lineTo(mBorderOuterRect.centerX(), mBorderOuterRect.centerY());
+        canvas.save();
+        canvas.clipPath(mask);
+        mBorderPaint.setColor(mBorderColors[Side.LEFT.index]);
+        canvas.drawPath(borderPath, mBorderPaint);
+        canvas.restore();
+        // Draw right border
+        mask.rewind();
+        mask.moveTo(mBorderOuterRect.centerX(), mBorderOuterRect.centerY());
+        mask.lineTo(mBorderOuterRect.right, mBorderOuterRect.top);
+        mask.lineTo(mBorderOuterRect.right, mBorderOuterRect.bottom);
+        mask.lineTo(mBorderOuterRect.centerX(), mBorderOuterRect.centerY());
+        canvas.save();
+        canvas.clipPath(mask);
+        mBorderPaint.setColor(mBorderColors[Side.RIGHT.index]);
+        canvas.drawPath(borderPath, mBorderPaint);
+        canvas.restore();
     }
 
     @Override
@@ -317,9 +369,8 @@ public class RoundedDrawable extends Drawable {
         mBorderSizes[side] = width;
     }
 
-    public void setBorderColor(@ColorInt int color) {
-        mBorderColor = color;
-        mBorderPaint.setColor(mBorderColor);
+    public void setBorderColor(Side side, @ColorInt int color) {
+        mBorderColors[side.index] = color;
     }
 
     public void setColor(int color) {
