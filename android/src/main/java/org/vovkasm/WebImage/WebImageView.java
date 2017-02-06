@@ -132,25 +132,12 @@ public class WebImageView extends ImageView {
             roundedDrawable.setScaleType(getScaleType());
             roundedDrawable.setBorderColor(mBorderColor);
 
-            if (YogaConstants.isUndefined(mBorderRadii[0])) {
-                roundedDrawable.setCornerRadius(Corner.TOP_LEFT, mBorderRadius);
-            } else {
-                roundedDrawable.setCornerRadius(Corner.TOP_LEFT, mBorderRadii[0]);
-            }
-            if (YogaConstants.isUndefined(mBorderRadii[1])) {
-                roundedDrawable.setCornerRadius(Corner.TOP_RIGHT, mBorderRadius);
-            } else {
-                roundedDrawable.setCornerRadius(Corner.TOP_RIGHT, mBorderRadii[1]);
-            }
-            if (YogaConstants.isUndefined(mBorderRadii[2])) {
-                roundedDrawable.setCornerRadius(Corner.BOTTOM_RIGHT, mBorderRadius);
-            } else {
-                roundedDrawable.setCornerRadius(Corner.BOTTOM_RIGHT, mBorderRadii[2]);
-            }
-            if (YogaConstants.isUndefined(mBorderRadii[3])) {
-                roundedDrawable.setCornerRadius(Corner.BOTTOM_LEFT, mBorderRadius);
-            } else {
-                roundedDrawable.setCornerRadius(Corner.BOTTOM_LEFT, mBorderRadii[3]);
+            for (Corner corner : Corner.values()) {
+                if (YogaConstants.isUndefined(mBorderRadii[corner.index])) {
+                    roundedDrawable.setCornerRadius(corner, mBorderRadius);
+                } else {
+                    roundedDrawable.setCornerRadius(corner, mBorderRadii[corner.index]);
+                }
             }
 
         } else if (drawable instanceof LayerDrawable) {
