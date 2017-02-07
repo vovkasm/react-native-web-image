@@ -33,7 +33,15 @@ public class RoundedDrawable extends Drawable {
         Corner(final int index) {
             this.index = index;
         }
+
+        public Corner next() {
+            final int i = index < 3 ? index + 1 : 0;
+            return ALL[i];
+        }
+
+        private static final Corner[] ALL = new Corner[] { TOP_LEFT, TOP_RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT };
     }
+
     public enum Side {
         LEFT(0), TOP(1), RIGHT(2), BOTTOM(3);
 
@@ -61,7 +69,9 @@ public class RoundedDrawable extends Drawable {
     private float[] mCornerRadii = new float[]{0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f};
     private float[] mCornerInnerRadii = new float[]{0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f};
     private float[] mBorderSizes = new float[]{0f, 0f, 0f, 0f};
-    private @ColorInt int[] mBorderColors = new int[]{ DEFAULT_BORDER_COLOR, DEFAULT_BORDER_COLOR, DEFAULT_BORDER_COLOR, DEFAULT_BORDER_COLOR };
+    private
+    @ColorInt
+    int[] mBorderColors = new int[]{DEFAULT_BORDER_COLOR, DEFAULT_BORDER_COLOR, DEFAULT_BORDER_COLOR, DEFAULT_BORDER_COLOR};
 
     private ScaleType mScaleType = ScaleType.FIT_CENTER;
 
@@ -244,53 +254,56 @@ public class RoundedDrawable extends Drawable {
         bitmapPath.addRoundRect(mDrawableRect, mCornerInnerRadii, Path.Direction.CW);
         canvas.drawPath(bitmapPath, mBitmapPaint);
 
-        Path borderPath = new Path();
-        borderPath.addRoundRect(mBorderOuterRect, mCornerRadii, Path.Direction.CW);
-        borderPath.addRoundRect(mBorderInnerRect, mCornerInnerRadii, Path.Direction.CCW);
-        // Draw top border
-        Path mask = new Path();
-        mask.moveTo(mBorderOuterRect.centerX(), mBorderOuterRect.centerY());
-        mask.lineTo(mBorderOuterRect.left, mBorderOuterRect.top);
-        mask.lineTo(mBorderOuterRect.right, mBorderOuterRect.top);
-        mask.lineTo(mBorderOuterRect.centerX(), mBorderOuterRect.centerY());
-        canvas.save();
-        canvas.clipPath(mask);
-        mBorderPaint.setColor(mBorderColors[Side.TOP.index]);
-        canvas.drawPath(borderPath, mBorderPaint);
-        canvas.restore();
-        // Draw bottom border
-        mask.rewind();
-        mask.moveTo(mBorderOuterRect.centerX(), mBorderOuterRect.centerY());
-        mask.lineTo(mBorderOuterRect.right, mBorderOuterRect.bottom);
-        mask.lineTo(mBorderOuterRect.left, mBorderOuterRect.bottom);
-        mask.lineTo(mBorderOuterRect.centerX(), mBorderOuterRect.centerY());
-        canvas.save();
-        canvas.clipPath(mask);
-        mBorderPaint.setColor(mBorderColors[Side.BOTTOM.index]);
-        canvas.drawPath(borderPath, mBorderPaint);
-        canvas.restore();
-        // Draw left border
-        mask.rewind();
-        mask.moveTo(mBorderOuterRect.centerX(), mBorderOuterRect.centerY());
-        mask.lineTo(mBorderOuterRect.left, mBorderOuterRect.bottom);
-        mask.lineTo(mBorderOuterRect.left, mBorderOuterRect.top);
-        mask.lineTo(mBorderOuterRect.centerX(), mBorderOuterRect.centerY());
-        canvas.save();
-        canvas.clipPath(mask);
-        mBorderPaint.setColor(mBorderColors[Side.LEFT.index]);
-        canvas.drawPath(borderPath, mBorderPaint);
-        canvas.restore();
-        // Draw right border
-        mask.rewind();
-        mask.moveTo(mBorderOuterRect.centerX(), mBorderOuterRect.centerY());
-        mask.lineTo(mBorderOuterRect.right, mBorderOuterRect.top);
-        mask.lineTo(mBorderOuterRect.right, mBorderOuterRect.bottom);
-        mask.lineTo(mBorderOuterRect.centerX(), mBorderOuterRect.centerY());
-        canvas.save();
-        canvas.clipPath(mask);
-        mBorderPaint.setColor(mBorderColors[Side.RIGHT.index]);
-        canvas.drawPath(borderPath, mBorderPaint);
-        canvas.restore();
+        drawBorder(canvas);
+    }
+
+    private void drawBorder(@NonNull Canvas canvas) {
+        Path path = new Path();
+        for (Side side : Side.values()) {
+            path.rewind();
+            mBorderPaint.setColor(mBorderColors[side.index]);
+            calcBorderSegmentPath(path, side);
+            canvas.drawPath(path, mBorderPaint);
+        }
+    }
+
+    private void calcBorderSegmentPath(Path path, Side side) {
+        Corner corner1 = Corner.ALL[side.index];
+        Corner corner2 = corner1.next();
+        float splitAngle1 = getSplitAngleForCorner(corner1);
+        float splitAngle2 = getSplitAngleForCorner(corner2);
+        float normalAngle = 270f + corner1.index * 90f;
+        RectF oval = new RectF();
+        calcOvalRect(oval, mBorderOuterRect, mCornerRadii, corner1);
+        path.arcTo(oval, normalAngle - 90f + splitAngle1, 90f - splitAngle1);
+        calcOvalRect(oval, mBorderOuterRect, mCornerRadii, corner2);
+        path.arcTo(oval, normalAngle, splitAngle2);
+        calcOvalRect(oval, mBorderInnerRect, mCornerInnerRadii, corner2);
+        path.arcTo(oval, normalAngle + splitAngle2, -splitAngle2);
+        calcOvalRect(oval, mBorderInnerRect, mCornerInnerRadii, corner1);
+        path.arcTo(oval, normalAngle, -(90f - splitAngle1));
+        path.close();
+    }
+
+    private float getSplitAngleForCorner(Corner corner) {
+        return (float) Math.toDegrees(Math.atan2(mBorderSizes[corner.index], mBorderSizes[corner.next().index]));
+    }
+
+    private void calcOvalRect(RectF out, RectF rect, float[] radii, Corner corner) {
+        switch (corner) {
+            case TOP_LEFT:
+                out.set(rect.left, rect.top, rect.left + 2f * radii[0], rect.top + 2f * radii[1]);
+                break;
+            case TOP_RIGHT:
+                out.set(rect.right - 2f * radii[2], rect.top, rect.right, rect.top + 2f * radii[3]);
+                break;
+            case BOTTOM_RIGHT:
+                out.set(rect.right - 2f * radii[4], rect.bottom - 2f * radii[5], rect.right, rect.bottom);
+                break;
+            case BOTTOM_LEFT:
+                out.set(rect.left, rect.bottom - 2f * radii[6], rect.left + 2f * radii[7], rect.bottom);
+                break;
+        }
     }
 
     @Override
@@ -343,24 +356,24 @@ public class RoundedDrawable extends Drawable {
     }
 
     public void setCornerRadius(Corner corner, float radius) {
-        mCornerRadii[2*corner.index] = radius;
-        mCornerRadii[2*corner.index+1] = radius;
+        mCornerRadii[2 * corner.index] = radius;
+        mCornerRadii[2 * corner.index + 1] = radius;
         switch (corner) {
             case TOP_LEFT:
-                mCornerInnerRadii[2*corner.index] = Math.max(radius - mBorderSizes[0], 0f);
-                mCornerInnerRadii[2*corner.index+1] = Math.max(radius - mBorderSizes[1], 0f);
+                mCornerInnerRadii[2 * corner.index] = Math.max(radius - mBorderSizes[0], 0f);
+                mCornerInnerRadii[2 * corner.index + 1] = Math.max(radius - mBorderSizes[1], 0f);
                 break;
             case TOP_RIGHT:
-                mCornerInnerRadii[2*corner.index] = Math.max(radius - mBorderSizes[2], 0f);
-                mCornerInnerRadii[2*corner.index+1] = Math.max(radius - mBorderSizes[1], 0f);
+                mCornerInnerRadii[2 * corner.index] = Math.max(radius - mBorderSizes[2], 0f);
+                mCornerInnerRadii[2 * corner.index + 1] = Math.max(radius - mBorderSizes[1], 0f);
                 break;
             case BOTTOM_RIGHT:
-                mCornerInnerRadii[2*corner.index] = Math.max(radius - mBorderSizes[2], 0f);
-                mCornerInnerRadii[2*corner.index+1] = Math.max(radius - mBorderSizes[3], 0f);
+                mCornerInnerRadii[2 * corner.index] = Math.max(radius - mBorderSizes[2], 0f);
+                mCornerInnerRadii[2 * corner.index + 1] = Math.max(radius - mBorderSizes[3], 0f);
                 break;
             case BOTTOM_LEFT:
-                mCornerInnerRadii[2*corner.index] = Math.max(radius - mBorderSizes[0], 0f);
-                mCornerInnerRadii[2*corner.index+1] = Math.max(radius - mBorderSizes[3], 0f);
+                mCornerInnerRadii[2 * corner.index] = Math.max(radius - mBorderSizes[0], 0f);
+                mCornerInnerRadii[2 * corner.index + 1] = Math.max(radius - mBorderSizes[3], 0f);
                 break;
         }
     }
