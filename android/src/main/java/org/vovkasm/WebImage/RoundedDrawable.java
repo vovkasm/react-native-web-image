@@ -38,6 +38,10 @@ public class RoundedDrawable extends Drawable {
             final int i = index < 3 ? index + 1 : 0;
             return ALL[i];
         }
+        public Corner prev() {
+            final int i = index > 0 ? index - 1 : 3;
+            return ALL[i];
+        }
 
         private static final Corner[] ALL = new Corner[] { TOP_LEFT, TOP_RIGHT, BOTTOM_RIGHT, BOTTOM_LEFT };
     }
@@ -268,8 +272,8 @@ public class RoundedDrawable extends Drawable {
     }
 
     private void calcBorderSegmentPath(Path path, Side side) {
-        Corner corner1 = Corner.ALL[side.index];
-        Corner corner2 = corner1.next();
+        Corner corner2 = Corner.ALL[side.index];
+        Corner corner1 = corner2.prev();
         float splitAngle1 = getSplitAngleForCorner(corner1);
         float splitAngle2 = getSplitAngleForCorner(corner2);
         float normalAngle = 270f + corner1.index * 90f;
