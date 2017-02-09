@@ -28,7 +28,7 @@ public class RoundedDrawable extends Drawable {
     public enum Corner {
         TOP_LEFT(0), TOP_RIGHT(1), BOTTOM_RIGHT(2), BOTTOM_LEFT(3);
 
-        public int index;
+        public final int index;
 
         Corner(final int index) {
             this.index = index;
@@ -49,7 +49,7 @@ public class RoundedDrawable extends Drawable {
     public enum Side {
         LEFT(0), TOP(1), RIGHT(2), BOTTOM(3);
 
-        public int index;
+        public final int index;
 
         Side(final int index) {
             this.index = index;
