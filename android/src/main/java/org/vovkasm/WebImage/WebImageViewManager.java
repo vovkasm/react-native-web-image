@@ -89,7 +89,11 @@ class WebImageViewManager extends SimpleViewManager<WebImageView> {
     }
 
     @ReactPropGroup(names = {
-            "borderColor", "borderLeftColor", "borderTopColor", "borderRightColor", "borderBottomColor"
+            "borderColor",
+            "borderLeftColor",
+            "borderTopColor",
+            "borderRightColor",
+            "borderBottomColor"
     }, customType = "Color")
     public void setBorderColor(WebImageView view, int index, @Nullable Integer color) {
         if (color == null) {
