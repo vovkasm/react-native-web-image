@@ -46,13 +46,6 @@ public class WebImageView extends ImageView {
     }
 
     @Override
-    public void setBackgroundColor(@ColorInt int color) {
-        if (mDrawable instanceof RoundedDrawable) {
-            ((RoundedDrawable) mDrawable).setColor(color);
-        }
-    }
-
-    @Override
     public void setScaleType(ScaleType scaleType) {
         super.setScaleType(scaleType);
         if (mScaleType == scaleType) {

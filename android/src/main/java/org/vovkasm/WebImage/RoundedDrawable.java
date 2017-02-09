@@ -57,7 +57,6 @@ public class RoundedDrawable extends Drawable {
     }
 
     private final RectF mBounds = new RectF();
-    private final RectF mDrawableRect = new RectF();
     private final RectF mBitmapRect = new RectF();
     private final Bitmap mBitmap;
     private final Paint mBitmapPaint;
@@ -78,8 +77,6 @@ public class RoundedDrawable extends Drawable {
     int[] mBorderColors = new int[]{DEFAULT_BORDER_COLOR, DEFAULT_BORDER_COLOR, DEFAULT_BORDER_COLOR, DEFAULT_BORDER_COLOR};
 
     private ScaleType mScaleType = ScaleType.FIT_CENTER;
-
-    private int mColor = Color.TRANSPARENT;
 
     public RoundedDrawable(Bitmap bitmap) {
         mBitmap = bitmap;
@@ -232,8 +229,6 @@ public class RoundedDrawable extends Drawable {
                 mShaderMatrix.setRectToRect(mBitmapRect, mBorderInnerRect, Matrix.ScaleToFit.FILL);
                 break;
         }
-
-        mDrawableRect.set(mBorderInnerRect);
     }
 
     @Override
@@ -255,7 +250,7 @@ public class RoundedDrawable extends Drawable {
         }
 
         Path bitmapPath = new Path();
-        bitmapPath.addRoundRect(mDrawableRect, mCornerInnerRadii, Path.Direction.CW);
+        bitmapPath.addRoundRect(mBorderInnerRect, mCornerInnerRadii, Path.Direction.CW);
         canvas.drawPath(bitmapPath, mBitmapPaint);
 
         drawBorder(canvas);
@@ -388,11 +383,6 @@ public class RoundedDrawable extends Drawable {
 
     public void setBorderColor(Side side, @ColorInt int color) {
         mBorderColors[side.index] = color;
-    }
-
-    public void setColor(int color) {
-        mColor = color;
-        invalidateSelf();
     }
 
     public ScaleType getScaleType() {
