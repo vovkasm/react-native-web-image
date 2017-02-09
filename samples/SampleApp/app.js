@@ -31,21 +31,24 @@ export default class App extends React.Component {
     const borderStyle = {
       width: 100,
       height: 100,
-      backgroundColor: 'gray',
-      borderLeftWidth: 20,
+      borderLeftWidth: 6,
+      borderTopWidth: 6,
+      borderRightWidth: 6,
+      borderBottomWidth: 6,
       borderLeftColor: 'green',
-      borderRightWidth: 20,
       borderRightColor: 'green',
-      borderTopWidth: 10,
       borderTopColor: 'blue',
-      borderBottomWidth: 10,
       borderBottomColor: 'blue',
       borderRadius: 30,
+      borderTopLeftRadius: 10,
+      borderTopRightRadius: 20,
+      borderBottomRightRadius: 30,
+      borderBottomLeftRadius: 40,
       borderColor: 'black'
     }
     return <ScrollView>
       <View style={[styles.container, {padding: 4}]}>
-        <View style={borderStyle} />
+        <View style={[borderStyle, {backgroundColor: 'gray'}]} />
       </View>
       <View style={[styles.container, {padding: 4}]}>
         <WebImage style={borderStyle} source={{uri: 'https://placeholdit.imgix.net/~text?txtsize=58&txt=200x200&w=200&h=200'}} />
