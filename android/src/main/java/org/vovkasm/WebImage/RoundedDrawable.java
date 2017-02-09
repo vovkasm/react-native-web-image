@@ -305,7 +305,7 @@ public class RoundedDrawable extends Drawable {
                 out.set(rect.right - 2f * radii[4], rect.bottom - 2f * radii[5], rect.right, rect.bottom);
                 break;
             case BOTTOM_LEFT:
-                out.set(rect.left, rect.bottom - 2f * radii[6], rect.left + 2f * radii[7], rect.bottom);
+                out.set(rect.left, rect.bottom - 2f * radii[7], rect.left + 2f * radii[6], rect.bottom);
                 break;
         }
     }
