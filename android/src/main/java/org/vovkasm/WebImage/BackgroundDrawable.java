@@ -139,8 +139,8 @@ public class BackgroundDrawable extends Drawable {
                 break;
             // center
             case CENTER:
-                dx = (mBounds.width() - mBitmapWidth) * 0.5f + 0.5f;
-                dy = (mBounds.height() - mBitmapHeight) * 0.5f + 0.5f;
+                dx = (mBounds.width() - mBitmapWidth) * 0.5f;
+                dy = (mBounds.height() - mBitmapHeight) * 0.5f;
                 mShaderMatrix.setTranslate(dx, dy);
                 RectF tmpRect = new RectF();
                 mShaderMatrix.mapRect(tmpRect, mBitmapRect);
