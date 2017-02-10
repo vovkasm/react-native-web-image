@@ -31,7 +31,7 @@ public class RoundedDrawable extends Drawable {
     private final Matrix mShaderMatrix = new Matrix();
     private final Border mBorder = new Border();
 
-    private boolean mRebuildShader = true;
+    private boolean mDirty = true;
 
     private ScaleType mScaleType = ScaleType.FIT_CENTER;
 
@@ -98,7 +98,7 @@ public class RoundedDrawable extends Drawable {
         return bitmap;
     }
 
-    private void updateShaderMatrix() {
+    private void update() {
         float scale;
         float dx;
         float dy;
@@ -145,6 +145,12 @@ public class RoundedDrawable extends Drawable {
                 mBorder.setInnerRect(rect);
                 break;
         }
+
+        BitmapShader bitmapShader = new BitmapShader(mBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+        bitmapShader.setLocalMatrix(mShaderMatrix);
+        mBitmapPaint.setShader(bitmapShader);
+
+        mDirty = false;
     }
 
     @Override
@@ -153,16 +159,14 @@ public class RoundedDrawable extends Drawable {
 
         mBounds.set(bounds);
 
-        updateShaderMatrix();
+        mDirty = true;
     }
 
     @Override
     public void draw(@NonNull Canvas canvas) {
-        if (mRebuildShader) {
-            BitmapShader bitmapShader = new BitmapShader(mBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
-            bitmapShader.setLocalMatrix(mShaderMatrix);
-            mBitmapPaint.setShader(bitmapShader);
-            mRebuildShader = false;
+        if (mDirty) {
+            update();
+            mDirty = false;
         }
 
         canvas.drawPath(mBorder.getInnerPath(), mBitmapPaint);
@@ -218,17 +222,20 @@ public class RoundedDrawable extends Drawable {
     public int getIntrinsicHeight() {
         return mBitmapHeight;
     }
-
+    
     public void setBorderRadii(float tl, float tr, float br, float bl) {
         mBorder.setRadii(tl, tr, br, bl);
+        mDirty = true;
     }
 
     public void setBorderWidths(float ls, float ts, float rs, float bs) {
         mBorder.setWidths(ls, ts, rs, bs);
+        mDirty = true;
     }
 
     public void setBorderColors(@ColorInt final int lc, @ColorInt final int tc, @ColorInt final int rc, @ColorInt final int bc) {
         mBorder.setColors(lc, tc, rc, bc);
+        mDirty = true;
     }
 
     public ScaleType getScaleType() {
@@ -241,7 +248,7 @@ public class RoundedDrawable extends Drawable {
         }
         if (mScaleType != scaleType) {
             mScaleType = scaleType;
-            updateShaderMatrix();
+            mDirty = true;
         }
     }
 
