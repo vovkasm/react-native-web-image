@@ -33,14 +33,14 @@ public class WebImageView extends ImageView {
 
     @Override
     public void setImageDrawable(Drawable drawable) {
-        mDrawable = RoundedDrawable.fromDrawable(drawable);
+        mDrawable = BackgroundDrawable.fromDrawable(drawable);
         updateDrawableAttrs();
         super.setImageDrawable(mDrawable);
     }
 
     @Override
     public void setImageBitmap(Bitmap bm) {
-        mDrawable = RoundedDrawable.fromBitmap(bm);
+        mDrawable = BackgroundDrawable.fromBitmap(bm);
         updateDrawableAttrs();
         super.setImageDrawable(mDrawable);
     }
@@ -124,11 +124,11 @@ public class WebImageView extends ImageView {
             return;
         }
 
-        if (drawable instanceof RoundedDrawable) {
-            RoundedDrawable roundedDrawable = (RoundedDrawable) drawable;
+        if (drawable instanceof BackgroundDrawable) {
+            BackgroundDrawable backgroundDrawable = (BackgroundDrawable) drawable;
 
             if (hasBorder()) {
-                Border border = roundedDrawable.getBorder();
+                Border border = backgroundDrawable.getBorder();
 
                 if (hasMonoBorder()) {
                     MonoBorder monoBorder = null;
@@ -152,7 +152,7 @@ public class WebImageView extends ImageView {
 
                     monoBorder.setColor(mBorderColors[0] == Color.TRANSPARENT ? mBorderColor : mBorderColors[0]);
 
-                    roundedDrawable.setBorder(monoBorder);
+                    backgroundDrawable.setBorder(monoBorder);
                 } else {
                     MulticolorBorder multicolorBorder = null;
                     if (border instanceof MulticolorBorder)
@@ -179,13 +179,13 @@ public class WebImageView extends ImageView {
                     final float bl = YogaConstants.isUndefined(mBorderRadii[3]) ? mBorderRadius : mBorderRadii[3];
                     multicolorBorder.setRadii(tl, tr, br, bl);
 
-                    roundedDrawable.setBorder(multicolorBorder);
+                    backgroundDrawable.setBorder(multicolorBorder);
                 }
             } else {
                 // no borders
-                if (roundedDrawable.getBorder() != null) roundedDrawable.setBorder(null);
+                if (backgroundDrawable.getBorder() != null) backgroundDrawable.setBorder(null);
             }
-            roundedDrawable.setScaleType(getScaleType());
+            backgroundDrawable.setScaleType(getScaleType());
         } else if (drawable instanceof LayerDrawable) {
             LayerDrawable ld = (LayerDrawable) drawable;
             for (int i = 0, layers = ld.getNumberOfLayers(); i < layers; i++) {

@@ -18,8 +18,8 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.ImageView.ScaleType;
 
-public class RoundedDrawable extends Drawable {
-    public static final String TAG = "RoundedDrawable";
+public class BackgroundDrawable extends Drawable {
+    public static final String TAG = "BackgroundDrawable";
 
     private final RectF mBounds = new RectF();
     private final RectF mBitmapRect = new RectF();
@@ -34,7 +34,7 @@ public class RoundedDrawable extends Drawable {
     private boolean mDirty = true;
     private ScaleType mScaleType = ScaleType.FIT_CENTER;
 
-    public RoundedDrawable(Bitmap bitmap) {
+    public BackgroundDrawable(Bitmap bitmap) {
         mBitmap = bitmap;
 
         mBitmapWidth = bitmap.getWidth();
@@ -46,9 +46,9 @@ public class RoundedDrawable extends Drawable {
         mBitmapPaint.setAntiAlias(true);
     }
 
-    public static RoundedDrawable fromBitmap(Bitmap bitmap) {
+    public static BackgroundDrawable fromBitmap(Bitmap bitmap) {
         if (bitmap != null) {
-            return new RoundedDrawable(bitmap);
+            return new BackgroundDrawable(bitmap);
         } else {
             return null;
         }
@@ -56,7 +56,7 @@ public class RoundedDrawable extends Drawable {
 
     public static Drawable fromDrawable(Drawable drawable) {
         if (drawable != null) {
-            if (drawable instanceof RoundedDrawable) {
+            if (drawable instanceof BackgroundDrawable) {
                 return drawable;
             } else if (drawable instanceof LayerDrawable) {
                 LayerDrawable ld = (LayerDrawable) drawable;
@@ -69,7 +69,7 @@ public class RoundedDrawable extends Drawable {
 
             Bitmap bm = drawableToBitmap(drawable);
             if (bm != null) {
-                return new RoundedDrawable(bm);
+                return new BackgroundDrawable(bm);
             }
         }
         return drawable;
