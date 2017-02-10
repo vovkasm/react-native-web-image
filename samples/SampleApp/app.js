@@ -47,9 +47,8 @@ export default class App extends React.Component {
       borderColor: 'black'
     }
     const imgStyle = {
-      borderWidth: 2,
-      borderColor: 'green',
-      backgroundColor: 'black'
+      borderWidth: 4,
+      borderColor: 'green'
     }
     return <ScrollView>
       <View style={[styles.container, {padding: 4}]}>
