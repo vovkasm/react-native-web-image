@@ -129,29 +129,58 @@ public class WebImageView extends ImageView {
 
             if (hasBorder()) {
                 Border border = roundedDrawable.getBorder();
-                if (border == null) {
-                    border = new Border();
+
+                if (hasMonoBorder()) {
+                    MonoBorder monoBorder = null;
+                    if (border instanceof MonoBorder)
+                        monoBorder = (MonoBorder)border;
+                    if (monoBorder == null) {
+                        monoBorder = new MonoBorder();
+                    }
+
+                    final float lw = YogaConstants.isUndefined(mBorderSizes[0]) ? mBorderWidth : mBorderSizes[0];
+                    final float tw = YogaConstants.isUndefined(mBorderSizes[1]) ? mBorderWidth : mBorderSizes[1];
+                    final float rw = YogaConstants.isUndefined(mBorderSizes[2]) ? mBorderWidth : mBorderSizes[2];
+                    final float bw = YogaConstants.isUndefined(mBorderSizes[3]) ? mBorderWidth : mBorderSizes[3];
+                    monoBorder.setWidths(lw, tw, rw, bw);
+
+                    final float tl = YogaConstants.isUndefined(mBorderRadii[0]) ? mBorderRadius : mBorderRadii[0];
+                    final float tr = YogaConstants.isUndefined(mBorderRadii[1]) ? mBorderRadius : mBorderRadii[1];
+                    final float br = YogaConstants.isUndefined(mBorderRadii[2]) ? mBorderRadius : mBorderRadii[2];
+                    final float bl = YogaConstants.isUndefined(mBorderRadii[3]) ? mBorderRadius : mBorderRadii[3];
+                    monoBorder.setRadii(tl, tr, br, bl);
+
+                    monoBorder.setColor(mBorderColors[0] == Color.TRANSPARENT ? mBorderColor : mBorderColors[0]);
+
+                    roundedDrawable.setBorder(monoBorder);
+                } else {
+                    MulticolorBorder multicolorBorder = null;
+                    if (border instanceof MulticolorBorder)
+                        multicolorBorder = (MulticolorBorder) border;
+                    if (multicolorBorder == null) {
+                        multicolorBorder = new MulticolorBorder();
+                    }
+
+                    final float lw = YogaConstants.isUndefined(mBorderSizes[0]) ? mBorderWidth : mBorderSizes[0];
+                    final float tw = YogaConstants.isUndefined(mBorderSizes[1]) ? mBorderWidth : mBorderSizes[1];
+                    final float rw = YogaConstants.isUndefined(mBorderSizes[2]) ? mBorderWidth : mBorderSizes[2];
+                    final float bw = YogaConstants.isUndefined(mBorderSizes[3]) ? mBorderWidth : mBorderSizes[3];
+                    multicolorBorder.setWidths(lw, tw, rw, bw);
+
+                    final int lc = mBorderColors[0] == Color.TRANSPARENT ? mBorderColor : mBorderColors[0];
+                    final int tc = mBorderColors[1] == Color.TRANSPARENT ? mBorderColor : mBorderColors[1];
+                    final int rc = mBorderColors[2] == Color.TRANSPARENT ? mBorderColor : mBorderColors[2];
+                    final int bc = mBorderColors[3] == Color.TRANSPARENT ? mBorderColor : mBorderColors[3];
+                    multicolorBorder.setColors(lc, tc, rc, bc);
+
+                    final float tl = YogaConstants.isUndefined(mBorderRadii[0]) ? mBorderRadius : mBorderRadii[0];
+                    final float tr = YogaConstants.isUndefined(mBorderRadii[1]) ? mBorderRadius : mBorderRadii[1];
+                    final float br = YogaConstants.isUndefined(mBorderRadii[2]) ? mBorderRadius : mBorderRadii[2];
+                    final float bl = YogaConstants.isUndefined(mBorderRadii[3]) ? mBorderRadius : mBorderRadii[3];
+                    multicolorBorder.setRadii(tl, tr, br, bl);
+
+                    roundedDrawable.setBorder(multicolorBorder);
                 }
-
-                final float lw = YogaConstants.isUndefined(mBorderSizes[0]) ? mBorderWidth : mBorderSizes[0];
-                final float tw = YogaConstants.isUndefined(mBorderSizes[1]) ? mBorderWidth : mBorderSizes[1];
-                final float rw = YogaConstants.isUndefined(mBorderSizes[2]) ? mBorderWidth : mBorderSizes[2];
-                final float bw = YogaConstants.isUndefined(mBorderSizes[3]) ? mBorderWidth : mBorderSizes[3];
-                border.setWidths(lw, tw, rw, bw);
-
-                final int lc = mBorderColors[0] == Color.TRANSPARENT ? mBorderColor : mBorderColors[0];
-                final int tc = mBorderColors[1] == Color.TRANSPARENT ? mBorderColor : mBorderColors[1];
-                final int rc = mBorderColors[2] == Color.TRANSPARENT ? mBorderColor : mBorderColors[2];
-                final int bc = mBorderColors[3] == Color.TRANSPARENT ? mBorderColor : mBorderColors[3];
-                border.setColors(lc, tc, rc, bc);
-
-                final float tl = YogaConstants.isUndefined(mBorderRadii[0]) ? mBorderRadius : mBorderRadii[0];
-                final float tr = YogaConstants.isUndefined(mBorderRadii[1]) ? mBorderRadius : mBorderRadii[1];
-                final float br = YogaConstants.isUndefined(mBorderRadii[2]) ? mBorderRadius : mBorderRadii[2];
-                final float bl = YogaConstants.isUndefined(mBorderRadii[3]) ? mBorderRadius : mBorderRadii[3];
-                border.setRadii(tl, tr, br, bl);
-
-                roundedDrawable.setBorder(border);
             } else {
                 // no borders
                 if (roundedDrawable.getBorder() != null) roundedDrawable.setBorder(null);
@@ -171,6 +200,12 @@ public class WebImageView extends ImageView {
                 && YogaConstants.isUndefined(mBorderSizes[1])
                 && YogaConstants.isUndefined(mBorderSizes[2])
                 && YogaConstants.isUndefined(mBorderSizes[3]));
+    }
+
+    private boolean hasMonoBorder() {
+        return (mBorderColors[0] == mBorderColors[1]
+                && mBorderColors[1] == mBorderColors[2]
+                && mBorderColors[2] == mBorderColors[3]);
     }
 
 }
