@@ -47,7 +47,7 @@ public class WebImageView extends ImageView {
 
     @Override
     public void setScaleType(ScaleType scaleType) {
-        super.setScaleType(scaleType);
+        super.setScaleType(ScaleType.FIT_XY);
         if (mScaleType == scaleType) {
             return;
         }
@@ -127,31 +127,25 @@ public class WebImageView extends ImageView {
         if (drawable instanceof RoundedDrawable) {
             RoundedDrawable roundedDrawable = (RoundedDrawable) drawable;
 
-            for (int side=0; side<4; side++) {
-                if (YogaConstants.isUndefined(mBorderSizes[side])) {
-                    roundedDrawable.setBorderWidth(side, mBorderWidth);
-                } else {
-                    roundedDrawable.setBorderWidth(side, mBorderSizes[side]);
-                }
-            }
+            final float lw = YogaConstants.isUndefined(mBorderSizes[0]) ? mBorderWidth : mBorderSizes[0];
+            final float tw = YogaConstants.isUndefined(mBorderSizes[1]) ? mBorderWidth : mBorderSizes[1];
+            final float rw = YogaConstants.isUndefined(mBorderSizes[2]) ? mBorderWidth : mBorderSizes[2];
+            final float bw = YogaConstants.isUndefined(mBorderSizes[3]) ? mBorderWidth : mBorderSizes[3];
+            roundedDrawable.setBorderWidths(lw, tw, rw, bw);
+
+            final int lc = mBorderColors[0] == Color.TRANSPARENT ? mBorderColor : mBorderColors[0];
+            final int tc = mBorderColors[1] == Color.TRANSPARENT ? mBorderColor : mBorderColors[1];
+            final int rc = mBorderColors[2] == Color.TRANSPARENT ? mBorderColor : mBorderColors[2];
+            final int bc = mBorderColors[3] == Color.TRANSPARENT ? mBorderColor : mBorderColors[3];
+            roundedDrawable.setBorderColors(lc, tc, rc, bc);
+
+            final float tl = YogaConstants.isUndefined(mBorderRadii[0]) ? mBorderRadius : mBorderRadii[0];
+            final float tr = YogaConstants.isUndefined(mBorderRadii[1]) ? mBorderRadius : mBorderRadii[1];
+            final float br = YogaConstants.isUndefined(mBorderRadii[2]) ? mBorderRadius : mBorderRadii[2];
+            final float bl = YogaConstants.isUndefined(mBorderRadii[3]) ? mBorderRadius : mBorderRadii[3];
+            roundedDrawable.setBorderRadii(tl, tr, br, bl);
 
             roundedDrawable.setScaleType(getScaleType());
-            for (Side side : Side.values()) {
-                if (mBorderColors[side.index] == Color.TRANSPARENT) {
-                    roundedDrawable.setBorderColor(side, mBorderColor);
-                } else {
-                    roundedDrawable.setBorderColor(side, mBorderColors[side.index]);
-                }
-            }
-
-            for (Corner corner : Corner.values()) {
-                if (YogaConstants.isUndefined(mBorderRadii[corner.index])) {
-                    roundedDrawable.setCornerRadius(corner, mBorderRadius);
-                } else {
-                    roundedDrawable.setCornerRadius(corner, mBorderRadii[corner.index]);
-                }
-            }
-
         } else if (drawable instanceof LayerDrawable) {
             LayerDrawable ld = (LayerDrawable) drawable;
             for (int i = 0, layers = ld.getNumberOfLayers(); i < layers; i++) {

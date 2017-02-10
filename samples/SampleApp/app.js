@@ -46,6 +46,11 @@ export default class App extends React.Component {
       borderBottomLeftRadius: 40,
       borderColor: 'black'
     }
+    const imgStyle = {
+      borderWidth: 2,
+      borderColor: 'green',
+      backgroundColor: 'black'
+    }
     return <ScrollView>
       <View style={[styles.container, {padding: 4}]}>
         <View style={[borderStyle, {backgroundColor: 'gray'}]} />
@@ -57,53 +62,62 @@ export default class App extends React.Component {
         title='[200x150] in [auto x 120] block'
         source={{uri: 'https://placeholdit.imgix.net/~text?txtsize=33&txt=200x150&w=200&h=150'}}
         height={120}
+        imageStyle={imgStyle}
       />
       <Sample
         title='[200x150] in [100 x 100] block'
         source={{uri: 'https://placeholdit.imgix.net/~text?txtsize=33&txt=200x150&w=200&h=150'}}
         height={100} width={100}
+        imageStyle={imgStyle}
       />
       <Sample
         title='[200x150] in [auto x 120] block, resizeMode=cover'
         source={{uri: 'https://placeholdit.imgix.net/~text?txtsize=33&txt=200x150&w=200&h=150'}}
         resizeMode='cover'
         height={120}
+        imageStyle={imgStyle}
       />
       <Sample
         title='[200x150] in [100 x 100] block, resizeMode=cover'
         source={{uri: 'https://placeholdit.imgix.net/~text?txtsize=33&txt=200x150&w=200&h=150'}}
         resizeMode='cover'
         height={100} width={100}
+        imageStyle={imgStyle}
       />
       <Sample
         title='[200x150] in [auto x 120] block, resizeMode=stretch'
         source={{uri: 'https://placeholdit.imgix.net/~text?txtsize=33&txt=200x150&w=200&h=150'}}
         resizeMode='stretch'
         height={120}
+        imageStyle={imgStyle}
       />
       <Sample
         title='[200x150] in [100 x 100] block, resizeMode=stretch'
         source={{uri: 'https://placeholdit.imgix.net/~text?txtsize=33&txt=200x150&w=200&h=150'}}
         resizeMode='stretch'
         height={100} width={100}
+        imageStyle={imgStyle}
       />
       <Sample
         title='[200x150] in [auto x 120] block, resizeMode=center'
         source={{uri: 'https://placeholdit.imgix.net/~text?txtsize=33&txt=200x150&w=200&h=150'}}
         resizeMode='center'
         height={120}
+        imageStyle={imgStyle}
       />
       <Sample
         title='[200x150] in [100 x 100] block, resizeMode=center'
         source={{uri: 'https://placeholdit.imgix.net/~text?txtsize=33&txt=200x150&w=200&h=150'}}
         resizeMode='center'
         height={100} width={100}
+        imageStyle={imgStyle}
       />
       <Sample
         title='image with onError handler, see logs'
         source={{uri: 'https://httpbin.org/status/404'}}
         width={100} height={100}
         onError={(e) => { console.log('WebImage onError handler: ', e) }}
+        imageStyle={imgStyle}
       />
     </ScrollView>
   }
