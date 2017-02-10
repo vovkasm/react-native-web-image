@@ -105,10 +105,10 @@ export default class App extends React.Component {
         imageStyle={imgStyle}
       />
       <Sample
-        title='[200x150] in [100 x 100] block, resizeMode=center'
+        title='[200x150] in [100 x 50] block, resizeMode=center'
         source={{uri: 'https://placeholdit.imgix.net/~text?txtsize=33&txt=200x150&w=200&h=150'}}
         resizeMode='center'
-        height={100} width={100}
+        height={50} width={100}
         imageStyle={imgStyle}
       />
       <Sample
