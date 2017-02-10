@@ -136,7 +136,7 @@ public class WebImageView extends ImageView {
             }
 
             roundedDrawable.setScaleType(getScaleType());
-            for (RoundedDrawable.Side side : RoundedDrawable.Side.values()) {
+            for (Side side : Side.values()) {
                 if (mBorderColors[side.index] == Color.TRANSPARENT) {
                     roundedDrawable.setBorderColor(side, mBorderColor);
                 } else {
@@ -144,7 +144,7 @@ public class WebImageView extends ImageView {
                 }
             }
 
-            for (RoundedDrawable.Corner corner : RoundedDrawable.Corner.values()) {
+            for (Corner corner : Corner.values()) {
                 if (YogaConstants.isUndefined(mBorderRadii[corner.index])) {
                     roundedDrawable.setCornerRadius(corner, mBorderRadius);
                 } else {
