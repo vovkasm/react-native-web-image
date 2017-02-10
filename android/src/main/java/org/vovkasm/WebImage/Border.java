@@ -37,11 +37,6 @@ public class Border {
         mInnerRectValid = false;
     }
 
-    public RectF getRect() {
-        updateRects();
-        return mBounds;
-    }
-
     public void setInnerRect(final RectF rect) {
         mInnerRect.set(rect);
         mBoundsValid = false;
