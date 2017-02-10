@@ -104,68 +104,45 @@ public class RoundedDrawable extends Drawable {
         float dy;
 
         mBorder.setRect(mBounds);
+        final RectF rect = mBorder.getInnerRect();
 
         mShaderMatrix.reset();
         switch (mScaleType) {
-            case CENTER:
-                mShaderMatrix.setTranslate((int) ((mBounds.width() - mBitmapWidth) * 0.5f + 0.5f),
-                        (int) ((mBounds.height() - mBitmapHeight) * 0.5f + 0.5f));
+            // contain
+            default:
+            case FIT_CENTER:
+                mShaderMatrix.setRectToRect(mBitmapRect, rect, Matrix.ScaleToFit.CENTER);
+                mShaderMatrix.mapRect(rect, mBitmapRect);
+                mBorder.setInnerRect(rect);
                 break;
-
+            // cover
             case CENTER_CROP:
                 dx = 0;
                 dy = 0;
-                final RectF rect = mBorder.getInnerRect();
-
                 if (mBitmapWidth * rect.height() > rect.width() * mBitmapHeight) {
                     scale = rect.height() / (float) mBitmapHeight;
-                    dx = (rect.width() - mBitmapWidth * scale) * 0.5f;
+                    dx = (rect.width() - mBitmapWidth * scale) * 0.5f + 0.5f;
                 } else {
                     scale = rect.width() / (float) mBitmapWidth;
-                    dy = (rect.height() - mBitmapHeight * scale) * 0.5f;
+                    dy = (rect.height() - mBitmapHeight * scale) * 0.5f + 0.5f;
                 }
 
                 mShaderMatrix.setScale(scale, scale);
-                mShaderMatrix.postTranslate((int) (dx + 0.5f), (int) (dy + 0.5f));
+                mShaderMatrix.postTranslate((int) dx, (int) dy);
                 break;
-
-            case CENTER_INSIDE:
-                if (mBitmapWidth <= mBounds.width() && mBitmapHeight <= mBounds.height()) {
-                    scale = 1.0f;
-                } else {
-                    scale = Math.min(mBounds.width() / (float) mBitmapWidth,
-                            mBounds.height() / (float) mBitmapHeight);
-                }
-
-                dx = (int) ((mBounds.width() - mBitmapWidth * scale) * 0.5f + 0.5f);
-                dy = (int) ((mBounds.height() - mBitmapHeight * scale) * 0.5f + 0.5f);
-
-                mShaderMatrix.setScale(scale, scale);
-                mShaderMatrix.postTranslate(dx, dy);
-
-                mShaderMatrix.mapRect(mBorder.getInnerRect());
-                mShaderMatrix.setRectToRect(mBitmapRect, mBorder.getInnerRect(), Matrix.ScaleToFit.FILL);
-                break;
-
-            default:
-            case FIT_CENTER:
-                mShaderMatrix.setRectToRect(mBitmapRect, mBorder.getInnerRect(), Matrix.ScaleToFit.CENTER);
-                break;
-
-            case FIT_END:
-                mShaderMatrix.setRectToRect(mBitmapRect, mBounds, Matrix.ScaleToFit.END);
-                mShaderMatrix.mapRect(mBorder.getInnerRect());
-                mShaderMatrix.setRectToRect(mBitmapRect, mBorder.getInnerRect(), Matrix.ScaleToFit.FILL);
-                break;
-
-            case FIT_START:
-                mShaderMatrix.setRectToRect(mBitmapRect, mBounds, Matrix.ScaleToFit.START);
-                mShaderMatrix.mapRect(mBorder.getInnerRect());
-                mShaderMatrix.setRectToRect(mBitmapRect, mBorder.getInnerRect(), Matrix.ScaleToFit.FILL);
-                break;
-
+            // stretch
             case FIT_XY:
                 mShaderMatrix.setRectToRect(mBitmapRect, mBorder.getInnerRect(), Matrix.ScaleToFit.FILL);
+                break;
+            // center
+            case CENTER:
+                dx = (mBounds.width() - mBitmapWidth) * 0.5f + 0.5f;
+                dy = (mBounds.height() - mBitmapHeight) * 0.5f + 0.5f;
+                mShaderMatrix.setTranslate(dx, dy);
+                RectF tmpRect = new RectF();
+                mShaderMatrix.mapRect(tmpRect, mBitmapRect);
+                rect.intersect(tmpRect);
+                mBorder.setInnerRect(rect);
                 break;
         }
     }

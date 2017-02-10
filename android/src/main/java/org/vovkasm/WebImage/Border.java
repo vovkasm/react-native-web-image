@@ -12,7 +12,9 @@ public class Border {
     public static final int DEFAULT_COLOR = Color.TRANSPARENT;
 
     private final RectF mBounds = new RectF();
+    private boolean mBoundsValid = false;
     private final RectF mInnerRect = new RectF();
+    private boolean mInnerRectValid = false;
     private final float[] mWidths = new float[]{0f, 0f, 0f, 0f};
     private final float[] mRadii = new float[]{0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f};
     private final float[] mInnerRadii = new float[]{0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f};
@@ -31,19 +33,28 @@ public class Border {
 
     public void setRect(final RectF rect) {
         mBounds.set(rect);
-        //TODO: update only when required (in draw & getInnerRect)
-        update();
+        mBoundsValid = true;
+        mInnerRectValid = false;
     }
 
     public RectF getRect() {
+        updateRects();
         return mBounds;
     }
 
+    public void setInnerRect(final RectF rect) {
+        mInnerRect.set(rect);
+        mBoundsValid = false;
+        mInnerRectValid = true;
+    }
+
     public RectF getInnerRect() {
+        updateRects();
         return mInnerRect;
     }
 
     public Path getInnerPath() {
+        updateRects();
         Path path = new Path();
         path.addRoundRect(mInnerRect, mInnerRadii, Path.Direction.CW);
         return path;
@@ -76,12 +87,25 @@ public class Border {
         mColors[3] = bc;
     }
 
+    private void updateRects() {
+        if (!mBoundsValid && mInnerRectValid) {
+            mBounds.left = mInnerRect.left - mWidths[0];
+            mBounds.top = mInnerRect.top - mWidths[1];
+            mBounds.right = mInnerRect.right + mWidths[2];
+            mBounds.bottom = mInnerRect.bottom + mWidths[3];
+            mBoundsValid = true;
+        }
+        if (mBoundsValid && !mInnerRectValid) {
+            mInnerRect.left = mBounds.left + mWidths[0];
+            mInnerRect.top = mBounds.top + mWidths[1];
+            mInnerRect.right = mBounds.right - mWidths[2];
+            mInnerRect.bottom = mBounds.bottom - mWidths[3];
+            mInnerRectValid = true;
+        }
+    }
+
     private void update() {
-        mInnerRect.set(mBounds);
-        mInnerRect.left += mWidths[0];
-        mInnerRect.top += mWidths[1];
-        mInnerRect.right -= mWidths[2];
-        mInnerRect.bottom -= mWidths[3];
+        updateRects();
 
         mInnerRadii[0] = Math.max(mRadii[0] - mWidths[0], 0f);
         mInnerRadii[1] = Math.max(mRadii[1] - mWidths[1], 0f);
