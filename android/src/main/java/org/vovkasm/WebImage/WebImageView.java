@@ -127,24 +127,35 @@ public class WebImageView extends ImageView {
         if (drawable instanceof RoundedDrawable) {
             RoundedDrawable roundedDrawable = (RoundedDrawable) drawable;
 
-            final float lw = YogaConstants.isUndefined(mBorderSizes[0]) ? mBorderWidth : mBorderSizes[0];
-            final float tw = YogaConstants.isUndefined(mBorderSizes[1]) ? mBorderWidth : mBorderSizes[1];
-            final float rw = YogaConstants.isUndefined(mBorderSizes[2]) ? mBorderWidth : mBorderSizes[2];
-            final float bw = YogaConstants.isUndefined(mBorderSizes[3]) ? mBorderWidth : mBorderSizes[3];
-            roundedDrawable.setBorderWidths(lw, tw, rw, bw);
+            if (hasBorder()) {
+                Border border = roundedDrawable.getBorder();
+                if (border == null) {
+                    border = new Border();
+                }
 
-            final int lc = mBorderColors[0] == Color.TRANSPARENT ? mBorderColor : mBorderColors[0];
-            final int tc = mBorderColors[1] == Color.TRANSPARENT ? mBorderColor : mBorderColors[1];
-            final int rc = mBorderColors[2] == Color.TRANSPARENT ? mBorderColor : mBorderColors[2];
-            final int bc = mBorderColors[3] == Color.TRANSPARENT ? mBorderColor : mBorderColors[3];
-            roundedDrawable.setBorderColors(lc, tc, rc, bc);
+                final float lw = YogaConstants.isUndefined(mBorderSizes[0]) ? mBorderWidth : mBorderSizes[0];
+                final float tw = YogaConstants.isUndefined(mBorderSizes[1]) ? mBorderWidth : mBorderSizes[1];
+                final float rw = YogaConstants.isUndefined(mBorderSizes[2]) ? mBorderWidth : mBorderSizes[2];
+                final float bw = YogaConstants.isUndefined(mBorderSizes[3]) ? mBorderWidth : mBorderSizes[3];
+                border.setWidths(lw, tw, rw, bw);
 
-            final float tl = YogaConstants.isUndefined(mBorderRadii[0]) ? mBorderRadius : mBorderRadii[0];
-            final float tr = YogaConstants.isUndefined(mBorderRadii[1]) ? mBorderRadius : mBorderRadii[1];
-            final float br = YogaConstants.isUndefined(mBorderRadii[2]) ? mBorderRadius : mBorderRadii[2];
-            final float bl = YogaConstants.isUndefined(mBorderRadii[3]) ? mBorderRadius : mBorderRadii[3];
-            roundedDrawable.setBorderRadii(tl, tr, br, bl);
+                final int lc = mBorderColors[0] == Color.TRANSPARENT ? mBorderColor : mBorderColors[0];
+                final int tc = mBorderColors[1] == Color.TRANSPARENT ? mBorderColor : mBorderColors[1];
+                final int rc = mBorderColors[2] == Color.TRANSPARENT ? mBorderColor : mBorderColors[2];
+                final int bc = mBorderColors[3] == Color.TRANSPARENT ? mBorderColor : mBorderColors[3];
+                border.setColors(lc, tc, rc, bc);
 
+                final float tl = YogaConstants.isUndefined(mBorderRadii[0]) ? mBorderRadius : mBorderRadii[0];
+                final float tr = YogaConstants.isUndefined(mBorderRadii[1]) ? mBorderRadius : mBorderRadii[1];
+                final float br = YogaConstants.isUndefined(mBorderRadii[2]) ? mBorderRadius : mBorderRadii[2];
+                final float bl = YogaConstants.isUndefined(mBorderRadii[3]) ? mBorderRadius : mBorderRadii[3];
+                border.setRadii(tl, tr, br, bl);
+
+                roundedDrawable.setBorder(border);
+            } else {
+                // no borders
+                if (roundedDrawable.getBorder() != null) roundedDrawable.setBorder(null);
+            }
             roundedDrawable.setScaleType(getScaleType());
         } else if (drawable instanceof LayerDrawable) {
             LayerDrawable ld = (LayerDrawable) drawable;
@@ -152,6 +163,14 @@ public class WebImageView extends ImageView {
                 updateAttrs(ld.getDrawable(i));
             }
         }
+    }
+
+    private boolean hasBorder() {
+        return !(YogaConstants.isUndefined(mBorderWidth)
+                && YogaConstants.isUndefined(mBorderSizes[0])
+                && YogaConstants.isUndefined(mBorderSizes[1])
+                && YogaConstants.isUndefined(mBorderSizes[2])
+                && YogaConstants.isUndefined(mBorderSizes[3]));
     }
 
 }
