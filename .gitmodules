@@ -1,0 +1,3 @@
+[submodule "WebImage/Vendor/SDWebImage"]
+	path = WebImage/Vendor/SDWebImage
+	url = https://github.com/rs/SDWebImage.git
