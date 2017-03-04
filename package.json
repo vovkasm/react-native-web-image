@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "start": "npm run start-sample --",
-    "start-sample": "react-native start --root samples/SampleApp",
+    "start-sample": "node rn-wrapper.js start --projectRoots samples/SampleApp,.",
     "run-sample-android": "react-native run-android --root samples/SampleApp",
     "run-sample-ios": "react-native run-ios --project-path samples/SampleApp/ios"
   },
