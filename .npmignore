@@ -1,7 +1,6 @@
 /**/xcuserdata/
-/.eslintrc.js
+/*.js
 /android/build/
-/rn-cli.config.js
 /samples/
 /WebImage/Vendor/SDWebImage/.git*
 /WebImage/Vendor/SDWebImage/Examples
