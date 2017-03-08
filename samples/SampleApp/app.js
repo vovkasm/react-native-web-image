@@ -96,7 +96,9 @@ const styles = StyleSheet.create({
     margin: 10
   },
   img: {
-    flex: 1
+    flex: 1,
+    borderWidth: 3,
+    borderColor: 'rgb(127,255,127)'
   },
   imgContainer: {
     flexDirection: 'row',
