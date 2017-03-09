@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
   img: {
     flex: 1,
     borderWidth: 3,
+    borderRadius: 10,
     borderColor: 'rgb(127,255,127)'
   },
   imgContainer: {
