@@ -2,10 +2,14 @@ import React, { PropTypes } from 'react'
 import { Button, ScrollView, StyleSheet, Text, View } from 'react-native'
 
 import Samples from './samples'
+import TestDefault from './test-default'
+import TestBorders from './test-borders'
 
 const Main = ({ navigateTo }) => {
   return <ScrollView>
     <Button title='Samples' onPress={() => { navigateTo('/samples') }} />
+    <Button title='Default params' onPress={() => { navigateTo('/test-default') }} />
+    <Button title='Borders' onPress={() => { navigateTo('/test-borders') }} />
   </ScrollView>
 }
 Main.propTypes = {
@@ -14,7 +18,9 @@ Main.propTypes = {
 
 const routes = {
   '/': Main,
-  '/samples': Samples
+  '/samples': Samples,
+  '/test-default': TestDefault,
+  '/test-borders': TestBorders
 }
 
 export default class App extends React.Component {
@@ -57,7 +63,7 @@ const s = StyleSheet.create({
     flex: 1
   },
   header: {
-    marginTop: 16,
+    marginTop: 15,
     flexDirection: 'row',
     alignItems: 'center'
   }
