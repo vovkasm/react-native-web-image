@@ -2,7 +2,6 @@ package org.vovkasm.WebImage;
 
 import android.graphics.Color;
 import android.net.Uri;
-import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 
 import com.bumptech.glide.Glide;
@@ -13,8 +12,9 @@ import com.bumptech.glide.request.target.Target;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.uimanager.BaseViewManager;
+import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.uimanager.PixelUtil;
-import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewProps;
 import com.facebook.react.uimanager.annotations.ReactProp;
@@ -27,7 +27,7 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-class WebImageViewManager extends SimpleViewManager<WebImageView> {
+class WebImageViewManager extends BaseViewManager<WebImageView, LayoutShadowNode> {
     private static final String REACT_CLASS = "WebImageView";
 
     private static Map<String, ScaleType> RESIZE_MODE_MAP = new HashMap<String, ScaleType>(){{
@@ -66,6 +66,21 @@ class WebImageViewManager extends SimpleViewManager<WebImageView> {
     @Override
     protected WebImageView createViewInstance(ThemedReactContext reactContext) {
         return new WebImageView(reactContext);
+    }
+
+    @Override
+    public LayoutShadowNode createShadowNodeInstance() {
+        return new LayoutShadowNode();
+    }
+
+    @Override
+    public Class<? extends LayoutShadowNode> getShadowNodeClass() {
+        return LayoutShadowNode.class;
+    }
+
+    @Override
+    public void updateExtraData(WebImageView root, Object extraData) {
+
     }
 
     @ReactProp(name="source")
