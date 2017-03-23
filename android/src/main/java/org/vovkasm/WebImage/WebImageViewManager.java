@@ -77,11 +77,6 @@ class WebImageViewManager extends BaseViewManager<WebImageView, WebImageShadowNo
         return WebImageShadowNode.class;
     }
 
-    @Override
-    public void updateExtraData(WebImageView root, Object extraData) {
-
-    }
-
     @ReactProp(name="source")
     public void setSrc(WebImageView view, @Nullable ReadableMap source) {
         if (source == null) return;
@@ -122,25 +117,6 @@ class WebImageViewManager extends BaseViewManager<WebImageView, WebImageShadowNo
     }
 
     @ReactPropGroup(names = {
-            ViewProps.BORDER_WIDTH,
-            ViewProps.BORDER_LEFT_WIDTH,
-            ViewProps.BORDER_TOP_WIDTH,
-            ViewProps.BORDER_RIGHT_WIDTH,
-            ViewProps.BORDER_BOTTOM_WIDTH
-    }, defaultFloat = YogaConstants.UNDEFINED)
-    public void setBorderWidth(WebImageView view, int index, float borderWidth) {
-        if (!YogaConstants.isUndefined(borderWidth)) {
-            borderWidth = PixelUtil.toPixelFromDIP(borderWidth);
-        }
-
-        if (index == 0) {
-            view.setBorderWidth(borderWidth);
-        } else {
-            view.setBorderWidth(borderWidth, index - 1);
-        }
-    }
-
-    @ReactPropGroup(names = {
             ViewProps.BORDER_RADIUS,
             ViewProps.BORDER_TOP_LEFT_RADIUS,
             ViewProps.BORDER_TOP_RIGHT_RADIUS,
@@ -156,6 +132,14 @@ class WebImageViewManager extends BaseViewManager<WebImageView, WebImageShadowNo
             view.setBorderRadius(borderRadius);
         } else {
             view.setBorderRadius(borderRadius, index - 1);
+        }
+    }
+
+    @Override
+    public void updateExtraData(WebImageView view, Object extraData) {
+        if (extraData instanceof BoxMetrics) {
+            BoxMetrics bm = (BoxMetrics) extraData;
+            view.setBoxMetrics(bm);
         }
     }
 
