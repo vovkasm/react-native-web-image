@@ -13,7 +13,6 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.BaseViewManager;
-import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.uimanager.PixelUtil;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewProps;
@@ -27,7 +26,7 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-class WebImageViewManager extends BaseViewManager<WebImageView, LayoutShadowNode> {
+class WebImageViewManager extends BaseViewManager<WebImageView, WebImageShadowNode> {
     private static final String REACT_CLASS = "WebImageView";
 
     private static Map<String, ScaleType> RESIZE_MODE_MAP = new HashMap<String, ScaleType>(){{
@@ -69,13 +68,13 @@ class WebImageViewManager extends BaseViewManager<WebImageView, LayoutShadowNode
     }
 
     @Override
-    public LayoutShadowNode createShadowNodeInstance() {
-        return new LayoutShadowNode();
+    public WebImageShadowNode createShadowNodeInstance() {
+        return new WebImageShadowNode();
     }
 
     @Override
-    public Class<? extends LayoutShadowNode> getShadowNodeClass() {
-        return LayoutShadowNode.class;
+    public Class<? extends WebImageShadowNode> getShadowNodeClass() {
+        return WebImageShadowNode.class;
     }
 
     @Override
