@@ -4,21 +4,14 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.widget.ImageView.ScaleType;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.ImageViewTarget;
-import com.bumptech.glide.request.target.Target;
-import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.uimanager.BaseViewManager;
 import com.facebook.react.uimanager.PixelUtil;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewProps;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.annotations.ReactPropGroup;
-import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.facebook.yoga.YogaConstants;
 
 import java.util.HashMap;
@@ -26,8 +19,9 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
+@ReactModule(name = WebImageViewManager.REACT_CLASS)
 class WebImageViewManager extends BaseViewManager<WebImageView, WebImageShadowNode> {
-    private static final String REACT_CLASS = "WebImageView";
+    static final String REACT_CLASS = "WebImageView";
 
     private static Map<String, ScaleType> RESIZE_MODE_MAP = new HashMap<String, ScaleType>(){{
         put("cover", ScaleType.CENTER_CROP);
@@ -35,27 +29,6 @@ class WebImageViewManager extends BaseViewManager<WebImageView, WebImageShadowNo
         put("stretch", ScaleType.FIT_XY);
         put("center", ScaleType.CENTER);
     }};
-
-    private static RequestListener LISTENER = new RequestListener<Uri,GlideDrawable>() {
-        @Override
-        public boolean onException(Exception e, Uri uri, Target<GlideDrawable> target, boolean isFirstResource) {
-            if (!(target instanceof ImageViewTarget)) {
-                return false;
-            }
-            WebImageView view = (WebImageView) ((ImageViewTarget) target).getView();
-            WritableMap event = Arguments.createMap();
-            event.putString("error", e.getMessage());
-            event.putString("uri", uri.toString());
-            ThemedReactContext context = (ThemedReactContext) view.getContext();
-            context.getJSModule(RCTEventEmitter.class).receiveEvent(view.getId(), "onWebImageError", event);
-            return false;
-        }
-
-        @Override
-        public boolean onResourceReady(GlideDrawable resource, Uri uri, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-            return false;
-        }
-    };
 
     @Override
     public String getName() {
@@ -82,11 +55,7 @@ class WebImageViewManager extends BaseViewManager<WebImageView, WebImageShadowNo
         if (source == null) return;
         final String uriProp = source.getString("uri");
         final Uri uri = Uri.parse(uriProp);
-        Glide.with(view.getContext())
-                .load(uri)
-                .listener(LISTENER)
-                .dontTransform()
-                .into(view);
+        view.setImageUri(uri);
     }
 
     @ReactProp(name="resizeMode")
