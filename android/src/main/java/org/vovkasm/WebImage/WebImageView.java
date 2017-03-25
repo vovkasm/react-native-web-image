@@ -12,8 +12,10 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.ImageViewTarget;
 import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.target.ViewTarget;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.FloatUtil;
@@ -96,7 +98,7 @@ class WebImageView extends ImageView {
         if (uri.equals(mUri)) return;
         mUri = uri;
         // TODO(vovkasm): use ThemedReactContext#getCurrentActivity so glide can follow lifecycle
-        Glide.with(getContext()).load(mUri).listener(LISTENER).into(this);
+        Glide.with(getContext()).load(mUri).listener(LISTENER).into(new WebImageViewTarget(this));
     }
 
     public void setBorderColor(@ColorInt int color) {
@@ -233,4 +235,14 @@ class WebImageView extends ImageView {
                 && mBorderColors[2] == mBorderColors[3]);
     }
 
+    static class WebImageViewTarget extends ViewTarget<WebImageView, GlideDrawable> {
+        public WebImageViewTarget(WebImageView view) {
+            super(view);
+        }
+
+        @Override
+        public void onResourceReady(GlideDrawable drawable, GlideAnimation<? super GlideDrawable> glideAnimation) {
+            this.view.setImageDrawable(drawable);
+        }
+    }
 }
