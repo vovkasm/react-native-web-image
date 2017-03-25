@@ -1,7 +1,6 @@
 package org.vovkasm.WebImage;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
@@ -13,7 +12,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.ImageViewTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.target.ViewTarget;
 import com.facebook.react.bridge.Arguments;
@@ -27,7 +25,10 @@ class WebImageView extends ImageView {
     public static final int DEFAULT_BORDER_COLOR = Color.TRANSPARENT;
     public static final float DEFAULT_BORDER_RADIUS = 0f;
 
+    private static RequestListener requestListener = new WebImageViewRequestListener();
+
     private Uri mUri;
+    private ScaleType mScaleType = ScaleType.FIT_CENTER;
 
     private BoxMetrics mBoxMetrics;
     private @ColorInt int mBorderColor = DEFAULT_BORDER_COLOR;
@@ -35,29 +36,6 @@ class WebImageView extends ImageView {
     private float mBorderRadius = DEFAULT_BORDER_RADIUS;
     private float[] mBorderRadii = new float[]{YogaConstants.UNDEFINED, YogaConstants.UNDEFINED, YogaConstants.UNDEFINED, YogaConstants.UNDEFINED};
     private Drawable mDrawable;
-
-    private ScaleType mScaleType = ScaleType.FIT_CENTER;
-
-    static RequestListener LISTENER = new RequestListener<Uri,GlideDrawable>() {
-        @Override
-        public boolean onException(Exception e, Uri uri, Target<GlideDrawable> target, boolean isFirstResource) {
-            if (!(target instanceof ImageViewTarget)) {
-                return false;
-            }
-            WebImageView view = (WebImageView) ((ImageViewTarget) target).getView();
-            WritableMap event = Arguments.createMap();
-            event.putString("error", e.getMessage());
-            event.putString("uri", uri.toString());
-            ThemedReactContext context = (ThemedReactContext) view.getContext();
-            context.getJSModule(RCTEventEmitter.class).receiveEvent(view.getId(), "onWebImageError", event);
-            return false;
-        }
-
-        @Override
-        public boolean onResourceReady(GlideDrawable resource, Uri uri, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-            return false;
-        }
-    };
 
     public WebImageView(Context context) {
         super(context);
@@ -67,13 +45,6 @@ class WebImageView extends ImageView {
     @Override
     public void setImageDrawable(Drawable drawable) {
         mDrawable = BackgroundDrawable.fromDrawable(drawable);
-        updateDrawableAttrs();
-        super.setImageDrawable(mDrawable);
-    }
-
-    @Override
-    public void setImageBitmap(Bitmap bm) {
-        mDrawable = BackgroundDrawable.fromBitmap(bm);
         updateDrawableAttrs();
         super.setImageDrawable(mDrawable);
     }
@@ -98,7 +69,7 @@ class WebImageView extends ImageView {
         if (uri.equals(mUri)) return;
         mUri = uri;
         // TODO(vovkasm): use ThemedReactContext#getCurrentActivity so glide can follow lifecycle
-        Glide.with(getContext()).load(mUri).listener(LISTENER).into(new WebImageViewTarget(this));
+        Glide.with(getContext()).load(mUri).listener(requestListener).into(new WebImageViewTarget(this));
     }
 
     public void setBorderColor(@ColorInt int color) {
@@ -235,8 +206,27 @@ class WebImageView extends ImageView {
                 && mBorderColors[2] == mBorderColors[3]);
     }
 
-    static class WebImageViewTarget extends ViewTarget<WebImageView, GlideDrawable> {
-        public WebImageViewTarget(WebImageView view) {
+    private static class WebImageViewRequestListener implements RequestListener<Uri,GlideDrawable> {
+        @Override
+        public boolean onException(Exception e, Uri uri, Target<GlideDrawable> target, boolean isFirstResource) {
+            if (!(target instanceof WebImageViewTarget)) return false;
+            WebImageView view = ((WebImageViewTarget) target).getView();
+            WritableMap event = Arguments.createMap();
+            event.putString("error", e.getMessage());
+            event.putString("uri", uri.toString());
+            ThemedReactContext context = (ThemedReactContext) view.getContext();
+            context.getJSModule(RCTEventEmitter.class).receiveEvent(view.getId(), "onWebImageError", event);
+            return false;
+        }
+
+        @Override
+        public boolean onResourceReady(GlideDrawable resource, Uri uri, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+            return false;
+        }
+    }
+
+    private static class WebImageViewTarget extends ViewTarget<WebImageView, GlideDrawable> {
+        WebImageViewTarget(WebImageView view) {
             super(view);
         }
 
@@ -244,5 +234,7 @@ class WebImageView extends ImageView {
         public void onResourceReady(GlideDrawable drawable, GlideAnimation<? super GlideDrawable> glideAnimation) {
             this.view.setImageDrawable(drawable);
         }
+
+        public WebImageView getView() { return view; }
     }
 }
