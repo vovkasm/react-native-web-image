@@ -1,12 +1,14 @@
 package org.vovkasm.WebImage;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.support.annotation.ColorInt;
-import android.widget.ImageView;
+import android.view.View;
+import android.widget.ImageView.ScaleType;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -21,14 +23,14 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.facebook.yoga.YogaConstants;
 
-class WebImageView extends ImageView {
+class WebImageView extends View {
     public static final int DEFAULT_BORDER_COLOR = Color.TRANSPARENT;
     public static final float DEFAULT_BORDER_RADIUS = 0f;
 
     private static RequestListener requestListener = new WebImageViewRequestListener();
 
     private Uri mUri;
-    private ScaleType mScaleType = ScaleType.FIT_CENTER;
+    private ScaleType mScaleType;
 
     private BoxMetrics mBoxMetrics;
     private @ColorInt int mBorderColor = DEFAULT_BORDER_COLOR;
@@ -37,30 +39,84 @@ class WebImageView extends ImageView {
     private float[] mBorderRadii = new float[]{YogaConstants.UNDEFINED, YogaConstants.UNDEFINED, YogaConstants.UNDEFINED, YogaConstants.UNDEFINED};
     private Drawable mDrawable;
 
+    private int mDrawableWidth;
+    private int mDrawableHeight;
+
     public WebImageView(Context context) {
         super(context);
+        mScaleType = ScaleType.FIT_CENTER;
         updateDrawableAttrs();
     }
 
-    @Override
     public void setImageDrawable(Drawable drawable) {
-        mDrawable = BackgroundDrawable.fromDrawable(drawable);
-        updateDrawableAttrs();
-        super.setImageDrawable(mDrawable);
+        Drawable bd = BackgroundDrawable.fromDrawable(drawable);
+        if (mDrawable != bd) {
+            final int oldWidth = mDrawableWidth;
+            final int oldHeight = mDrawableHeight;
+
+            updateDrawable(bd);
+
+            updateDrawableAttrs();
+
+            if (oldWidth != mDrawableWidth || oldHeight != mDrawableHeight) {
+                requestLayout();
+            }
+            invalidate();
+        }
     }
 
     @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        if (changed) {
+            configureBounds();
+        }
+        super.onLayout(changed, left, top, right, bottom);
+    }
+
+    private void updateDrawable(Drawable d) {
+        if (mDrawable != null) {
+            mDrawable.setCallback(null);
+            unscheduleDrawable(mDrawable);
+        }
+
+        mDrawable = d;
+
+        if (d != null) {
+            d.setCallback(this);
+            d.setVisible(getVisibility() == VISIBLE, true);
+            mDrawableWidth = d.getIntrinsicWidth();
+            mDrawableHeight = d.getIntrinsicHeight();
+            configureBounds();
+        } else {
+            mDrawableWidth = mDrawableHeight = -1;
+        }
+    }
+
+    private void configureBounds() {
+        if (mDrawable == null) {
+            return;
+        }
+        mDrawable.setBounds(0, 0, getWidth(), getHeight());
+    }
+
     public void setScaleType(ScaleType scaleType) {
-        super.setScaleType(ScaleType.FIT_XY);
+        if (scaleType == null) {
+            throw new NullPointerException();
+        }
+
         if (mScaleType == scaleType) {
             return;
         }
+
         mScaleType = scaleType;
+
+        setWillNotCacheDrawing(mScaleType == ScaleType.CENTER);
+
         updateDrawableAttrs();
+        requestLayout();
         invalidate();
     }
 
-    @Override
     public ScaleType getScaleType() {
         return mScaleType;
     }
@@ -194,6 +250,14 @@ class WebImageView extends ImageView {
                 updateAttrs(ld.getDrawable(i));
             }
         }
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+
+        if (mDrawable == null) return;
+        mDrawable.draw(canvas);
     }
 
     private boolean hasBorder() {
