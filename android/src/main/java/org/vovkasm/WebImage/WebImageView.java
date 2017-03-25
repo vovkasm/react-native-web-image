@@ -95,6 +95,7 @@ class WebImageView extends ImageView {
     void setImageUri(Uri uri) {
         if (uri.equals(mUri)) return;
         mUri = uri;
+        // TODO(vovkasm): use ThemedReactContext#getCurrentActivity so glide can follow lifecycle
         Glide.with(getContext()).load(mUri).listener(LISTENER).into(this);
     }
 
