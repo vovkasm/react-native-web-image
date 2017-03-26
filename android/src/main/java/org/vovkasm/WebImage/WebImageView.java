@@ -4,9 +4,10 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Path;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.support.annotation.ColorInt;
 import android.view.View;
@@ -40,14 +41,21 @@ class WebImageView extends View {
     private float mBorderRadius = DEFAULT_BORDER_RADIUS;
     private float[] mBorderRadii = new float[]{YogaConstants.UNDEFINED, YogaConstants.UNDEFINED, YogaConstants.UNDEFINED, YogaConstants.UNDEFINED};
 
+    private Rect mBorderRect = new Rect();
+    private Rect mPaddingRect = new Rect();
+    private Rect mContentRect = new Rect();
+
     private Drawable mImgDrawable;
     private int mImgDrawableWidth;
     private int mImgDrawableHeight;
     private Matrix mDrawMatrix = null;
 
     // Avoid allocations...
+    private RectF mContentRectF = new RectF();
     private RectF mTempSrc = new RectF();
     private RectF mTempDst = new RectF();
+
+    private IBorder mBorder;
 
     public WebImageView(Context context) {
         super(context);
@@ -97,35 +105,38 @@ class WebImageView extends View {
     }
 
     private void configureBounds() {
-        if (mImgDrawable == null) {
-            return;
-        }
-        int dwidth = mImgDrawableWidth;
-        int dheight = mImgDrawableHeight;
+        if (mBoxMetrics == null || mImgDrawable == null) return;
 
-        int vwidth = getWidth();
-        int vheight = getHeight();
+        float viewWidth = mBoxMetrics.getWidth();
+        float viewHeight = mBoxMetrics.getHeight();
 
-        if (mBoxMetrics != null) {
-            vwidth -= mBoxMetrics.getBorderLeft() + mBoxMetrics.getPaddingLeft() + mBoxMetrics.getPaddingRight() + mBoxMetrics.getBorderRight();
-            vheight -= mBoxMetrics.getBorderTop() + mBoxMetrics.getPaddingTop() + mBoxMetrics.getPaddingBottom() + mBoxMetrics.getBorderBottom();
-        }
+        mContentRectF.set(
+                mBoxMetrics.getBorderLeft() + mBoxMetrics.getPaddingLeft(),
+                mBoxMetrics.getBorderTop() + mBoxMetrics.getPaddingTop(),
+                viewWidth - (mBoxMetrics.getPaddingRight() + mBoxMetrics.getBorderRight()),
+                viewHeight - (mBoxMetrics.getPaddingBottom() + mBoxMetrics.getBorderBottom()));
 
-        boolean fits = (dwidth < 0 || vwidth == dwidth) && (dheight < 0 || vheight == dheight);
+        float cBoxWidth = mContentRectF.width();
+        float cBoxHeight = mContentRectF.height();
 
-        if (dwidth <= 0 || dheight <= 0 || ScaleType.FIT_XY == mScaleType) {
+        int imWidth = mImgDrawableWidth;
+        int imHeight = mImgDrawableHeight;
+
+        boolean fits = (imWidth < 0 || cBoxWidth == imWidth) && (imHeight < 0 || cBoxHeight == imHeight);
+
+        if (imWidth <= 0 || imHeight <= 0 || ScaleType.FIT_XY == mScaleType) {
             // stretch
-            mImgDrawable.setBounds(0, 0, vwidth, vheight);
+            mImgDrawable.setBounds(0, 0, Math.round(cBoxWidth), Math.round(cBoxHeight));
             mDrawMatrix = null;
         } else {
-            mImgDrawable.setBounds(0, 0, dwidth, dheight);
+            mImgDrawable.setBounds(0, 0, imWidth, imHeight);
 
             if (fits) {
                 mDrawMatrix = null;
             } else if (ScaleType.CENTER == mScaleType) {
                 // center
                 mDrawMatrix = new Matrix();
-                mDrawMatrix.setTranslate(Math.round((vwidth - dwidth) * 0.5f), Math.round((vheight - dheight) * 0.5f));
+                mDrawMatrix.setTranslate(Math.round((cBoxWidth - imWidth) * 0.5f), Math.round((cBoxHeight - imHeight) * 0.5f));
             } else if (ScaleType.CENTER_CROP == mScaleType) {
                 // cover
                 mDrawMatrix = new Matrix();
@@ -133,24 +144,104 @@ class WebImageView extends View {
                 float scale;
                 float dx = 0, dy = 0;
 
-                if (dwidth * vheight > vwidth * dheight) {
-                    scale = (float) vheight / (float) dheight;
-                    dx = (vwidth - dwidth * scale) * 0.5f;
+                if (imWidth * cBoxHeight > cBoxWidth * imHeight) {
+                    scale = cBoxHeight / (float) imHeight;
+                    dx = (cBoxWidth - imWidth * scale) * 0.5f;
                 } else {
-                    scale = (float) vwidth / (float) dwidth;
-                    dy = (vheight - dheight * scale) * 0.5f;
+                    scale = cBoxWidth / (float) imWidth;
+                    dy = (cBoxHeight - imHeight * scale) * 0.5f;
                 }
 
                 mDrawMatrix.setScale(scale, scale);
                 mDrawMatrix.postTranslate(Math.round(dx), Math.round(dy));
             } else {
                 // contain
-                mTempSrc.set(0, 0, dwidth, dheight);
-                mTempDst.set(0, 0, vwidth, vheight);
+                mTempSrc.set(0, 0, imWidth, imHeight);
+                mTempDst.set(0, 0, cBoxWidth, cBoxHeight);
 
                 mDrawMatrix = new Matrix();
                 mDrawMatrix.setRectToRect(mTempSrc, mTempDst, Matrix.ScaleToFit.CENTER);
             }
+        }
+
+        if (mDrawMatrix != null) {
+            mTempSrc.set(0, 0, imWidth, imHeight);
+            mDrawMatrix.mapRect(mTempDst, mTempSrc);
+            float w = Math.min(cBoxWidth, mTempDst.width());
+            float h = Math.min(cBoxHeight, mTempDst.height());
+
+            if (w != cBoxWidth) {
+                float dx = (cBoxWidth - w) * 0.5f;
+                mContentRectF.left += dx;
+                mContentRectF.right -= dx;
+            }
+            if (h != cBoxHeight) {
+                float dy = (cBoxHeight - h) * 0.5f;
+                mContentRectF.top += dy;
+                mContentRectF.bottom -= dy;
+            }
+        }
+        mContentRectF.round(mContentRect);
+        mPaddingRect.set(mContentRect);
+        mPaddingRect.left -= mBoxMetrics.getPaddingLeft();
+        mPaddingRect.top -= mBoxMetrics.getPaddingTop();
+        mPaddingRect.right += mBoxMetrics.getPaddingRight();
+        mPaddingRect.bottom += mBoxMetrics.getPaddingBottom();
+        mBorderRect.set(mPaddingRect);
+        mBorderRect.left -= mBoxMetrics.getBorderLeft();
+        mBorderRect.top -= mBoxMetrics.getBorderTop();
+        mBorderRect.right += mBoxMetrics.getBorderRight();
+        mBorderRect.bottom += mBoxMetrics.getBorderBottom();
+
+        if (hasBorder()) {
+            if (hasMonoBorder()) {
+                MonoBorder monoBorder = null;
+                if (mBorder instanceof MonoBorder)
+                    monoBorder = (MonoBorder)mBorder;
+                if (monoBorder == null) {
+                    monoBorder = new MonoBorder();
+                }
+
+                monoBorder.setWidths(mBoxMetrics.getBorderLeft(), mBoxMetrics.getBorderTop(), mBoxMetrics.getBorderRight(), mBoxMetrics.getBorderBottom());
+
+                final float tl = YogaConstants.isUndefined(mBorderRadii[0]) ? mBorderRadius : mBorderRadii[0];
+                final float tr = YogaConstants.isUndefined(mBorderRadii[1]) ? mBorderRadius : mBorderRadii[1];
+                final float br = YogaConstants.isUndefined(mBorderRadii[2]) ? mBorderRadius : mBorderRadii[2];
+                final float bl = YogaConstants.isUndefined(mBorderRadii[3]) ? mBorderRadius : mBorderRadii[3];
+                monoBorder.setRadii(tl, tr, br, bl);
+
+                monoBorder.setColor(mBorderColors[0] == Color.TRANSPARENT ? mBorderColor : mBorderColors[0]);
+
+                mBorder = monoBorder;
+            } else {
+                MulticolorBorder multicolorBorder = null;
+                if (mBorder instanceof MulticolorBorder)
+                    multicolorBorder = (MulticolorBorder) mBorder;
+                if (multicolorBorder == null) {
+                    multicolorBorder = new MulticolorBorder();
+                }
+
+                multicolorBorder.setWidths(mBoxMetrics.getBorderLeft(), mBoxMetrics.getBorderTop(), mBoxMetrics.getBorderRight(), mBoxMetrics.getBorderBottom());
+
+                final int lc = mBorderColors[0] == Color.TRANSPARENT ? mBorderColor : mBorderColors[0];
+                final int tc = mBorderColors[1] == Color.TRANSPARENT ? mBorderColor : mBorderColors[1];
+                final int rc = mBorderColors[2] == Color.TRANSPARENT ? mBorderColor : mBorderColors[2];
+                final int bc = mBorderColors[3] == Color.TRANSPARENT ? mBorderColor : mBorderColors[3];
+                multicolorBorder.setColors(lc, tc, rc, bc);
+
+                final float tl = YogaConstants.isUndefined(mBorderRadii[0]) ? mBorderRadius : mBorderRadii[0];
+                final float tr = YogaConstants.isUndefined(mBorderRadii[1]) ? mBorderRadius : mBorderRadii[1];
+                final float br = YogaConstants.isUndefined(mBorderRadii[2]) ? mBorderRadius : mBorderRadii[2];
+                final float bl = YogaConstants.isUndefined(mBorderRadii[3]) ? mBorderRadius : mBorderRadii[3];
+                multicolorBorder.setRadii(tl, tr, br, bl);
+
+                mBorder = multicolorBorder;
+            }
+
+            mBorder.setRect(mBorderRect);
+        } else {
+            // no borders
+            mBorder = null;
         }
     }
 
@@ -209,82 +300,8 @@ class WebImageView extends View {
     public void setBoxMetrics(BoxMetrics bm) {
         if (mBoxMetrics != null && mBoxMetrics.equalsToBoxMetrics(bm)) return;
         mBoxMetrics = bm;
+        configureBounds();
         invalidate();
-    }
-
-    private void updateAttrs(Drawable drawable) {
-        if (drawable == null) {
-            return;
-        }
-
-        if (drawable instanceof BackgroundDrawable) {
-            BackgroundDrawable backgroundDrawable = (BackgroundDrawable) drawable;
-
-            if (hasBorder()) {
-                IBorder border = backgroundDrawable.getBorder();
-
-                if (hasMonoBorder()) {
-                    MonoBorder monoBorder = null;
-                    if (border instanceof MonoBorder)
-                        monoBorder = (MonoBorder)border;
-                    if (monoBorder == null) {
-                        monoBorder = new MonoBorder();
-                    }
-
-                    if (mBoxMetrics == null) {
-                        monoBorder.setWidths(0f, 0f, 0f, 0f);
-                    } else {
-                        monoBorder.setWidths(mBoxMetrics.getBorderLeft(), mBoxMetrics.getBorderTop(), mBoxMetrics.getBorderRight(), mBoxMetrics.getBorderBottom());
-                    }
-
-                    final float tl = YogaConstants.isUndefined(mBorderRadii[0]) ? mBorderRadius : mBorderRadii[0];
-                    final float tr = YogaConstants.isUndefined(mBorderRadii[1]) ? mBorderRadius : mBorderRadii[1];
-                    final float br = YogaConstants.isUndefined(mBorderRadii[2]) ? mBorderRadius : mBorderRadii[2];
-                    final float bl = YogaConstants.isUndefined(mBorderRadii[3]) ? mBorderRadius : mBorderRadii[3];
-                    monoBorder.setRadii(tl, tr, br, bl);
-
-                    monoBorder.setColor(mBorderColors[0] == Color.TRANSPARENT ? mBorderColor : mBorderColors[0]);
-
-                    backgroundDrawable.setBorder(monoBorder);
-                } else {
-                    MulticolorBorder multicolorBorder = null;
-                    if (border instanceof MulticolorBorder)
-                        multicolorBorder = (MulticolorBorder) border;
-                    if (multicolorBorder == null) {
-                        multicolorBorder = new MulticolorBorder();
-                    }
-
-                    if (mBoxMetrics == null) {
-                        multicolorBorder.setWidths(0f, 0f, 0f, 0f);
-                    } else {
-                        multicolorBorder.setWidths(mBoxMetrics.getBorderLeft(), mBoxMetrics.getBorderTop(), mBoxMetrics.getBorderRight(), mBoxMetrics.getBorderBottom());
-                    }
-
-                    final int lc = mBorderColors[0] == Color.TRANSPARENT ? mBorderColor : mBorderColors[0];
-                    final int tc = mBorderColors[1] == Color.TRANSPARENT ? mBorderColor : mBorderColors[1];
-                    final int rc = mBorderColors[2] == Color.TRANSPARENT ? mBorderColor : mBorderColors[2];
-                    final int bc = mBorderColors[3] == Color.TRANSPARENT ? mBorderColor : mBorderColors[3];
-                    multicolorBorder.setColors(lc, tc, rc, bc);
-
-                    final float tl = YogaConstants.isUndefined(mBorderRadii[0]) ? mBorderRadius : mBorderRadii[0];
-                    final float tr = YogaConstants.isUndefined(mBorderRadii[1]) ? mBorderRadius : mBorderRadii[1];
-                    final float br = YogaConstants.isUndefined(mBorderRadii[2]) ? mBorderRadius : mBorderRadii[2];
-                    final float bl = YogaConstants.isUndefined(mBorderRadii[3]) ? mBorderRadius : mBorderRadii[3];
-                    multicolorBorder.setRadii(tl, tr, br, bl);
-
-                    backgroundDrawable.setBorder(multicolorBorder);
-                }
-            } else {
-                // no borders
-                if (backgroundDrawable.getBorder() != null) backgroundDrawable.setBorder(null);
-            }
-            backgroundDrawable.setScaleType(getScaleType());
-        } else if (drawable instanceof LayerDrawable) {
-            LayerDrawable ld = (LayerDrawable) drawable;
-            for (int i = 0, layers = ld.getNumberOfLayers(); i < layers; i++) {
-                updateAttrs(ld.getDrawable(i));
-            }
-        }
     }
 
     @Override
@@ -298,7 +315,7 @@ class WebImageView extends View {
         int paddingTop = 0;
         if (mBoxMetrics != null) {
             paddingLeft += mBoxMetrics.getBorderLeft() + mBoxMetrics.getPaddingLeft();
-            paddingTop += mBoxMetrics.getBorderTop() + mBoxMetrics.getBorderTop();
+            paddingTop += mBoxMetrics.getBorderTop() + mBoxMetrics.getPaddingTop();
         }
 
         if (mDrawMatrix == null && paddingLeft == 0 && paddingTop == 0) {
@@ -306,6 +323,18 @@ class WebImageView extends View {
         } else {
             int saveCount = canvas.getSaveCount();
             canvas.save();
+
+            if (mBorder != null) {
+                // TODO(vovkasm): Border can be drawn only after getInnerPath(). Fix it.
+                Path innerPath = mBorder.getInnerPath();
+                mBorder.draw(canvas);
+                // TODO(vovkasm): Optimize case path is rectangular
+                // TODO(vovkasm): Calculate rounded content rect - not padding rect
+                canvas.clipPath(innerPath);
+            } else {
+                canvas.clipRect(mContentRect);
+            }
+
 
             canvas.translate(paddingLeft, paddingTop);
             if (mDrawMatrix != null) {
