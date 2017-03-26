@@ -36,7 +36,7 @@ class WebImageView extends View {
 
     private BoxMetrics mBoxMetrics;
     private @ColorInt int mBorderColor = DEFAULT_BORDER_COLOR;
-    private @ColorInt int mBorderColors[] = new int[]{DEFAULT_BORDER_COLOR, DEFAULT_BORDER_COLOR, DEFAULT_BORDER_COLOR, DEFAULT_BORDER_COLOR};
+    private @ColorInt int[] mBorderColors = new int[]{DEFAULT_BORDER_COLOR, DEFAULT_BORDER_COLOR, DEFAULT_BORDER_COLOR, DEFAULT_BORDER_COLOR};
     private float mBorderRadius = DEFAULT_BORDER_RADIUS;
     private float[] mBorderRadii = new float[]{YogaConstants.UNDEFINED, YogaConstants.UNDEFINED, YogaConstants.UNDEFINED, YogaConstants.UNDEFINED};
 
