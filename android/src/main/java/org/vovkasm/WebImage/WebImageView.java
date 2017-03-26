@@ -3,6 +3,8 @@ package org.vovkasm.WebImage;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
@@ -37,10 +39,15 @@ class WebImageView extends View {
     private @ColorInt int mBorderColors[] = new int[]{DEFAULT_BORDER_COLOR, DEFAULT_BORDER_COLOR, DEFAULT_BORDER_COLOR, DEFAULT_BORDER_COLOR};
     private float mBorderRadius = DEFAULT_BORDER_RADIUS;
     private float[] mBorderRadii = new float[]{YogaConstants.UNDEFINED, YogaConstants.UNDEFINED, YogaConstants.UNDEFINED, YogaConstants.UNDEFINED};
-    private Drawable mDrawable;
 
-    private int mDrawableWidth;
-    private int mDrawableHeight;
+    private Drawable mImgDrawable;
+    private int mImgDrawableWidth;
+    private int mImgDrawableHeight;
+    private Matrix mDrawMatrix = null;
+
+    // Avoid allocations...
+    private RectF mTempSrc = new RectF();
+    private RectF mTempDst = new RectF();
 
     public WebImageView(Context context) {
         super(context);
@@ -49,16 +56,13 @@ class WebImageView extends View {
     }
 
     public void setImageDrawable(Drawable drawable) {
-        Drawable bd = BackgroundDrawable.fromDrawable(drawable);
-        if (mDrawable != bd) {
-            final int oldWidth = mDrawableWidth;
-            final int oldHeight = mDrawableHeight;
+        if (mImgDrawable != drawable) {
+            final int oldWidth = mImgDrawableWidth;
+            final int oldHeight = mImgDrawableHeight;
 
-            updateDrawable(bd);
+            updateDrawable(drawable);
 
-            updateDrawableAttrs();
-
-            if (oldWidth != mDrawableWidth || oldHeight != mDrawableHeight) {
+            if (oldWidth != mImgDrawableWidth || oldHeight != mImgDrawableHeight) {
                 requestLayout();
             }
             invalidate();
@@ -74,29 +78,80 @@ class WebImageView extends View {
     }
 
     private void updateDrawable(Drawable d) {
-        if (mDrawable != null) {
-            mDrawable.setCallback(null);
-            unscheduleDrawable(mDrawable);
+        if (mImgDrawable != null) {
+            mImgDrawable.setCallback(null);
+            unscheduleDrawable(mImgDrawable);
         }
 
-        mDrawable = d;
+        mImgDrawable = d;
 
         if (d != null) {
             d.setCallback(this);
             d.setVisible(getVisibility() == VISIBLE, true);
-            mDrawableWidth = d.getIntrinsicWidth();
-            mDrawableHeight = d.getIntrinsicHeight();
+            mImgDrawableWidth = d.getIntrinsicWidth();
+            mImgDrawableHeight = d.getIntrinsicHeight();
             configureBounds();
         } else {
-            mDrawableWidth = mDrawableHeight = -1;
+            mImgDrawableWidth = mImgDrawableHeight = -1;
         }
     }
 
     private void configureBounds() {
-        if (mDrawable == null) {
+        if (mImgDrawable == null) {
             return;
         }
-        mDrawable.setBounds(0, 0, getWidth(), getHeight());
+        int dwidth = mImgDrawableWidth;
+        int dheight = mImgDrawableHeight;
+
+        int vwidth = getWidth();
+        int vheight = getHeight();
+
+        if (mBoxMetrics != null) {
+            vwidth -= mBoxMetrics.getBorderLeft() + mBoxMetrics.getPaddingLeft() + mBoxMetrics.getPaddingRight() + mBoxMetrics.getBorderRight();
+            vheight -= mBoxMetrics.getBorderTop() + mBoxMetrics.getPaddingTop() + mBoxMetrics.getPaddingBottom() + mBoxMetrics.getBorderBottom();
+        }
+
+        boolean fits = (dwidth < 0 || vwidth == dwidth) && (dheight < 0 || vheight == dheight);
+
+        if (dwidth <= 0 || dheight <= 0 || ScaleType.FIT_XY == mScaleType) {
+            // stretch
+            mImgDrawable.setBounds(0, 0, vwidth, vheight);
+            mDrawMatrix = null;
+        } else {
+            mImgDrawable.setBounds(0, 0, dwidth, dheight);
+
+            if (fits) {
+                mDrawMatrix = null;
+            } else if (ScaleType.CENTER == mScaleType) {
+                // center
+                mDrawMatrix = new Matrix();
+                mDrawMatrix.setTranslate(Math.round((vwidth - dwidth) * 0.5f), Math.round((vheight - dheight) * 0.5f));
+            } else if (ScaleType.CENTER_CROP == mScaleType) {
+                // cover
+                mDrawMatrix = new Matrix();
+
+                float scale;
+                float dx = 0, dy = 0;
+
+                if (dwidth * vheight > vwidth * dheight) {
+                    scale = (float) vheight / (float) dheight;
+                    dx = (vwidth - dwidth * scale) * 0.5f;
+                } else {
+                    scale = (float) vwidth / (float) dwidth;
+                    dy = (vheight - dheight * scale) * 0.5f;
+                }
+
+                mDrawMatrix.setScale(scale, scale);
+                mDrawMatrix.postTranslate(Math.round(dx), Math.round(dy));
+            } else {
+                // contain
+                mTempSrc.set(0, 0, dwidth, dheight);
+                mTempDst.set(0, 0, vwidth, vheight);
+
+                mDrawMatrix = new Matrix();
+                mDrawMatrix.setRectToRect(mTempSrc, mTempDst, Matrix.ScaleToFit.CENTER);
+            }
+        }
     }
 
     public void setScaleType(ScaleType scaleType) {
@@ -174,7 +229,7 @@ class WebImageView extends View {
     }
 
     private void updateDrawableAttrs() {
-        updateAttrs(mDrawable);
+        updateAttrs(mImgDrawable);
     }
 
     private void updateAttrs(Drawable drawable) {
@@ -256,8 +311,31 @@ class WebImageView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        if (mDrawable == null) return;
-        mDrawable.draw(canvas);
+        if (mImgDrawable == null) return;
+        if (mImgDrawableWidth == 0 || mImgDrawableHeight == 0) return;
+
+        int paddingLeft = 0;
+        int paddingTop = 0;
+        if (mBoxMetrics != null) {
+            paddingLeft += mBoxMetrics.getBorderLeft() + mBoxMetrics.getPaddingLeft();
+            paddingTop += mBoxMetrics.getBorderTop() + mBoxMetrics.getBorderTop();
+        }
+
+        if (mDrawMatrix == null && paddingLeft == 0 && paddingTop == 0) {
+            mImgDrawable.draw(canvas);
+        } else {
+            int saveCount = canvas.getSaveCount();
+            canvas.save();
+
+            canvas.translate(paddingLeft, paddingTop);
+            if (mDrawMatrix != null) {
+                canvas.concat(mDrawMatrix);
+            }
+
+            mImgDrawable.draw(canvas);
+
+            canvas.restoreToCount(saveCount);
+        }
     }
 
     private boolean hasBorder() {

@@ -32,7 +32,15 @@ class BoxMetrics {
     float getBorderRight() { return mBorderRight; }
     float getBorderBottom() { return mBorderBottom; }
 
-    public boolean hasBorder() {
+    float getWidth() { return mWidth; }
+    float getHeight() { return mHeight; }
+
+    float getPaddingLeft() { return mPaddingLeft; }
+    float getPaddingTop() { return mPaddingTop; }
+    float getPaddingRight() { return mPaddingRight; }
+    float getPaddingBottom() { return mPaddingBottom; }
+
+    boolean hasBorder() {
         return mBorderLeft != 0f || mBorderTop != 0f || mBorderRight != 0f || mBorderBottom != 0f;
     }
 
