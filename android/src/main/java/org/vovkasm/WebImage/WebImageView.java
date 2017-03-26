@@ -52,7 +52,7 @@ class WebImageView extends View {
     public WebImageView(Context context) {
         super(context);
         mScaleType = ScaleType.FIT_CENTER;
-        updateDrawableAttrs();
+        configureBounds();
     }
 
     public void setImageDrawable(Drawable drawable) {
@@ -167,7 +167,6 @@ class WebImageView extends View {
 
         setWillNotCacheDrawing(mScaleType == ScaleType.CENTER);
 
-        updateDrawableAttrs();
         requestLayout();
         invalidate();
     }
@@ -184,52 +183,33 @@ class WebImageView extends View {
     }
 
     public void setBorderColor(@ColorInt int color) {
-        if (mBorderColor == color) {
-            return;
-        }
+        if (mBorderColor == color) return;
         mBorderColor = color;
-        updateDrawableAttrs();
         invalidate();
     }
 
     public void setBorderColor(@ColorInt int color, int side) {
-        if (mBorderColors[side] == color) {
-            return;
-        }
+        if (mBorderColors[side] == color) return;
         mBorderColors[side] = color;
-        updateDrawableAttrs();
         invalidate();
     }
 
     public void setBorderRadius(float radius) {
-        if (FloatUtil.floatsEqual(mBorderRadius,radius)) {
-            return;
-        }
+        if (FloatUtil.floatsEqual(mBorderRadius,radius)) return;
         mBorderRadius = radius;
-        updateDrawableAttrs();
         invalidate();
     }
 
     public void setBorderRadius(float radius, int index) {
-        if (FloatUtil.floatsEqual(mBorderRadii[index], radius)) {
-            return;
-        }
+        if (FloatUtil.floatsEqual(mBorderRadii[index], radius)) return;
         mBorderRadii[index] = radius;
-        updateDrawableAttrs();
         invalidate();
     }
 
     public void setBoxMetrics(BoxMetrics bm) {
-        if (mBoxMetrics != null && mBoxMetrics.equalsToBoxMetrics(bm)) {
-            return;
-        }
+        if (mBoxMetrics != null && mBoxMetrics.equalsToBoxMetrics(bm)) return;
         mBoxMetrics = bm;
-        updateDrawableAttrs();
         invalidate();
-    }
-
-    private void updateDrawableAttrs() {
-        updateAttrs(mImgDrawable);
     }
 
     private void updateAttrs(Drawable drawable) {
