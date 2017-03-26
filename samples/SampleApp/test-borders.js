@@ -10,11 +10,8 @@ export default function TestBordersFlexible () {
     borderRadius: 10
   }
   return <ScrollView style={s.container}>
-    <View style={[s.block, {width: 102 + 4, height: 82 + 4}]}><WebImage source={{uri}} style={[s.web, bs]} /></View>
-    <View style={[s.block, {width: 120 + 4, height: 120 + 4}]}><WebImage source={{uri}} style={[s.web, bs]} /></View>
-    <View style={[s.block, {width: 120 + 4, height: 90 + 4}]}><WebImage source={{uri}} style={[s.web, bs]} /></View>
-    <View style={[s.block, {width: 90 + 4, height: 90 + 4}]}><WebImage source={{uri}} style={[s.web, bs]} /></View>
-    <View style={[s.block, {width: 90 + 4, height: 50 + 4}]}><WebImage source={{uri}} style={[s.web, bs]} /></View>
+    <View style={[s.block, {width: 160, height: 160}]}><WebImage source={{uri}} style={[s.web, bs]} /></View>
+    <View style={[s.block, {width: 160, height: 160}]}><WebImage source={{uri}} style={[s.web, bs, {borderLeftWidth: 30, borderRightWidth: 30}]} /></View>
   </ScrollView>
 }
 
