@@ -29,7 +29,7 @@ class WebImageView extends View {
     public static final int DEFAULT_BORDER_COLOR = Color.TRANSPARENT;
     public static final float DEFAULT_BORDER_RADIUS = 0f;
 
-    private static RequestListener requestListener = new WebImageViewRequestListener();
+    private static RequestListener<Uri, GlideDrawable> requestListener = new WebImageViewRequestListener();
 
     private Uri mUri;
     private ScaleType mScaleType;
