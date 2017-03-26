@@ -34,9 +34,9 @@ class WebImageShadowNode extends LayoutShadowNode {
         BoxMetrics bm = new BoxMetrics(
                 getLayoutWidth(),
                 getLayoutHeight(),
-                getEffectiveBorderWidth(Spacing.LEFT),
+                getEffectiveBorderWidth(Spacing.START),
                 getEffectiveBorderWidth(Spacing.TOP),
-                getEffectiveBorderWidth(Spacing.RIGHT),
+                getEffectiveBorderWidth(Spacing.END),
                 getEffectiveBorderWidth(Spacing.BOTTOM),
                 getPadding(Spacing.LEFT),
                 getPadding(Spacing.TOP),
