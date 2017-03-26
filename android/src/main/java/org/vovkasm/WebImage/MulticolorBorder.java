@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
@@ -25,7 +26,7 @@ class MulticolorBorder implements IBorder {
 
     private final Path tmpPath = new Path();
 
-    public MulticolorBorder() {
+    MulticolorBorder() {
         mPaint = new Paint();
         mPaint.setStyle(Paint.Style.FILL);
         mPaint.setAntiAlias(true);
@@ -39,7 +40,21 @@ class MulticolorBorder implements IBorder {
     }
 
     @Override
+    public void setRect(final Rect rect) {
+        mBounds.set(rect);
+        mBoundsValid = true;
+        mInnerRectValid = false;
+    }
+
+    @Override
     public void setInnerRect(final RectF rect) {
+        mInnerRect.set(rect);
+        mBoundsValid = false;
+        mInnerRectValid = true;
+    }
+
+    @Override
+    public void setInnerRect(final Rect rect) {
         mInnerRect.set(rect);
         mBoundsValid = false;
         mInnerRectValid = true;
