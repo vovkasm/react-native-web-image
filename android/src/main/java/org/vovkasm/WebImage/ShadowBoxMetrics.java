@@ -1,6 +1,6 @@
 package org.vovkasm.WebImage;
 
-class BoxMetrics {
+class ShadowBoxMetrics {
     private float mWidth;
     private float mHeight;
 
@@ -14,7 +14,7 @@ class BoxMetrics {
     private float mPaddingRight;
     private float mPaddingBottom;
 
-    BoxMetrics(float w, float h, float bl, float bt, float br, float bb, float pl, float pt, float pr, float pb) {
+    ShadowBoxMetrics(float w, float h, float bl, float bt, float br, float bb, float pl, float pt, float pr, float pb) {
         mWidth = w;
         mHeight = h;
         mBorderLeft = bl;
@@ -44,7 +44,7 @@ class BoxMetrics {
         return mBorderLeft != 0f || mBorderTop != 0f || mBorderRight != 0f || mBorderBottom != 0f;
     }
 
-    boolean equalsToBoxMetrics(BoxMetrics bm) {
+    boolean equalsToBoxMetrics(ShadowBoxMetrics bm) {
         return bm != null && bm.mWidth == mWidth && bm.mHeight == mHeight &&
                 bm.mBorderLeft == mBorderLeft && bm.mBorderTop == mBorderTop && bm.mBorderRight == mBorderRight && bm.mBorderBottom == mBorderBottom &&
                 bm.mPaddingLeft == mPaddingLeft && bm.mPaddingTop == mPaddingTop && bm.mPaddingRight == mPaddingRight && bm.mPaddingBottom == mPaddingBottom;

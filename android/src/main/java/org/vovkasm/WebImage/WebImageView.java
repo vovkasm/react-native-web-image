@@ -35,7 +35,7 @@ class WebImageView extends View {
     private Uri mUri;
     private ScaleType mScaleType;
 
-    private BoxMetrics mBoxMetrics;
+    private ShadowBoxMetrics mBoxMetrics;
     private @ColorInt int mBorderColor = DEFAULT_BORDER_COLOR;
     private @ColorInt int[] mBorderColors = new int[]{DEFAULT_BORDER_COLOR, DEFAULT_BORDER_COLOR, DEFAULT_BORDER_COLOR, DEFAULT_BORDER_COLOR};
     private float mBorderRadius = DEFAULT_BORDER_RADIUS;
@@ -297,7 +297,7 @@ class WebImageView extends View {
         invalidate();
     }
 
-    public void setBoxMetrics(BoxMetrics bm) {
+    public void setBoxMetrics(ShadowBoxMetrics bm) {
         if (mBoxMetrics != null && mBoxMetrics.equalsToBoxMetrics(bm)) return;
         mBoxMetrics = bm;
         configureBounds();

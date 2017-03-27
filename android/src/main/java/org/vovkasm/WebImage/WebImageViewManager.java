@@ -106,8 +106,8 @@ class WebImageViewManager extends BaseViewManager<WebImageView, WebImageShadowNo
 
     @Override
     public void updateExtraData(WebImageView view, Object extraData) {
-        if (extraData instanceof BoxMetrics) {
-            BoxMetrics bm = (BoxMetrics) extraData;
+        if (extraData instanceof ShadowBoxMetrics) {
+            ShadowBoxMetrics bm = (ShadowBoxMetrics) extraData;
             view.setBoxMetrics(bm);
         }
     }
