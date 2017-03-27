@@ -1,5 +1,8 @@
 package org.vovkasm.WebImage;
 
+import android.graphics.Rect;
+import android.graphics.RectF;
+
 import com.facebook.react.uimanager.FloatUtil;
 
 class BoxMetrics {
@@ -16,7 +19,13 @@ class BoxMetrics {
     float paddingRight = 0f;
     float paddingBottom = 0f;
 
-    boolean dirty = false;
+    private boolean dirty = false;
+
+    private Rect borderRect = new Rect();
+    private Rect paddingRect = new Rect();
+    private Rect contentRect = new Rect();
+
+    private RectF contentRectF = new RectF();
 
     void set(ShadowBoxMetrics sm) {
         boolean isSame = FloatUtil.floatsEqual(width, sm.width)
@@ -40,7 +49,65 @@ class BoxMetrics {
         paddingTop = sm.paddingTop;
         paddingRight = sm.paddingRight;
         paddingBottom = sm.paddingBottom;
+        contentRectF.set(borderLeft + paddingLeft, borderTop + paddingTop, width - paddingRight - borderRight, height - paddingBottom + borderBottom);
         dirty = true;
+    }
+
+    void update() {
+        if (dirty) {
+            contentRectF.round(contentRect);
+            paddingRect.set(contentRect);
+            paddingRect.left -= paddingLeft;
+            paddingRect.top -= paddingTop;
+            paddingRect.right += paddingRight;
+            paddingRect.bottom += paddingBottom;
+            borderRect.set(paddingRect);
+            borderRect.left -= borderLeft;
+            borderRect.top -= borderTop;
+            borderRect.right += borderRight;
+            borderRect.bottom += borderBottom;
+
+            dirty = false;
+        }
+    }
+
+    float getContentWidth() { return contentRectF.width(); }
+    float getContentHeight() { return contentRectF.height(); }
+    RectF getContentRectF() { return contentRectF; }
+
+    Rect getContentRect() {
+        update();
+        return contentRect;
+    }
+
+    Rect getBorderRect() {
+        update();
+        return borderRect;
+    }
+
+    Rect getPaddingRect() {
+        update();
+        return paddingRect;
+    }
+
+    void ajustContentSize(float realWidth, float realHeight) {
+        float cw = contentRectF.width();
+        float ch = contentRectF.height();
+        float w = Math.min(cw, realWidth);
+        float h = Math.min(ch, realHeight);
+
+        if (w != cw) {
+            float dx = (cw - w) * 0.5f;
+            contentRectF.left += dx;
+            contentRectF.right -= dx;
+            dirty = true;
+        }
+        if (h != ch) {
+            float dy = (ch - h) * 0.5f;
+            contentRectF.top += dy;
+            contentRectF.bottom -= dy;
+            dirty = true;
+        }
     }
 
     boolean hasBorder() {

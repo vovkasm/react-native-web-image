@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Path;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -41,17 +40,12 @@ class WebImageView extends View {
     private float mBorderRadius = DEFAULT_BORDER_RADIUS;
     private float[] mBorderRadii = new float[]{YogaConstants.UNDEFINED, YogaConstants.UNDEFINED, YogaConstants.UNDEFINED, YogaConstants.UNDEFINED};
 
-    private Rect mBorderRect = new Rect();
-    private Rect mPaddingRect = new Rect();
-    private Rect mContentRect = new Rect();
-
     private Drawable mImgDrawable;
     private int mImgDrawableWidth;
     private int mImgDrawableHeight;
     private Matrix mDrawMatrix = null;
 
     // Avoid allocations...
-    private RectF mContentRectF = new RectF();
     private RectF mTempSrc = new RectF();
     private RectF mTempDst = new RectF();
 
@@ -106,19 +100,10 @@ class WebImageView extends View {
     }
 
     private void configureBounds() {
-        if (mBoxMetrics == null || mImgDrawable == null) return;
+        if (mImgDrawable == null) return;
 
-        float viewWidth = mBoxMetrics.width;
-        float viewHeight = mBoxMetrics.height;
-
-        mContentRectF.set(
-                mBoxMetrics.borderLeft + mBoxMetrics.paddingLeft,
-                mBoxMetrics.borderTop + mBoxMetrics.paddingTop,
-                viewWidth - (mBoxMetrics.paddingRight + mBoxMetrics.borderRight),
-                viewHeight - (mBoxMetrics.paddingBottom + mBoxMetrics.borderBottom));
-
-        float cBoxWidth = mContentRectF.width();
-        float cBoxHeight = mContentRectF.height();
+        float cBoxWidth = mBoxMetrics.getContentWidth();
+        float cBoxHeight = mBoxMetrics.getContentHeight();
 
         int imWidth = mImgDrawableWidth;
         int imHeight = mImgDrawableHeight;
@@ -168,31 +153,8 @@ class WebImageView extends View {
         if (mDrawMatrix != null) {
             mTempSrc.set(0, 0, imWidth, imHeight);
             mDrawMatrix.mapRect(mTempDst, mTempSrc);
-            float w = Math.min(cBoxWidth, mTempDst.width());
-            float h = Math.min(cBoxHeight, mTempDst.height());
-
-            if (w != cBoxWidth) {
-                float dx = (cBoxWidth - w) * 0.5f;
-                mContentRectF.left += dx;
-                mContentRectF.right -= dx;
-            }
-            if (h != cBoxHeight) {
-                float dy = (cBoxHeight - h) * 0.5f;
-                mContentRectF.top += dy;
-                mContentRectF.bottom -= dy;
-            }
+            mBoxMetrics.ajustContentSize(mTempDst.width(), mTempDst.height());
         }
-        mContentRectF.round(mContentRect);
-        mPaddingRect.set(mContentRect);
-        mPaddingRect.left -= mBoxMetrics.paddingLeft;
-        mPaddingRect.top -= mBoxMetrics.paddingTop;
-        mPaddingRect.right += mBoxMetrics.paddingRight;
-        mPaddingRect.bottom += mBoxMetrics.paddingBottom;
-        mBorderRect.set(mPaddingRect);
-        mBorderRect.left -= mBoxMetrics.borderLeft;
-        mBorderRect.top -= mBoxMetrics.borderTop;
-        mBorderRect.right += mBoxMetrics.borderRight;
-        mBorderRect.bottom += mBoxMetrics.borderBottom;
 
         if (hasBorder()) {
             if (hasMonoBorder()) {
@@ -239,7 +201,7 @@ class WebImageView extends View {
                 mBorder = multicolorBorder;
             }
 
-            mBorder.setRect(mBorderRect);
+            mBorder.setRect(mBoxMetrics.getBorderRect());
         } else {
             // no borders
             mBorder = null;
@@ -332,7 +294,7 @@ class WebImageView extends View {
                 // TODO(vovkasm): Calculate rounded content rect - not padding rect
                 canvas.clipPath(innerPath);
             } else {
-                canvas.clipRect(mContentRect);
+                canvas.clipRect(mBoxMetrics.getContentRect());
             }
 
 
