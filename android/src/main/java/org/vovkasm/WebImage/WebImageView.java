@@ -35,7 +35,7 @@ class WebImageView extends View {
     private Uri mUri;
     private ScaleType mScaleType;
 
-    private ShadowBoxMetrics mBoxMetrics;
+    private BoxMetrics mBoxMetrics;
     private @ColorInt int mBorderColor = DEFAULT_BORDER_COLOR;
     private @ColorInt int[] mBorderColors = new int[]{DEFAULT_BORDER_COLOR, DEFAULT_BORDER_COLOR, DEFAULT_BORDER_COLOR, DEFAULT_BORDER_COLOR};
     private float mBorderRadius = DEFAULT_BORDER_RADIUS;
@@ -60,6 +60,7 @@ class WebImageView extends View {
     public WebImageView(Context context) {
         super(context);
         mScaleType = ScaleType.FIT_CENTER;
+        mBoxMetrics = new BoxMetrics();
         configureBounds();
     }
 
@@ -107,14 +108,14 @@ class WebImageView extends View {
     private void configureBounds() {
         if (mBoxMetrics == null || mImgDrawable == null) return;
 
-        float viewWidth = mBoxMetrics.getWidth();
-        float viewHeight = mBoxMetrics.getHeight();
+        float viewWidth = mBoxMetrics.width;
+        float viewHeight = mBoxMetrics.height;
 
         mContentRectF.set(
-                mBoxMetrics.getBorderLeft() + mBoxMetrics.getPaddingLeft(),
-                mBoxMetrics.getBorderTop() + mBoxMetrics.getPaddingTop(),
-                viewWidth - (mBoxMetrics.getPaddingRight() + mBoxMetrics.getBorderRight()),
-                viewHeight - (mBoxMetrics.getPaddingBottom() + mBoxMetrics.getBorderBottom()));
+                mBoxMetrics.borderLeft + mBoxMetrics.paddingLeft,
+                mBoxMetrics.borderTop + mBoxMetrics.paddingTop,
+                viewWidth - (mBoxMetrics.paddingRight + mBoxMetrics.borderRight),
+                viewHeight - (mBoxMetrics.paddingBottom + mBoxMetrics.borderBottom));
 
         float cBoxWidth = mContentRectF.width();
         float cBoxHeight = mContentRectF.height();
@@ -183,15 +184,15 @@ class WebImageView extends View {
         }
         mContentRectF.round(mContentRect);
         mPaddingRect.set(mContentRect);
-        mPaddingRect.left -= mBoxMetrics.getPaddingLeft();
-        mPaddingRect.top -= mBoxMetrics.getPaddingTop();
-        mPaddingRect.right += mBoxMetrics.getPaddingRight();
-        mPaddingRect.bottom += mBoxMetrics.getPaddingBottom();
+        mPaddingRect.left -= mBoxMetrics.paddingLeft;
+        mPaddingRect.top -= mBoxMetrics.paddingTop;
+        mPaddingRect.right += mBoxMetrics.paddingRight;
+        mPaddingRect.bottom += mBoxMetrics.paddingBottom;
         mBorderRect.set(mPaddingRect);
-        mBorderRect.left -= mBoxMetrics.getBorderLeft();
-        mBorderRect.top -= mBoxMetrics.getBorderTop();
-        mBorderRect.right += mBoxMetrics.getBorderRight();
-        mBorderRect.bottom += mBoxMetrics.getBorderBottom();
+        mBorderRect.left -= mBoxMetrics.borderLeft;
+        mBorderRect.top -= mBoxMetrics.borderTop;
+        mBorderRect.right += mBoxMetrics.borderRight;
+        mBorderRect.bottom += mBoxMetrics.borderBottom;
 
         if (hasBorder()) {
             if (hasMonoBorder()) {
@@ -202,7 +203,7 @@ class WebImageView extends View {
                     monoBorder = new MonoBorder();
                 }
 
-                monoBorder.setWidths(mBoxMetrics.getBorderLeft(), mBoxMetrics.getBorderTop(), mBoxMetrics.getBorderRight(), mBoxMetrics.getBorderBottom());
+                monoBorder.setWidths(mBoxMetrics.borderLeft, mBoxMetrics.borderTop, mBoxMetrics.borderRight, mBoxMetrics.borderBottom);
 
                 final float tl = YogaConstants.isUndefined(mBorderRadii[0]) ? mBorderRadius : mBorderRadii[0];
                 final float tr = YogaConstants.isUndefined(mBorderRadii[1]) ? mBorderRadius : mBorderRadii[1];
@@ -221,7 +222,7 @@ class WebImageView extends View {
                     multicolorBorder = new MulticolorBorder();
                 }
 
-                multicolorBorder.setWidths(mBoxMetrics.getBorderLeft(), mBoxMetrics.getBorderTop(), mBoxMetrics.getBorderRight(), mBoxMetrics.getBorderBottom());
+                multicolorBorder.setWidths(mBoxMetrics.borderLeft, mBoxMetrics.borderTop, mBoxMetrics.borderRight, mBoxMetrics.borderBottom);
 
                 final int lc = mBorderColors[0] == Color.TRANSPARENT ? mBorderColor : mBorderColors[0];
                 final int tc = mBorderColors[1] == Color.TRANSPARENT ? mBorderColor : mBorderColors[1];
@@ -297,9 +298,8 @@ class WebImageView extends View {
         invalidate();
     }
 
-    public void setBoxMetrics(ShadowBoxMetrics bm) {
-        if (mBoxMetrics != null && mBoxMetrics.equalsToBoxMetrics(bm)) return;
-        mBoxMetrics = bm;
+    public void setBoxMetrics(ShadowBoxMetrics shadowMetrics) {
+        mBoxMetrics.set(shadowMetrics);
         configureBounds();
         invalidate();
     }
@@ -314,8 +314,8 @@ class WebImageView extends View {
         int paddingLeft = 0;
         int paddingTop = 0;
         if (mBoxMetrics != null) {
-            paddingLeft += mBoxMetrics.getBorderLeft() + mBoxMetrics.getPaddingLeft();
-            paddingTop += mBoxMetrics.getBorderTop() + mBoxMetrics.getPaddingTop();
+            paddingLeft += mBoxMetrics.borderLeft + mBoxMetrics.paddingLeft;
+            paddingTop += mBoxMetrics.borderTop + mBoxMetrics.paddingTop;
         }
 
         if (mDrawMatrix == null && paddingLeft == 0 && paddingTop == 0) {
