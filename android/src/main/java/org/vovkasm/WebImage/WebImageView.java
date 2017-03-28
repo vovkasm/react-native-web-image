@@ -273,14 +273,7 @@ class WebImageView extends View {
         if (mImgDrawable == null) return;
         if (mImgDrawableWidth == 0 || mImgDrawableHeight == 0) return;
 
-        int paddingLeft = 0;
-        int paddingTop = 0;
-        if (mBoxMetrics != null) {
-            paddingLeft += mBoxMetrics.borderLeft + mBoxMetrics.paddingLeft;
-            paddingTop += mBoxMetrics.borderTop + mBoxMetrics.paddingTop;
-        }
-
-        if (mDrawMatrix == null && paddingLeft == 0 && paddingTop == 0) {
+        if (mDrawMatrix == null) {
             mImgDrawable.draw(canvas);
         } else {
             int saveCount = canvas.getSaveCount();
@@ -297,11 +290,8 @@ class WebImageView extends View {
                 canvas.clipRect(mBoxMetrics.getContentRect());
             }
 
-
-            canvas.translate(paddingLeft, paddingTop);
-            if (mDrawMatrix != null) {
-                canvas.concat(mDrawMatrix);
-            }
+            canvas.translate(mBoxMetrics.borderLeft + mBoxMetrics.paddingLeft, mBoxMetrics.borderTop + mBoxMetrics.paddingTop);
+            canvas.concat(mDrawMatrix);
 
             mImgDrawable.draw(canvas);
 
