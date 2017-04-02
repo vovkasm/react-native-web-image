@@ -11,8 +11,8 @@ abstract class BaseBorder implements IBorder {
     final RectF mInnerRect = new RectF();
 
     final float[] mWidths = new float[]{0f, 0f, 0f, 0f};
-    final float[] mRadii = new float[]{0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f};
-    final float[] mInnerRadii = new float[]{0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f};
+    final Radii mRadii = new Radii();
+    final Radii mInnerRadii = new Radii();
 
     final Path mBorderPath = new Path();
     final Path mInnerPath = new Path();
@@ -63,14 +63,7 @@ abstract class BaseBorder implements IBorder {
     }
 
     void setRadii(float tl, float tr, float br, float bl) {
-        mRadii[0] = tl;
-        mRadii[1] = tl;
-        mRadii[2] = tr;
-        mRadii[3] = tr;
-        mRadii[4] = br;
-        mRadii[5] = br;
-        mRadii[6] = bl;
-        mRadii[7] = bl;
+        mRadii.set(tl, tr, br, bl);
         update();
     }
 
@@ -102,20 +95,14 @@ abstract class BaseBorder implements IBorder {
     void update() {
         updateRects();
 
-        mInnerRadii[0] = Math.max(mRadii[0] - mWidths[0], 0f);
-        mInnerRadii[1] = Math.max(mRadii[1] - mWidths[1], 0f);
-        mInnerRadii[2] = Math.max(mRadii[2] - mWidths[2], 0f);
-        mInnerRadii[3] = Math.max(mRadii[3] - mWidths[1], 0f);
-        mInnerRadii[4] = Math.max(mRadii[4] - mWidths[2], 0f);
-        mInnerRadii[5] = Math.max(mRadii[5] - mWidths[3], 0f);
-        mInnerRadii[6] = Math.max(mRadii[6] - mWidths[0], 0f);
-        mInnerRadii[7] = Math.max(mRadii[7] - mWidths[3], 0f);
+        mInnerRadii.set(mRadii);
+        mInnerRadii.shrink(mWidths[0], mWidths[1], mWidths[2], mWidths[3]);
 
         mBorderPath.rewind();
-        mBorderPath.addRoundRect(mBounds, mRadii, Path.Direction.CW);
-        mBorderPath.addRoundRect(mInnerRect, mInnerRadii, Path.Direction.CCW);
+        mBorderPath.addRoundRect(mBounds, mRadii.asArray(), Path.Direction.CW);
+        mBorderPath.addRoundRect(mInnerRect, mInnerRadii.asArray(), Path.Direction.CCW);
         mInnerPath.rewind();
-        mInnerPath.addRoundRect(mInnerRect, mInnerRadii, Path.Direction.CW);
+        mInnerPath.addRoundRect(mInnerRect, mInnerRadii.asArray(), Path.Direction.CW);
     }
 
 }

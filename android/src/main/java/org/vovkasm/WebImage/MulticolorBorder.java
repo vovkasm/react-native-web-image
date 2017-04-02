@@ -54,19 +54,31 @@ class MulticolorBorder extends BaseBorder {
         return (float) Math.toDegrees(Math.atan2(mWidths[corner.index], mWidths[corner.next().index]));
     }
 
-    private void calcOvalRect(RectF out, RectF rect, float[] radii, Corner corner) {
+    private void calcOvalRect(RectF out, RectF rect, final Radii radii, Corner corner) {
         switch (corner) {
             case TOP_LEFT:
-                out.set(rect.left, rect.top, rect.left + 2f * radii[0], rect.top + 2f * radii[1]);
+                out.set(rect.left,
+                        rect.top,
+                        rect.left + 2f * radii.getRadius(Radii.TOP_LEFT_WIDTH),
+                        rect.top + 2f * radii.getRadius(Radii.TOP_LEFT_HEIGHT));
                 break;
             case TOP_RIGHT:
-                out.set(rect.right - 2f * radii[2], rect.top, rect.right, rect.top + 2f * radii[3]);
+                out.set(rect.right - 2f * radii.getRadius(Radii.TOP_RIGHT_WIDTH),
+                        rect.top,
+                        rect.right,
+                        rect.top + 2f * radii.getRadius(Radii.TOP_RIGHT_HEIGHT));
                 break;
             case BOTTOM_RIGHT:
-                out.set(rect.right - 2f * radii[4], rect.bottom - 2f * radii[5], rect.right, rect.bottom);
+                out.set(rect.right - 2f * radii.getRadius(Radii.BOTTOM_RIGHT_WIDTH),
+                        rect.bottom - 2f * radii.getRadius(Radii.BOTTOM_RIGHT_HEIGHT),
+                        rect.right,
+                        rect.bottom);
                 break;
             case BOTTOM_LEFT:
-                out.set(rect.left, rect.bottom - 2f * radii[7], rect.left + 2f * radii[6], rect.bottom);
+                out.set(rect.left,
+                        rect.bottom - 2f * radii.getRadius(Radii.BOTTOM_LEFT_HEIGHT),
+                        rect.left + 2f * radii.getRadius(Radii.BOTTOM_LEFT_WIDTH),
+                        rect.bottom);
                 break;
         }
     }
