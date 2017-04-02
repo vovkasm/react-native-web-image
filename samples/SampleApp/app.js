@@ -17,7 +17,7 @@ const Main = ({ navigateTo }) => {
   return <ScrollView>
     <TestItem title='Samples' onPress={() => { navigateTo('/samples') }} />
     <TestItem title='Default params' onPress={() => { navigateTo('/test-default') }} />
-    <TestItem title='Borders' onPress={() => { navigateTo('/test-borders') }} />
+    <TestItem title='Borders Rectangle Mono' onPress={() => { navigateTo('/test-borders/rectangle/mono') }} />
   </ScrollView>
 }
 Main.propTypes = {
@@ -28,7 +28,7 @@ const routes = {
   '/': Main,
   '/samples': Samples,
   '/test-default': TestDefault,
-  '/test-borders': TestBorders
+  '/test-borders/rectangle/mono': TestBorders
 }
 
 export default class App extends React.Component {
