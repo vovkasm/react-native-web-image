@@ -5,11 +5,19 @@ import Samples from './samples'
 import TestDefault from './test-default'
 import TestBorders from './test-borders'
 
+const TestItem = ({ title, onPress }) => {
+  return <View style={s.testItem}><Button title={title} onPress={onPress} /></View>
+}
+TestItem.propTypes = {
+  onPress: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired
+}
+
 const Main = ({ navigateTo }) => {
   return <ScrollView>
-    <Button title='Samples' onPress={() => { navigateTo('/samples') }} />
-    <Button title='Default params' onPress={() => { navigateTo('/test-default') }} />
-    <Button title='Borders' onPress={() => { navigateTo('/test-borders') }} />
+    <TestItem title='Samples' onPress={() => { navigateTo('/samples') }} />
+    <TestItem title='Default params' onPress={() => { navigateTo('/test-default') }} />
+    <TestItem title='Borders' onPress={() => { navigateTo('/test-borders') }} />
   </ScrollView>
 }
 Main.propTypes = {
@@ -64,7 +72,13 @@ const s = StyleSheet.create({
   },
   header: {
     marginTop: 15,
+    marginBottom: 2,
+    marginHorizontal: 8,    
     flexDirection: 'row',
     alignItems: 'center'
+  },
+  testItem: {
+    marginHorizontal: 8,
+    paddingVertical: 2
   }
 })
