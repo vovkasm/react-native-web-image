@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
-import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -156,6 +155,12 @@ class WebImageView extends View {
             mBoxMetrics.ajustContentSize(mTempDst.width(), mTempDst.height());
         }
 
+        final float tl = YogaConstants.isUndefined(mBorderRadii[0]) ? mBorderRadius : mBorderRadii[0];
+        final float tr = YogaConstants.isUndefined(mBorderRadii[1]) ? mBorderRadius : mBorderRadii[1];
+        final float br = YogaConstants.isUndefined(mBorderRadii[2]) ? mBorderRadius : mBorderRadii[2];
+        final float bl = YogaConstants.isUndefined(mBorderRadii[3]) ? mBorderRadius : mBorderRadii[3];
+        mBoxMetrics.setRadii(tl, tr, br, bl);
+
         if (hasBorder()) {
             if (hasMonoBorder()) {
                 MonoBorder monoBorder = null;
@@ -164,14 +169,6 @@ class WebImageView extends View {
                 if (monoBorder == null) {
                     monoBorder = new MonoBorder();
                 }
-
-                monoBorder.setWidths(mBoxMetrics.borderLeft, mBoxMetrics.borderTop, mBoxMetrics.borderRight, mBoxMetrics.borderBottom);
-
-                final float tl = YogaConstants.isUndefined(mBorderRadii[0]) ? mBorderRadius : mBorderRadii[0];
-                final float tr = YogaConstants.isUndefined(mBorderRadii[1]) ? mBorderRadius : mBorderRadii[1];
-                final float br = YogaConstants.isUndefined(mBorderRadii[2]) ? mBorderRadius : mBorderRadii[2];
-                final float bl = YogaConstants.isUndefined(mBorderRadii[3]) ? mBorderRadius : mBorderRadii[3];
-                monoBorder.setRadii(tl, tr, br, bl);
 
                 monoBorder.setColor(mBorderColors[0] == Color.TRANSPARENT ? mBorderColor : mBorderColors[0]);
 
@@ -184,24 +181,16 @@ class WebImageView extends View {
                     multicolorBorder = new MulticolorBorder();
                 }
 
-                multicolorBorder.setWidths(mBoxMetrics.borderLeft, mBoxMetrics.borderTop, mBoxMetrics.borderRight, mBoxMetrics.borderBottom);
-
                 final int lc = mBorderColors[0] == Color.TRANSPARENT ? mBorderColor : mBorderColors[0];
                 final int tc = mBorderColors[1] == Color.TRANSPARENT ? mBorderColor : mBorderColors[1];
                 final int rc = mBorderColors[2] == Color.TRANSPARENT ? mBorderColor : mBorderColors[2];
                 final int bc = mBorderColors[3] == Color.TRANSPARENT ? mBorderColor : mBorderColors[3];
                 multicolorBorder.setColors(lc, tc, rc, bc);
 
-                final float tl = YogaConstants.isUndefined(mBorderRadii[0]) ? mBorderRadius : mBorderRadii[0];
-                final float tr = YogaConstants.isUndefined(mBorderRadii[1]) ? mBorderRadius : mBorderRadii[1];
-                final float br = YogaConstants.isUndefined(mBorderRadii[2]) ? mBorderRadius : mBorderRadii[2];
-                final float bl = YogaConstants.isUndefined(mBorderRadii[3]) ? mBorderRadius : mBorderRadii[3];
-                multicolorBorder.setRadii(tl, tr, br, bl);
-
                 mBorder = multicolorBorder;
             }
 
-            mBorder.setRect(mBoxMetrics.getBorderRect());
+            mBorder.setMetrics(mBoxMetrics);
         } else {
             // no borders
             mBorder = null;
@@ -280,15 +269,9 @@ class WebImageView extends View {
             canvas.save();
 
             if (mBorder != null) {
-                // TODO(vovkasm): Border can be drawn only after getInnerPath(). Fix it.
-                Path innerPath = mBorder.getInnerPath();
                 mBorder.draw(canvas);
-                // TODO(vovkasm): Optimize case path is rectangular
-                // TODO(vovkasm): Calculate rounded content rect - not padding rect
-                canvas.clipPath(innerPath);
-            } else {
-                canvas.clipRect(mBoxMetrics.getContentRect());
             }
+            canvas.clipPath(mBoxMetrics.getContentPath());
 
             canvas.translate(mBoxMetrics.borderLeft + mBoxMetrics.paddingLeft, mBoxMetrics.borderTop + mBoxMetrics.paddingTop);
             canvas.concat(mDrawMatrix);

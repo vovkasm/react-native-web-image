@@ -39,19 +39,33 @@ class MulticolorBorder extends BaseBorder {
         float splitAngle1 = getSplitAngleForCorner(corner1);
         float splitAngle2 = getSplitAngleForCorner(corner2);
         float normalAngle = 270f + corner1.index * 90f;
-        calcOvalRect(tmpRect, mBounds, mRadii, corner1);
+        final RectF borderRect = mBoxMetrics.getBorderRect();
+        final Radii borderRadii = mBoxMetrics.getBorderRadii();
+        final RectF paddingRect = mBoxMetrics.getPaddingRect();
+        final Radii paddingRadii = mBoxMetrics.getPaddingRadii();
+        calcOvalRect(tmpRect, borderRect, borderRadii, corner1);
         path.arcTo(tmpRect, normalAngle - 90f + splitAngle1, 90f - splitAngle1);
-        calcOvalRect(tmpRect, mBounds, mRadii, corner2);
+        calcOvalRect(tmpRect, borderRect, borderRadii, corner2);
         path.arcTo(tmpRect, normalAngle, splitAngle2);
-        calcOvalRect(tmpRect, mInnerRect, mInnerRadii, corner2);
+        calcOvalRect(tmpRect, paddingRect, paddingRadii, corner2);
         path.arcTo(tmpRect, normalAngle + splitAngle2, -splitAngle2);
-        calcOvalRect(tmpRect, mInnerRect, mInnerRadii, corner1);
+        calcOvalRect(tmpRect, paddingRect, paddingRadii, corner1);
         path.arcTo(tmpRect, normalAngle, -(90f - splitAngle1));
         path.close();
     }
 
     private float getSplitAngleForCorner(Corner corner) {
-        return (float) Math.toDegrees(Math.atan2(mWidths[corner.index], mWidths[corner.next().index]));
+        switch (corner) {
+            case TOP_LEFT:
+                return (float) Math.toDegrees(Math.atan2(mBoxMetrics.borderLeft, mBoxMetrics.borderTop));
+            case TOP_RIGHT:
+                return (float) Math.toDegrees(Math.atan2(mBoxMetrics.borderTop, mBoxMetrics.borderRight));
+            case BOTTOM_RIGHT:
+                return (float) Math.toDegrees(Math.atan2(mBoxMetrics.borderRight, mBoxMetrics.borderBottom));
+            case BOTTOM_LEFT:
+                return (float) Math.toDegrees(Math.atan2(mBoxMetrics.borderBottom, mBoxMetrics.borderLeft));
+        }
+        return 0f;
     }
 
     private void calcOvalRect(RectF out, RectF rect, final Radii radii, Corner corner) {

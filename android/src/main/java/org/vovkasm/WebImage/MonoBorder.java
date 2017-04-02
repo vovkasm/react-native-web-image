@@ -12,6 +12,6 @@ class MonoBorder extends BaseBorder {
 
     @Override
     public void draw(@NonNull Canvas canvas) {
-        canvas.drawPath(mBorderPath, mPaint);
+        canvas.drawPath(mBoxMetrics.getBorderPath(), mPaint);
     }
 }

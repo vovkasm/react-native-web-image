@@ -1,6 +1,6 @@
 package org.vovkasm.WebImage;
 
-import android.graphics.Rect;
+import android.graphics.Path;
 import android.graphics.RectF;
 
 import com.facebook.react.uimanager.FloatUtil;
@@ -19,13 +19,18 @@ class BoxMetrics {
     float paddingRight = 0f;
     float paddingBottom = 0f;
 
+    private Radii borderRadii = new Radii();
+    private Radii paddingRadii = new Radii();
+    private Radii contentRadii = new Radii();
+
     private boolean dirty = false;
 
-    private Rect borderRect = new Rect();
-    private Rect paddingRect = new Rect();
-    private Rect contentRect = new Rect();
+    private RectF borderRect = new RectF();
+    private RectF paddingRect = new RectF();
+    private RectF contentRect = new RectF();
 
-    private RectF contentRectF = new RectF();
+    private Path borderPath = new Path();
+    private Path contentPath = new Path();
 
     void setShadowMetrics(ShadowBoxMetrics sm) {
         boolean isSame = FloatUtil.floatsEqual(width, sm.width)
@@ -49,13 +54,17 @@ class BoxMetrics {
         paddingTop = sm.paddingTop;
         paddingRight = sm.paddingRight;
         paddingBottom = sm.paddingBottom;
-        contentRectF.set(borderLeft + paddingLeft, borderTop + paddingTop, width - paddingRight - borderRight, height - paddingBottom + borderBottom);
+        contentRect.set(borderLeft + paddingLeft, borderTop + paddingTop, width - paddingRight - borderRight, height - paddingBottom + borderBottom);
+        dirty = true;
+    }
+
+    void setRadii(float tl, float tr, float br, float bl) {
+        borderRadii.set(tl, tr, br, bl);
         dirty = true;
     }
 
     void update() {
         if (dirty) {
-            contentRectF.round(contentRect);
             paddingRect.set(contentRect);
             paddingRect.left -= paddingLeft;
             paddingRect.top -= paddingTop;
@@ -67,45 +76,80 @@ class BoxMetrics {
             borderRect.right += borderRight;
             borderRect.bottom += borderBottom;
 
+            paddingRadii.set(borderRadii);
+            paddingRadii.shrink(borderLeft, borderTop, borderRight, borderBottom);
+            contentRadii.set(paddingRadii);
+            contentRadii.shrink(paddingLeft, paddingTop, paddingRight,paddingBottom);
+
+            borderPath.rewind();
+            borderPath.addRoundRect(borderRect, borderRadii.asArray(), Path.Direction.CW);
+            borderPath.addRoundRect(paddingRect, paddingRadii.asArray(), Path.Direction.CCW);
+
+            contentPath.rewind();
+            contentPath.addRoundRect(contentRect, contentRadii.asArray(), Path.Direction.CW);
+
             dirty = false;
         }
     }
 
-    float getContentWidth() { return contentRectF.width(); }
-    float getContentHeight() { return contentRectF.height(); }
-    RectF getContentRectF() { return contentRectF; }
+    float getContentWidth() { return contentRect.width(); }
+    float getContentHeight() { return contentRect.height(); }
 
-    Rect getContentRect() {
-        update();
+    RectF getContentRect() {
         return contentRect;
     }
 
-    Rect getBorderRect() {
+    RectF getBorderRect() {
         update();
         return borderRect;
     }
 
-    Rect getPaddingRect() {
+    RectF getPaddingRect() {
         update();
         return paddingRect;
     }
 
+    final Radii getBorderRadii() {
+        update();
+        return borderRadii;
+    }
+
+    final Radii getPaddingRadii() {
+        update();
+        return paddingRadii;
+    }
+
+    final Radii getContentRadii() {
+        update();
+        return contentRadii;
+    }
+
+    final Path getContentPath() {
+        update();
+        return contentPath;
+    }
+
+    final Path getBorderPath() {
+        update();
+        return borderPath;
+    }
+
     void ajustContentSize(float realWidth, float realHeight) {
-        float cw = contentRectF.width();
-        float ch = contentRectF.height();
+        float cw = contentRect.width();
+        float ch = contentRect.height();
         float w = Math.min(cw, realWidth);
         float h = Math.min(ch, realHeight);
 
         if (w != cw) {
             float dx = (cw - w) * 0.5f;
-            contentRectF.left += dx;
-            contentRectF.right -= dx;
+            contentRect.left += dx;
+            contentRect.right -= dx;
             dirty = true;
         }
         if (h != ch) {
             float dy = (ch - h) * 0.5f;
-            contentRectF.top += dy;
-            contentRectF.bottom -= dy;
+            contentRect.top += dy;
+            contentRect.bottom -= dy;
             dirty = true;
         }
     }
