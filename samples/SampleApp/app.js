@@ -3,7 +3,7 @@ import { Button, ScrollView, StyleSheet, Text, View } from 'react-native'
 
 import Samples from './samples'
 import TestDefault from './test-default'
-import TestBorders from './test-borders'
+import TestBordersRectangleMono from './test-borders-rectangle-mono'
 
 const TestItem = ({ title, onPress }) => {
   return <View style={s.testItem}><Button title={title} onPress={onPress} /></View>
@@ -28,7 +28,7 @@ const routes = {
   '/': Main,
   '/samples': Samples,
   '/test-default': TestDefault,
-  '/test-borders/rectangle/mono': TestBorders
+  '/test-borders/rectangle/mono': TestBordersRectangleMono
 }
 
 export default class App extends React.Component {
