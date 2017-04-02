@@ -12,7 +12,7 @@ export default function TestBordersRectangleMono () {
     <View style={[s.block, {width: 160, height: 160}]}><WebImage source={{uri}} style={[s.web, bs]} /></View>
     <View style={[s.block, {width: 160, height: 160}]}><WebImage source={{uri}} style={[s.web, bs, {borderWidth: 20}]} /></View>
     <View style={[s.block, {width: 160, height: 160}]}><WebImage source={{uri}} style={[s.web, bs, {borderTopWidth: 1, borderBottomWidth: 1, borderLeftWidth: 20, borderRightWidth: 20}]} /></View>
-    <View style={[s.block, {width: 160, height: 160}]}><WebImage source={{uri}} style={[s.web, bs, {borderTopWidth: 0, borderBottomWidth: 8, borderLeftWidth: 2, borderRightWidth: 2}]} /></View>    
+    <View style={[s.block, {width: 160, height: 160}]}><WebImage source={{uri}} style={[s.web, bs, {borderTopWidth: 0, borderBottomWidth: 8, borderLeftWidth: 2, borderRightWidth: 2}]} /></View>
   </ScrollView>
 }
 
