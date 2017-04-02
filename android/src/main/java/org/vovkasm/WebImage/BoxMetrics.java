@@ -27,7 +27,7 @@ class BoxMetrics {
 
     private RectF contentRectF = new RectF();
 
-    void set(ShadowBoxMetrics sm) {
+    void setShadowMetrics(ShadowBoxMetrics sm) {
         boolean isSame = FloatUtil.floatsEqual(width, sm.width)
                 && FloatUtil.floatsEqual(height, sm.height)
                 && FloatUtil.floatsEqual(borderLeft, sm.borderLeft)

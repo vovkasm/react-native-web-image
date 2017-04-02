@@ -261,7 +261,7 @@ class WebImageView extends View {
     }
 
     public void setBoxMetrics(ShadowBoxMetrics shadowMetrics) {
-        mBoxMetrics.set(shadowMetrics);
+        mBoxMetrics.setShadowMetrics(shadowMetrics);
         configureBounds();
         invalidate();
     }
