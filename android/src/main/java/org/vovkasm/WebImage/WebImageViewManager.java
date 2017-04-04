@@ -2,7 +2,6 @@ package org.vovkasm.WebImage;
 
 import android.graphics.Color;
 import android.net.Uri;
-import android.widget.ImageView.ScaleType;
 
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.module.annotations.ReactModule;
@@ -22,13 +21,6 @@ import javax.annotation.Nullable;
 @ReactModule(name = WebImageViewManager.REACT_CLASS)
 class WebImageViewManager extends BaseViewManager<WebImageView, WebImageShadowNode> {
     static final String REACT_CLASS = "WebImageView";
-
-    private static Map<String, ScaleType> RESIZE_MODE_MAP = new HashMap<String, ScaleType>(){{
-        put("cover", ScaleType.CENTER_CROP);
-        put("contain", ScaleType.FIT_CENTER);
-        put("stretch", ScaleType.FIT_XY);
-        put("center", ScaleType.CENTER);
-    }};
 
     @Override
     public String getName() {
@@ -60,10 +52,20 @@ class WebImageViewManager extends BaseViewManager<WebImageView, WebImageShadowNo
 
     @ReactProp(name="resizeMode")
     public void setResizeMode(WebImageView view, String resizeMode) {
-        ScaleType scaleType = RESIZE_MODE_MAP.get(resizeMode);
+        @WebImageView.ScaleType int scaleType;
 
-        if (scaleType != null) {
-            view.setScaleType(scaleType);
+        switch (resizeMode) {
+            case "contain":
+                view.setScaleType(WebImageView.SCALE_CONTAIN);
+                break;
+            case "cover":
+                view.setScaleType(WebImageView.SCALE_COVER);
+                break;
+            case "stretch":
+                view.setScaleType(WebImageView.SCALE_STRETCH);
+                break;
+            case "center":
+                view.setScaleType(WebImageView.SCALE_CENTER);
         }
     }
 

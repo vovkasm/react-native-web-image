@@ -8,8 +8,8 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.ColorInt;
+import android.support.annotation.IntDef;
 import android.view.View;
-import android.widget.ImageView.ScaleType;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -24,14 +24,26 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.facebook.yoga.YogaConstants;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
 class WebImageView extends View {
+
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({SCALE_CONTAIN, SCALE_COVER, SCALE_STRETCH, SCALE_CENTER})
+    @interface ScaleType {}
+    public static final int SCALE_CONTAIN = 0;
+    public static final int SCALE_COVER = 1;
+    public static final int SCALE_STRETCH = 2;
+    public static final int SCALE_CENTER = 3;
+
     public static final int DEFAULT_BORDER_COLOR = Color.TRANSPARENT;
     public static final float DEFAULT_BORDER_RADIUS = 0f;
 
     private static RequestListener<Uri, GlideDrawable> requestListener = new WebImageViewRequestListener();
 
     private Uri mUri;
-    private ScaleType mScaleType;
+    private @ScaleType int mScaleType = SCALE_CONTAIN;
 
     private BoxMetrics mBoxMetrics;
     private @ColorInt int mBorderColor = DEFAULT_BORDER_COLOR;
@@ -52,7 +64,6 @@ class WebImageView extends View {
 
     public WebImageView(Context context) {
         super(context);
-        mScaleType = ScaleType.FIT_CENTER;
         mBoxMetrics = new BoxMetrics();
         configureBounds();
     }
@@ -109,8 +120,7 @@ class WebImageView extends View {
 
         boolean fits = (imWidth < 0 || cBoxWidth == imWidth) && (imHeight < 0 || cBoxHeight == imHeight);
 
-        if (imWidth <= 0 || imHeight <= 0 || ScaleType.FIT_XY == mScaleType) {
-            // stretch
+        if (imWidth <= 0 || imHeight <= 0 || SCALE_STRETCH == mScaleType) {
             mImgDrawable.setBounds(0, 0, Math.round(cBoxWidth), Math.round(cBoxHeight));
             mDrawMatrix = null;
         } else {
@@ -118,12 +128,10 @@ class WebImageView extends View {
 
             if (fits) {
                 mDrawMatrix = null;
-            } else if (ScaleType.CENTER == mScaleType) {
-                // center
+            } else if (SCALE_CENTER == mScaleType) {
                 mDrawMatrix = new Matrix();
                 mDrawMatrix.setTranslate(Math.round((cBoxWidth - imWidth) * 0.5f), Math.round((cBoxHeight - imHeight) * 0.5f));
-            } else if (ScaleType.CENTER_CROP == mScaleType) {
-                // cover
+            } else if (SCALE_COVER == mScaleType) {
                 mDrawMatrix = new Matrix();
 
                 float scale;
@@ -197,24 +205,20 @@ class WebImageView extends View {
         }
     }
 
-    public void setScaleType(ScaleType scaleType) {
-        if (scaleType == null) {
-            throw new NullPointerException();
-        }
-
+    public void setScaleType(@ScaleType int scaleType) {
         if (mScaleType == scaleType) {
             return;
         }
 
         mScaleType = scaleType;
 
-        setWillNotCacheDrawing(mScaleType == ScaleType.CENTER);
+        setWillNotCacheDrawing(mScaleType == SCALE_CENTER);
 
         requestLayout();
         invalidate();
     }
 
-    public ScaleType getScaleType() {
+    public @ScaleType int getScaleType() {
         return mScaleType;
     }
 
