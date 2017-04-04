@@ -112,8 +112,8 @@ class WebImageView extends View {
     private void configureBounds() {
         if (mImgDrawable == null) return;
 
-        float cBoxWidth = mBoxMetrics.getContentWidth();
-        float cBoxHeight = mBoxMetrics.getContentHeight();
+        float cBoxWidth = mBoxMetrics.getLayoutContentWidth();
+        float cBoxHeight = mBoxMetrics.getLayoutContentHeight();
 
         int imWidth = mImgDrawableWidth;
         int imHeight = mImgDrawableHeight;

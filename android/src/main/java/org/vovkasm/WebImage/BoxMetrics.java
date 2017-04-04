@@ -6,8 +6,8 @@ import android.graphics.RectF;
 import com.facebook.react.uimanager.FloatUtil;
 
 class BoxMetrics {
-    float width = 0f;
-    float height = 0f;
+    private float layoutWidth = 0f;
+    private float layoutHeight = 0f;
 
     float borderLeft = 0f;
     float borderTop = 0f;
@@ -33,8 +33,8 @@ class BoxMetrics {
     private Path contentPath = new Path();
 
     void setShadowMetrics(ShadowBoxMetrics sm) {
-        boolean isSame = FloatUtil.floatsEqual(width, sm.width)
-                && FloatUtil.floatsEqual(height, sm.height)
+        boolean isSame = FloatUtil.floatsEqual(layoutWidth, sm.width)
+                && FloatUtil.floatsEqual(layoutHeight, sm.height)
                 && FloatUtil.floatsEqual(borderLeft, sm.borderLeft)
                 && FloatUtil.floatsEqual(borderTop, sm.borderTop)
                 && FloatUtil.floatsEqual(borderRight, sm.borderRight)
@@ -44,8 +44,8 @@ class BoxMetrics {
                 && FloatUtil.floatsEqual(paddingRight, sm.paddingRight)
                 && FloatUtil.floatsEqual(paddingBottom, sm.paddingBottom);
         if (isSame) return;
-        width = sm.width;
-        height = sm.height;
+        layoutWidth = sm.width;
+        layoutHeight = sm.height;
         borderLeft = sm.borderLeft;
         borderTop = sm.borderTop;
         borderRight = sm.borderRight;
@@ -54,7 +54,7 @@ class BoxMetrics {
         paddingTop = sm.paddingTop;
         paddingRight = sm.paddingRight;
         paddingBottom = sm.paddingBottom;
-        contentRect.set(borderLeft + paddingLeft, borderTop + paddingTop, width - paddingRight - borderRight, height - paddingBottom + borderBottom);
+        contentRect.set(borderLeft + paddingLeft, borderTop + paddingTop, layoutWidth - paddingRight - borderRight, layoutHeight - paddingBottom + borderBottom);
         dirty = true;
     }
 
@@ -92,8 +92,8 @@ class BoxMetrics {
         }
     }
 
-    float getContentWidth() { return contentRect.width(); }
-    float getContentHeight() { return contentRect.height(); }
+    float getLayoutContentWidth() { return layoutWidth - (borderLeft + paddingLeft + paddingRight + borderRight); }
+    float getLayoutContentHeight() { return layoutHeight - (borderTop + paddingTop + paddingBottom + borderBottom); }
 
     RectF getContentRect() {
         return contentRect;
