@@ -51,8 +51,6 @@ class WebImageView extends View {
     private float[] mBorderRadii = new float[]{YogaConstants.UNDEFINED, YogaConstants.UNDEFINED, YogaConstants.UNDEFINED, YogaConstants.UNDEFINED};
 
     private Drawable mImgDrawable;
-    private int mImgDrawableWidth;
-    private int mImgDrawableHeight;
 
     private IBorder mBorder;
 
@@ -64,27 +62,28 @@ class WebImageView extends View {
 
     public void setImageDrawable(Drawable drawable) {
         if (mImgDrawable != drawable) {
-            final int oldWidth = mImgDrawableWidth;
-            final int oldHeight = mImgDrawableHeight;
+            int oldWidth = 0;
+            int oldHeight = 0;
 
             if (mImgDrawable != null) {
+                oldWidth = mImgDrawable.getIntrinsicWidth();
+                oldHeight = mImgDrawable.getIntrinsicHeight();
                 mImgDrawable.setCallback(null);
                 unscheduleDrawable(mImgDrawable);
             }
 
             mImgDrawable = drawable;
 
+            int mImgDrawableWidth = 0;
+            int mImgDrawableHeight = 0;
             if (drawable != null) {
                 drawable.setCallback(this);
                 drawable.setVisible(getVisibility() == VISIBLE, true);
                 mImgDrawableWidth = drawable.getIntrinsicWidth();
                 mImgDrawableHeight = drawable.getIntrinsicHeight();
-                mBoxMetrics.setImageSize(mImgDrawableWidth, mImgDrawableHeight);
-                configureBounds();
-            } else {
-                mImgDrawableWidth = mImgDrawableHeight = -1;
-                mBoxMetrics.setImageSize(0, 0);
             }
+            mBoxMetrics.setImageSize(mImgDrawableWidth, mImgDrawableHeight);
+            configureBounds();
 
             if (oldWidth != mImgDrawableWidth || oldHeight != mImgDrawableHeight) {
                 requestLayout();
@@ -200,6 +199,7 @@ class WebImageView extends View {
     public void setBoxMetrics(ShadowBoxMetrics shadowMetrics) {
         mBoxMetrics.setShadowMetrics(shadowMetrics);
         configureBounds();
+        requestLayout();
         invalidate();
     }
 
