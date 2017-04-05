@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
-import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.ColorInt;
@@ -54,17 +53,12 @@ class WebImageView extends View {
     private Drawable mImgDrawable;
     private int mImgDrawableWidth;
     private int mImgDrawableHeight;
-    private Matrix mDrawMatrix = null;
-
-    // Avoid allocations...
-    private RectF mTempSrc = new RectF();
-    private RectF mTempDst = new RectF();
 
     private IBorder mBorder;
 
     public WebImageView(Context context) {
         super(context);
-        mBoxMetrics = new BoxMetrics();
+        mBoxMetrics = new BoxMetrics(mScaleType);
         configureBounds();
     }
 
@@ -73,7 +67,24 @@ class WebImageView extends View {
             final int oldWidth = mImgDrawableWidth;
             final int oldHeight = mImgDrawableHeight;
 
-            updateDrawable(drawable);
+            if (mImgDrawable != null) {
+                mImgDrawable.setCallback(null);
+                unscheduleDrawable(mImgDrawable);
+            }
+
+            mImgDrawable = drawable;
+
+            if (drawable != null) {
+                drawable.setCallback(this);
+                drawable.setVisible(getVisibility() == VISIBLE, true);
+                mImgDrawableWidth = drawable.getIntrinsicWidth();
+                mImgDrawableHeight = drawable.getIntrinsicHeight();
+                mBoxMetrics.setImageSize(mImgDrawableWidth, mImgDrawableHeight);
+                configureBounds();
+            } else {
+                mImgDrawableWidth = mImgDrawableHeight = -1;
+                mBoxMetrics.setImageSize(0, 0);
+            }
 
             if (oldWidth != mImgDrawableWidth || oldHeight != mImgDrawableHeight) {
                 requestLayout();
@@ -90,78 +101,10 @@ class WebImageView extends View {
         super.onLayout(changed, left, top, right, bottom);
     }
 
-    private void updateDrawable(Drawable d) {
-        if (mImgDrawable != null) {
-            mImgDrawable.setCallback(null);
-            unscheduleDrawable(mImgDrawable);
-        }
-
-        mImgDrawable = d;
-
-        if (d != null) {
-            d.setCallback(this);
-            d.setVisible(getVisibility() == VISIBLE, true);
-            mImgDrawableWidth = d.getIntrinsicWidth();
-            mImgDrawableHeight = d.getIntrinsicHeight();
-            configureBounds();
-        } else {
-            mImgDrawableWidth = mImgDrawableHeight = -1;
-        }
-    }
-
     private void configureBounds() {
         if (mImgDrawable == null) return;
 
-        float cBoxWidth = mBoxMetrics.getLayoutContentWidth();
-        float cBoxHeight = mBoxMetrics.getLayoutContentHeight();
-
-        int imWidth = mImgDrawableWidth;
-        int imHeight = mImgDrawableHeight;
-
-        boolean fits = (imWidth < 0 || cBoxWidth == imWidth) && (imHeight < 0 || cBoxHeight == imHeight);
-
-        if (imWidth <= 0 || imHeight <= 0 || SCALE_STRETCH == mScaleType) {
-            mImgDrawable.setBounds(0, 0, Math.round(cBoxWidth), Math.round(cBoxHeight));
-            mDrawMatrix = null;
-        } else {
-            mImgDrawable.setBounds(0, 0, imWidth, imHeight);
-
-            if (fits) {
-                mDrawMatrix = null;
-            } else if (SCALE_CENTER == mScaleType) {
-                mDrawMatrix = new Matrix();
-                mDrawMatrix.setTranslate(Math.round((cBoxWidth - imWidth) * 0.5f), Math.round((cBoxHeight - imHeight) * 0.5f));
-            } else if (SCALE_COVER == mScaleType) {
-                mDrawMatrix = new Matrix();
-
-                float scale;
-                float dx = 0, dy = 0;
-
-                if (imWidth * cBoxHeight > cBoxWidth * imHeight) {
-                    scale = cBoxHeight / (float) imHeight;
-                    dx = (cBoxWidth - imWidth * scale) * 0.5f;
-                } else {
-                    scale = cBoxWidth / (float) imWidth;
-                    dy = (cBoxHeight - imHeight * scale) * 0.5f;
-                }
-
-                mDrawMatrix.setScale(scale, scale);
-                mDrawMatrix.postTranslate(Math.round(dx), Math.round(dy));
-            } else {
-                // contain
-                mTempSrc.set(0, 0, imWidth, imHeight);
-                mTempDst.set(0, 0, cBoxWidth, cBoxHeight);
-
-                mDrawMatrix = new Matrix();
-                mDrawMatrix.setRectToRect(mTempSrc, mTempDst, Matrix.ScaleToFit.CENTER);
-            }
-        }
-
-        if (mDrawMatrix != null) {
-            mTempSrc.set(0, 0, imWidth, imHeight);
-            mDrawMatrix.mapRect(mTempDst, mTempSrc);
-            mBoxMetrics.ajustContentSize(mTempDst.width(), mTempDst.height());
-        }
+        mImgDrawable.setBounds(mBoxMetrics.getContentBounds());
 
         final float tl = YogaConstants.isUndefined(mBorderRadii[0]) ? mBorderRadius : mBorderRadii[0];
         final float tr = YogaConstants.isUndefined(mBorderRadii[1]) ? mBorderRadius : mBorderRadii[1];
@@ -211,6 +154,7 @@ class WebImageView extends View {
         }
 
         mScaleType = scaleType;
+        mBoxMetrics.setScaleType(scaleType);
 
         setWillNotCacheDrawing(mScaleType == SCALE_CENTER);
 
@@ -264,26 +208,23 @@ class WebImageView extends View {
         super.onDraw(canvas);
 
         if (mImgDrawable == null) return;
-        if (mImgDrawableWidth == 0 || mImgDrawableHeight == 0) return;
 
-        if (mDrawMatrix == null) {
-            mImgDrawable.draw(canvas);
-        } else {
-            int saveCount = canvas.getSaveCount();
-            canvas.save();
+        int saveCount = canvas.getSaveCount();
+        canvas.save();
 
-            if (mBorder != null) {
-                mBorder.draw(canvas);
-            }
-            canvas.clipPath(mBoxMetrics.getContentPath());
-
-            canvas.translate(mBoxMetrics.borderLeft + mBoxMetrics.paddingLeft, mBoxMetrics.borderTop + mBoxMetrics.paddingTop);
-            canvas.concat(mDrawMatrix);
-
-            mImgDrawable.draw(canvas);
-
-            canvas.restoreToCount(saveCount);
+        if (mBorder != null) {
+            mBorder.draw(canvas);
         }
+        canvas.clipPath(mBoxMetrics.getContentPath());
+
+        final Matrix contentMatrix = mBoxMetrics.getContentMatrix();
+        if (contentMatrix != null) {
+            canvas.concat(contentMatrix);
+        }
+
+        mImgDrawable.draw(canvas);
+
+        canvas.restoreToCount(saveCount);
     }
 
     private boolean hasBorder() {
