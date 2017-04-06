@@ -209,9 +209,6 @@ class WebImageView extends View {
 
         if (mImgDrawable == null) return;
 
-        int saveCount = canvas.getSaveCount();
-        canvas.save();
-
         if (mBorder != null) {
             mBorder.draw(canvas);
         }
@@ -223,8 +220,6 @@ class WebImageView extends View {
         }
 
         mImgDrawable.draw(canvas);
-
-        canvas.restoreToCount(saveCount);
     }
 
     private boolean hasBorder() {
