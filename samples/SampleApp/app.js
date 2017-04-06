@@ -7,6 +7,7 @@ import TestBordersRectangleMono from './test-borders-rectangle-mono'
 import TestBordersRectangleColor from './test-borders-rectangle-color'
 import TestBordersRoundMono from './test-borders-round-mono'
 import TestBordersRoundColor from './test-borders-round-color'
+import BenchNoDecor from './bench-no-decor'
 
 const TestCaseLink = ({ title, onPress }) => {
   return <View style={s.testItem}><Button title={title} onPress={onPress} /></View>
@@ -24,6 +25,7 @@ const Main = ({ navigateTo }) => {
     <TestCaseLink title='Borders Rectangle Color' onPress={() => { navigateTo('/test-borders/rectangle/color') }} />
     <TestCaseLink title='Borders Round Mono' onPress={() => { navigateTo('/test-borders/round/mono') }} />
     <TestCaseLink title='Borders Round Color' onPress={() => { navigateTo('/test-borders/round/color') }} />
+    <TestCaseLink title='Bench (no decorations)' onPress={() => { navigateTo('/bench/no-decor') }} />
   </ScrollView>
 }
 Main.propTypes = {
@@ -37,7 +39,8 @@ const routes = {
   '/test-borders/rectangle/mono': TestBordersRectangleMono,
   '/test-borders/rectangle/color': TestBordersRectangleColor,
   '/test-borders/round/mono': TestBordersRoundMono,
-  '/test-borders/round/color': TestBordersRoundColor
+  '/test-borders/round/color': TestBordersRoundColor,
+  '/bench/no-decor': BenchNoDecor
 }
 
 export default class App extends React.Component {
