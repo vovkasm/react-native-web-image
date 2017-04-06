@@ -56,6 +56,10 @@ class WebImageView extends View {
 
     public WebImageView(Context context) {
         super(context);
+        // TODO(vovkasm): use LAYER_TYPE_NONE only if no clipping path needed
+        //  - LAYER_TYPE_NONE(default) exposes bug with Canvas#clipPath when view partially out of ScrollView, so image draws over borders
+        //  - LAYER_TYPE_HARDWARE kill antialiasing in borders
+        setLayerType(LAYER_TYPE_SOFTWARE, null);
         mBoxMetrics = new BoxMetrics(mScaleType);
         configureBounds();
     }
