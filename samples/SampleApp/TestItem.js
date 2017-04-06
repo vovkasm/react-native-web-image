@@ -29,8 +29,8 @@ const s = StyleSheet.create({
     padding: 2
   },
   imageBlock: {
-    borderWidth: 1,
-    borderColor: 'green',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: '#ccc',
     width: 160,
     height: 160
   },
