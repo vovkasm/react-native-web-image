@@ -4,20 +4,22 @@ import { Button, ScrollView, StyleSheet, Text, View } from 'react-native'
 import Samples from './samples'
 import TestDefault from './test-default'
 import TestBordersRectangleMono from './test-borders-rectangle-mono'
+import TestBordersRectangleColor from './test-borders-rectangle-color'
 
-const TestItem = ({ title, onPress }) => {
+const TestCaseLink = ({ title, onPress }) => {
   return <View style={s.testItem}><Button title={title} onPress={onPress} /></View>
 }
-TestItem.propTypes = {
+TestCaseLink.propTypes = {
   onPress: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired
 }
 
 const Main = ({ navigateTo }) => {
   return <ScrollView>
-    <TestItem title='Samples' onPress={() => { navigateTo('/samples') }} />
-    <TestItem title='Default params' onPress={() => { navigateTo('/test-default') }} />
-    <TestItem title='Borders Rectangle Mono' onPress={() => { navigateTo('/test-borders/rectangle/mono') }} />
+    <TestCaseLink title='Samples' onPress={() => { navigateTo('/samples') }} />
+    <TestCaseLink title='Default params' onPress={() => { navigateTo('/test-default') }} />
+    <TestCaseLink title='Borders Rectangle Mono' onPress={() => { navigateTo('/test-borders/rectangle/mono') }} />
+    <TestCaseLink title='Borders Rectangle Color' onPress={() => { navigateTo('/test-borders/rectangle/color') }} />
   </ScrollView>
 }
 Main.propTypes = {
@@ -28,7 +30,8 @@ const routes = {
   '/': Main,
   '/samples': Samples,
   '/test-default': TestDefault,
-  '/test-borders/rectangle/mono': TestBordersRectangleMono
+  '/test-borders/rectangle/mono': TestBordersRectangleMono,
+  '/test-borders/rectangle/color': TestBordersRectangleColor
 }
 
 export default class App extends React.Component {
