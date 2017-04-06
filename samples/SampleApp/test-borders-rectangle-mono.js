@@ -1,25 +1,7 @@
-import React, { PropTypes } from 'react'
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
-import WebImage from 'react-native-web-image'
+import React from 'react'
+import { ScrollView, StyleSheet } from 'react-native'
 
-function TestItem (props) {
-  const uri = 'https://placeholdit.imgix.net/~text?txtsize=26&txt=100x80&w=100&h=80'
-  const style = {
-    flex: 1,
-    ...props.style
-  }
-  return <View style={s.test}>
-    <View style={[s.block, {width: 160, height: 160}]}>
-      <WebImage source={{uri}} style={style} />
-    </View>
-    <View style={s.testDescription}>
-      <Text style={s.testDescriptionText}>{JSON.stringify(style, null, ' ')}</Text>
-    </View>
-  </View>
-}
-TestItem.propTypes = {
-  style: PropTypes.object
-}
+import TestItem from './TestItem'
 
 export default function TestBordersRectangleMono () {
   const bs = { borderColor: 'red', borderWidth: 1 }
@@ -37,22 +19,5 @@ const s = StyleSheet.create({
   },
   content: {
     width: 600
-  },
-  test: {
-    flexDirection: 'row',
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderColor: '#ccc',
-    padding: 2
-  },
-  block: {
-    borderWidth: 1,
-    borderColor: 'green'
-  },
-  testDescription: {
-    flex: 1,
-    padding: 2
-  },
-  testDescriptionText: {
-    fontSize: 8
   }
 })
