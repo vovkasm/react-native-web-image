@@ -1,9 +1,11 @@
 package org.vovkasm.WebImage;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.ColorInt;
@@ -11,10 +13,7 @@ import android.support.annotation.IntDef;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.target.ViewTarget;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
@@ -38,8 +37,6 @@ class WebImageView extends View {
 
     public static final int DEFAULT_BORDER_COLOR = Color.TRANSPARENT;
     public static final float DEFAULT_BORDER_RADIUS = 0f;
-
-    private static RequestListener<Uri, GlideDrawable> requestListener = new WebImageViewRequestListener();
 
     private Uri mUri;
     private @ScaleType int mScaleType = SCALE_CONTAIN;
@@ -173,7 +170,11 @@ class WebImageView extends View {
         if (uri.equals(mUri)) return;
         mUri = uri;
         // TODO(vovkasm): use ThemedReactContext#getCurrentActivity so glide can follow lifecycle
-        Glide.with(getContext()).load(mUri).listener(requestListener).into(new WebImageViewTarget(this));
+        Glide.with(getContext()).load(mUri).asBitmap().into(new WebImageViewTarget(this));
+    }
+
+    final Uri getImageUri() {
+        return mUri;
     }
 
     public void setBorderColor(@ColorInt int color) {
@@ -241,33 +242,28 @@ class WebImageView extends View {
                 && mBorderColors[2] == mBorderColors[3]);
     }
 
-    private static class WebImageViewRequestListener implements RequestListener<Uri,GlideDrawable> {
-        @Override
-        public boolean onException(Exception e, Uri uri, Target<GlideDrawable> target, boolean isFirstResource) {
-            if (!(target instanceof WebImageViewTarget)) return false;
-            WebImageView view = ((WebImageViewTarget) target).getView();
-            WritableMap event = Arguments.createMap();
-            event.putString("error", e.getMessage());
-            event.putString("uri", uri.toString());
-            ThemedReactContext context = (ThemedReactContext) view.getContext();
-            context.getJSModule(RCTEventEmitter.class).receiveEvent(view.getId(), "onWebImageError", event);
-            return false;
-        }
-
-        @Override
-        public boolean onResourceReady(GlideDrawable resource, Uri uri, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-            return false;
-        }
-    }
-
-    private static class WebImageViewTarget extends ViewTarget<WebImageView, GlideDrawable> {
+    private static class WebImageViewTarget extends ViewTarget<WebImageView, Bitmap> {
         WebImageViewTarget(WebImageView view) {
             super(view);
         }
 
         @Override
-        public void onResourceReady(GlideDrawable drawable, GlideAnimation<? super GlideDrawable> glideAnimation) {
+        public void onResourceReady(Bitmap bitmap, GlideAnimation<? super Bitmap> glideAnimation) {
+            BitmapDrawable drawable = new BitmapDrawable(view.getResources(), bitmap);
             this.view.setImageDrawable(drawable);
+        }
+
+        @Override
+        public void onLoadFailed(Exception e, Drawable errorDrawable) {
+            super.onLoadFailed(e, errorDrawable);
+            WritableMap event = Arguments.createMap();
+            event.putString("error", e.getMessage());
+            final Uri uri = view.getImageUri();
+            if (uri != null) {
+                event.putString("uri", uri.toString());
+            }
+            ThemedReactContext context = (ThemedReactContext) view.getContext();
+            context.getJSModule(RCTEventEmitter.class).receiveEvent(view.getId(), "onWebImageError", event);
         }
 
         public WebImageView getView() { return view; }
