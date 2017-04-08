@@ -59,7 +59,7 @@ class WebImageView extends View {
         // TODO(vovkasm): use LAYER_TYPE_NONE only if no clipping path needed
         //  - LAYER_TYPE_NONE(default) exposes bug with Canvas#clipPath when view partially out of ScrollView, so image draws over borders
         //  - LAYER_TYPE_HARDWARE kill antialiasing in borders
-        setLayerType(LAYER_TYPE_SOFTWARE, null);
+        // setLayerType(LAYER_TYPE_SOFTWARE, null);
         mBoxMetrics = new BoxMetrics(mScaleType);
         configureBounds();
     }
@@ -216,6 +216,9 @@ class WebImageView extends View {
         if (mBorder != null) {
             mBorder.draw(canvas);
         }
+
+        final int saveCount = canvas.save(Canvas.ALL_SAVE_FLAG);
+
         canvas.clipPath(mBoxMetrics.getContentPath());
 
         final Matrix contentMatrix = mBoxMetrics.getContentMatrix();
@@ -224,6 +227,8 @@ class WebImageView extends View {
         }
 
         mImgDrawable.draw(canvas);
+
+        canvas.restoreToCount(saveCount);
     }
 
     private boolean hasBorder() {
