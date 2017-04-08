@@ -2,10 +2,11 @@ package org.vovkasm.WebImage;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.Paint;
+import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.ColorInt;
@@ -47,50 +48,27 @@ class WebImageView extends View {
     private float mBorderRadius = DEFAULT_BORDER_RADIUS;
     private float[] mBorderRadii = new float[]{YogaConstants.UNDEFINED, YogaConstants.UNDEFINED, YogaConstants.UNDEFINED, YogaConstants.UNDEFINED};
 
-    private Drawable mImgDrawable;
+    private Bitmap mBitmap = null;
+    private Paint mBitmapPaint = new Paint();
+    private BitmapShader mBitmapShader = null;
 
     private IBorder mBorder;
 
     public WebImageView(Context context) {
         super(context);
-        // TODO(vovkasm): use LAYER_TYPE_NONE only if no clipping path needed
-        //  - LAYER_TYPE_NONE(default) exposes bug with Canvas#clipPath when view partially out of ScrollView, so image draws over borders
-        //  - LAYER_TYPE_HARDWARE kill antialiasing in borders
-        // setLayerType(LAYER_TYPE_SOFTWARE, null);
         mBoxMetrics = new BoxMetrics(mScaleType);
+        mBitmapPaint.setAntiAlias(true);
         configureBounds();
     }
 
-    public void setImageDrawable(Drawable drawable) {
-        if (mImgDrawable != drawable) {
-            int oldWidth = 0;
-            int oldHeight = 0;
-
-            if (mImgDrawable != null) {
-                oldWidth = mImgDrawable.getIntrinsicWidth();
-                oldHeight = mImgDrawable.getIntrinsicHeight();
-                mImgDrawable.setCallback(null);
-                unscheduleDrawable(mImgDrawable);
-            }
-
-            mImgDrawable = drawable;
-
-            int mImgDrawableWidth = 0;
-            int mImgDrawableHeight = 0;
-            if (drawable != null) {
-                drawable.setCallback(this);
-                drawable.setVisible(getVisibility() == VISIBLE, true);
-                mImgDrawableWidth = drawable.getIntrinsicWidth();
-                mImgDrawableHeight = drawable.getIntrinsicHeight();
-            }
-            mBoxMetrics.setImageSize(mImgDrawableWidth, mImgDrawableHeight);
-            configureBounds();
-
-            if (oldWidth != mImgDrawableWidth || oldHeight != mImgDrawableHeight) {
-                requestLayout();
-            }
-            invalidate();
-        }
+    void setBitmap(Bitmap bitmap) {
+        mBitmap = bitmap;
+        mBitmapShader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+        mBitmapPaint.setShader(mBitmapShader);
+        mBoxMetrics.setImageSize(mBitmap.getWidth(), mBitmap.getHeight());
+        configureBounds();
+        requestLayout();
+        invalidate();
     }
 
     @Override
@@ -102,15 +80,16 @@ class WebImageView extends View {
     }
 
     private void configureBounds() {
-        if (mImgDrawable == null) return;
-
-        mImgDrawable.setBounds(mBoxMetrics.getContentBounds());
+        if (mBitmap == null) return;
 
         final float tl = YogaConstants.isUndefined(mBorderRadii[0]) ? mBorderRadius : mBorderRadii[0];
         final float tr = YogaConstants.isUndefined(mBorderRadii[1]) ? mBorderRadius : mBorderRadii[1];
         final float br = YogaConstants.isUndefined(mBorderRadii[2]) ? mBorderRadius : mBorderRadii[2];
         final float bl = YogaConstants.isUndefined(mBorderRadii[3]) ? mBorderRadius : mBorderRadii[3];
         mBoxMetrics.setRadii(tl, tr, br, bl);
+
+        mBitmapShader.setLocalMatrix(mBoxMetrics.getContentMatrix());
+        mBitmapPaint.setShader(mBitmapShader);
 
         if (hasBorder()) {
             if (hasMonoBorder()) {
@@ -156,9 +135,6 @@ class WebImageView extends View {
         mScaleType = scaleType;
         mBoxMetrics.setScaleType(scaleType);
 
-        setWillNotCacheDrawing(mScaleType == SCALE_CENTER);
-
-        requestLayout();
         invalidate();
     }
 
@@ -212,24 +188,13 @@ class WebImageView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        if (mImgDrawable == null) return;
+        if (mBitmap == null) return;
 
         if (mBorder != null) {
             mBorder.draw(canvas);
         }
 
-        final int saveCount = canvas.save(Canvas.ALL_SAVE_FLAG);
-
-        canvas.clipPath(mBoxMetrics.getContentPath());
-
-        final Matrix contentMatrix = mBoxMetrics.getContentMatrix();
-        if (contentMatrix != null) {
-            canvas.concat(contentMatrix);
-        }
-
-        mImgDrawable.draw(canvas);
-
-        canvas.restoreToCount(saveCount);
+        canvas.drawPath(mBoxMetrics.getContentPath(), mBitmapPaint);
     }
 
     private boolean hasBorder() {
@@ -249,8 +214,7 @@ class WebImageView extends View {
 
         @Override
         public void onResourceReady(Bitmap bitmap, GlideAnimation<? super Bitmap> glideAnimation) {
-            BitmapDrawable drawable = new BitmapDrawable(view.getResources(), bitmap);
-            this.view.setImageDrawable(drawable);
+            view.setBitmap(bitmap);
         }
 
         @Override
