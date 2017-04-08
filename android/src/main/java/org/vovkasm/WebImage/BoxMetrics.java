@@ -193,6 +193,11 @@ class BoxMetrics {
         return paddingRadii;
     }
 
+    final boolean needContentClipping() {
+        update();
+        return contentRadii.isZero();
+    }
+
     final Path getContentPath() {
         update();
         return contentPath;

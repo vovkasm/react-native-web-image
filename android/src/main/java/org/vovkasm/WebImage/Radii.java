@@ -2,6 +2,8 @@ package org.vovkasm.WebImage;
 
 import android.support.annotation.IntDef;
 
+import com.facebook.react.uimanager.FloatUtil;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.Arrays;
@@ -58,6 +60,13 @@ class Radii {
 
     float getRadius(@Corner int corner) {
         return mRadii[corner];
+    }
+
+    boolean isZero() {
+        for (int i = 0; i < 8; i++) {
+            if (!FloatUtil.floatsEqual(mRadii[i], 0f)) return true;
+        }
+        return false;
     }
 
     float[] asArray() {
