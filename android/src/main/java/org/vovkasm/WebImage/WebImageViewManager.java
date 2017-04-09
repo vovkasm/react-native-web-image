@@ -3,6 +3,7 @@ package org.vovkasm.WebImage;
 import android.graphics.Color;
 import android.net.Uri;
 
+import com.bumptech.glide.Glide;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.uimanager.BaseViewManager;
@@ -30,6 +31,12 @@ class WebImageViewManager extends BaseViewManager<WebImageView, WebImageShadowNo
     @Override
     protected WebImageView createViewInstance(ThemedReactContext reactContext) {
         return new WebImageView(reactContext);
+    }
+
+    @Override
+    public void onDropViewInstance(WebImageView view) {
+        super.onDropViewInstance(view);
+        Glide.clear(view);
     }
 
     @Override
