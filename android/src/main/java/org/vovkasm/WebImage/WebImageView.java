@@ -135,9 +135,7 @@ class WebImageView extends View {
     }
 
     public void setScaleType(@ScaleType int scaleType) {
-        if (mScaleType == scaleType) {
-            return;
-        }
+        if (mScaleType == scaleType) return;
 
         mScaleType = scaleType;
         mBoxMetrics.setScaleType(scaleType);
