@@ -54,10 +54,13 @@ class WebImageView extends View {
 
     private IBorder mBorder;
 
+    private WebImageViewTarget mGlideTarget;
+
     public WebImageView(Context context) {
         super(context);
         mBoxMetrics = new BoxMetrics(mScaleType);
         mBitmapPaint.setAntiAlias(true);
+        mGlideTarget = new WebImageViewTarget(this);
         configureBounds();
     }
 
@@ -69,6 +72,10 @@ class WebImageView extends View {
         configureBounds();
         requestLayout();
         invalidate();
+    }
+
+    ThemedReactContext getThemedReactContext() {
+        return (ThemedReactContext) getContext();
     }
 
     @Override
@@ -145,8 +152,8 @@ class WebImageView extends View {
     void setImageUri(Uri uri) {
         if (uri.equals(mUri)) return;
         mUri = uri;
-        // TODO(vovkasm): use ThemedReactContext#getCurrentActivity so glide can follow lifecycle
-        Glide.with(getContext()).load(mUri).asBitmap().into(new WebImageViewTarget(this));
+        ThemedReactContext ctx = getThemedReactContext();
+        Glide.with(ctx.getCurrentActivity()).load(mUri).asBitmap().into(mGlideTarget);
     }
 
     final Uri getImageUri() {
@@ -226,7 +233,7 @@ class WebImageView extends View {
             if (uri != null) {
                 event.putString("uri", uri.toString());
             }
-            ThemedReactContext context = (ThemedReactContext) view.getContext();
+            ThemedReactContext context = view.getThemedReactContext();
             context.getJSModule(RCTEventEmitter.class).receiveEvent(view.getId(), "onWebImageError", event);
         }
 
