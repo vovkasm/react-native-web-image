@@ -8,8 +8,8 @@ import android.graphics.RectF;
 import com.facebook.react.uimanager.FloatUtil;
 
 class BoxMetrics {
-    private float layoutWidth = 0f;
-    private float layoutHeight = 0f;
+    private int layoutWidth = 0;
+    private int layoutHeight = 0;
 
     float borderLeft = 0f;
     float borderTop = 0f;
@@ -46,9 +46,7 @@ class BoxMetrics {
     }
 
     void setShadowMetrics(ShadowBoxMetrics sm) {
-        boolean isSame = FloatUtil.floatsEqual(layoutWidth, sm.width)
-                && FloatUtil.floatsEqual(layoutHeight, sm.height)
-                && FloatUtil.floatsEqual(borderLeft, sm.borderLeft)
+        boolean isSame = FloatUtil.floatsEqual(borderLeft, sm.borderLeft)
                 && FloatUtil.floatsEqual(borderTop, sm.borderTop)
                 && FloatUtil.floatsEqual(borderRight, sm.borderRight)
                 && FloatUtil.floatsEqual(borderBottom, sm.borderBottom)
@@ -57,8 +55,6 @@ class BoxMetrics {
                 && FloatUtil.floatsEqual(paddingRight, sm.paddingRight)
                 && FloatUtil.floatsEqual(paddingBottom, sm.paddingBottom);
         if (isSame) return;
-        layoutWidth = sm.width;
-        layoutHeight = sm.height;
         borderLeft = sm.borderLeft;
         borderTop = sm.borderTop;
         borderRight = sm.borderRight;
@@ -70,17 +66,26 @@ class BoxMetrics {
         dirty = true;
     }
 
+    void setSize(int width, int height) {
+        if (width == layoutWidth && height == layoutHeight) return;
+        layoutWidth = width;
+        layoutHeight = height;
+        dirty = true;
+    }
+
     void setRadii(float tl, float tr, float br, float bl) {
         borderRadii.set(tl, tr, br, bl);
         dirty = true;
     }
 
     void setScaleType(@WebImageView.ScaleType int scaleType) {
+        if (this.scaleType == scaleType) return;
         this.scaleType = scaleType;
         dirty = true;
     }
 
     void setImageSize(int width, int height) {
+        if (imageWidth == width && imageHeight == height) return;
         imageWidth = width;
         imageHeight = height;
         dirty = true;
@@ -164,10 +169,6 @@ class BoxMetrics {
         contentMatrix.postTranslate(borderLeft + paddingLeft, borderTop + paddingTop);
     }
 
-    private void insetRect(RectF dst, RectF src, float left, float top, float right, float bottom) {
-        dst.set(src.left + left, src.top + top, src.right - right, src.bottom - bottom);
-    }
-
     final Matrix getContentMatrix() {
         update();
         return contentMatrix;
@@ -209,5 +210,9 @@ class BoxMetrics {
                 && FloatUtil.floatsEqual(borderRight, 0f)
                 && FloatUtil.floatsEqual(borderBottom, 0f)
         );
+    }
+
+    private static void insetRect(RectF dst, RectF src, float left, float top, float right, float bottom) {
+        dst.set(src.left + left, src.top + top, src.right - right, src.bottom - bottom);
     }
 }

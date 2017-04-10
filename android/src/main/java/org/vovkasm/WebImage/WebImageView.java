@@ -81,6 +81,7 @@ class WebImageView extends View {
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         if (changed) {
+            mBoxMetrics.setSize(right - left, bottom - top);
             configureBounds();
         }
         super.onLayout(changed, left, top, right, bottom);

@@ -1,9 +1,6 @@
 package org.vovkasm.WebImage;
 
 class ShadowBoxMetrics {
-    float width;
-    float height;
-
     float borderLeft;
     float borderTop;
     float borderRight;
@@ -14,9 +11,7 @@ class ShadowBoxMetrics {
     float paddingRight;
     float paddingBottom;
 
-    ShadowBoxMetrics(float w, float h, float bl, float bt, float br, float bb, float pl, float pt, float pr, float pb) {
-        width = w;
-        height = h;
+    ShadowBoxMetrics(float bl, float bt, float br, float bb, float pl, float pt, float pr, float pb) {
         borderLeft = bl;
         borderTop = bt;
         borderRight = br;

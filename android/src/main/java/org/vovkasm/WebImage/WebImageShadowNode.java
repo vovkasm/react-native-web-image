@@ -32,8 +32,6 @@ class WebImageShadowNode extends LayoutShadowNode {
     public void onCollectExtraUpdates(UIViewOperationQueue uiViewOperationQueue) {
         super.onCollectExtraUpdates(uiViewOperationQueue);
         ShadowBoxMetrics bm = new ShadowBoxMetrics(
-                getLayoutWidth(),
-                getLayoutHeight(),
                 getEffectiveBorderWidth(Spacing.START),
                 getEffectiveBorderWidth(Spacing.TOP),
                 getEffectiveBorderWidth(Spacing.END),
