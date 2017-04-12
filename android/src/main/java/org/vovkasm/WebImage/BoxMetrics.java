@@ -2,7 +2,6 @@ package org.vovkasm.WebImage;
 
 import android.graphics.Matrix;
 import android.graphics.Path;
-import android.graphics.Rect;
 import android.graphics.RectF;
 
 import com.facebook.react.uimanager.FloatUtil;
@@ -35,7 +34,6 @@ class BoxMetrics {
     private RectF paddingRect = new RectF();
     private RectF contentRect = new RectF();
 
-    private Rect contentBounds = new Rect();
     private Matrix contentMatrix = new Matrix();
 
     private Path borderPath = new Path();
@@ -117,7 +115,6 @@ class BoxMetrics {
         insetRect(contentRect, paddingRect, paddingLeft, paddingTop, paddingRight, paddingBottom);
 
         contentMatrix.reset();
-        contentBounds.set(0, 0, imageWidth, imageHeight);
 
         final float availableWidth = contentRect.width();
         final float availableHeight = contentRect.height();
