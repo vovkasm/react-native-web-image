@@ -72,6 +72,7 @@ class BoxMetrics {
     }
 
     void setRadii(float tl, float tr, float br, float bl) {
+        if (borderRadii.isEqual4(tl, tr, br, bl)) return;
         borderRadii.set(tl, tr, br, bl);
         dirty = true;
     }

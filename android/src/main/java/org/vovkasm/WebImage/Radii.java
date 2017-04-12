@@ -43,6 +43,17 @@ class Radii {
         mRadii[BOTTOM_LEFT_HEIGHT] = bottomLeft;
     }
 
+    boolean isEqual4(float topLeft, float topRight, float bottomRight, float bottomLeft) {
+        return FloatUtil.floatsEqual(mRadii[TOP_LEFT_WIDTH], topLeft)
+                && FloatUtil.floatsEqual(mRadii[TOP_LEFT_HEIGHT], topLeft)
+                && FloatUtil.floatsEqual(mRadii[TOP_RIGHT_WIDTH], topRight)
+                && FloatUtil.floatsEqual(mRadii[TOP_RIGHT_HEIGHT], topRight)
+                && FloatUtil.floatsEqual(mRadii[BOTTOM_RIGHT_WIDTH], bottomRight)
+                && FloatUtil.floatsEqual(mRadii[BOTTOM_RIGHT_HEIGHT], bottomRight)
+                && FloatUtil.floatsEqual(mRadii[BOTTOM_LEFT_WIDTH], bottomLeft)
+                && FloatUtil.floatsEqual(mRadii[BOTTOM_LEFT_HEIGHT], bottomLeft);
+    }
+
     void set(final Radii radii) {
         System.arraycopy(radii.mRadii, 0, mRadii, 0, 8);
     }
