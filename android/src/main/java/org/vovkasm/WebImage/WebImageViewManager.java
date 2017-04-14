@@ -40,7 +40,11 @@ class WebImageViewManager extends SimpleViewManager<ImageView> {
             }
             ImageView view = (ImageView) ((ImageViewTarget) target).getView();
             WritableMap event = Arguments.createMap();
-            event.putString("error", e.getMessage());
+            if (e != null) {
+                event.putString("error", e.getMessage());
+            } else {
+                event.putString("error", "Unknown");
+            }
             event.putString("uri", uri.toString());
             ThemedReactContext context = (ThemedReactContext) view.getContext();
             context.getJSModule(RCTEventEmitter.class).receiveEvent(view.getId(), "onWebImageError", event);
