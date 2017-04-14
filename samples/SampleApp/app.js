@@ -3,6 +3,7 @@ import { Button, ScrollView, StyleSheet, Text, View } from 'react-native'
 
 import Samples from './samples'
 import TestDefault from './test-default'
+import TestCrash from './test-activity-destroy-crash'
 import TestBordersRectangleMono from './test-borders-rectangle-mono'
 import TestBordersRectangleColor from './test-borders-rectangle-color'
 import TestBordersRoundMono from './test-borders-round-mono'
@@ -26,6 +27,7 @@ const Main = ({ navigateTo }) => {
     <TestCaseLink title='Borders Round Mono' onPress={() => { navigateTo('/test-borders/round/mono') }} />
     <TestCaseLink title='Borders Round Color' onPress={() => { navigateTo('/test-borders/round/color') }} />
     <TestCaseLink title='Bench (no decorations)' onPress={() => { navigateTo('/bench/no-decor') }} />
+    <TestCaseLink title='Crashes' onPress={() => { navigateTo('/test-crash') }} />
   </ScrollView>
 }
 Main.propTypes = {
@@ -40,7 +42,8 @@ const routes = {
   '/test-borders/rectangle/color': TestBordersRectangleColor,
   '/test-borders/round/mono': TestBordersRoundMono,
   '/test-borders/round/color': TestBordersRoundColor,
-  '/bench/no-decor': BenchNoDecor
+  '/bench/no-decor': BenchNoDecor,
+  '/test-crash': TestCrash
 }
 
 export default class App extends React.Component {
