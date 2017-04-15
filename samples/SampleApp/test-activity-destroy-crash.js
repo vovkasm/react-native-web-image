@@ -1,5 +1,5 @@
 import React from 'react'
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Alert, Button, Linking, ScrollView, StyleSheet, Text, View } from 'react-native'
 import WebImage from 'react-native-web-image'
 
 export default class TestDefaultFlexible extends React.Component {
@@ -25,10 +25,16 @@ export default class TestDefaultFlexible extends React.Component {
   }
   render () {
     const uri = `https://placeholdit.imgix.net/~text?txtsize=26&txt=it${this.state.iter}&w=100&h=80`
-    return <ScrollView style={s.container}>
-      <Text>This test will update image every second to allow test app lifecycle issues. You can background/restore app.</Text>
-      <View style={[s.block, {width: 102, height: 82}]}><WebImage source={{uri}} style={s.web} /></View>
-    </ScrollView>
+    return <View style={s.container}>
+      <ScrollView style={s.container}>
+        <Text>This test will update image every second to allow test app lifecycle issues. You can background/restore app.</Text>
+        <Button title='Alert' onPress={() => { Alert.alert('Alert', 'Sample alert') }} />
+        <Button title='Browser' onPress={() => {
+          Linking.openURL('https://w3.org')
+        }} />
+        <View style={[s.block, {width: 102, height: 82}]}><WebImage source={{uri}} style={s.web} /></View>
+      </ScrollView>
+    </View>
   }
 }
 
