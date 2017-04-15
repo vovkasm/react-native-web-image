@@ -1,6 +1,8 @@
 package org.vovkasm.WebImage;
 
+import android.app.Activity;
 import android.net.Uri;
+import android.os.Build;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 
@@ -70,9 +72,17 @@ class WebImageViewManager extends SimpleViewManager<ImageView> {
     @ReactProp(name="source")
     public void setSrc(ImageView view, @Nullable ReadableMap source) {
         if (source == null) return;
+        final ThemedReactContext context = (ThemedReactContext) view.getContext();
+        if (context == null) return;
+
+        // Guard against destroyed activity (see: https://github.com/bumptech/glide/issues/803)
+        final Activity activity = context.getCurrentActivity();
+        if (activity == null) return;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && activity.isDestroyed()) return;
+
         final String uriProp = source.getString("uri");
         final Uri uri = Uri.parse(uriProp);
-        Glide.with(view.getContext()).load(uri).listener(LISTENER).into(view);
+        Glide.with(activity).load(uri).listener(LISTENER).into(view);
     }
 
     @ReactProp(name="resizeMode")
