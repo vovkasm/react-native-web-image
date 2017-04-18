@@ -2,6 +2,7 @@
 
 ## 0.0.5 (not released)
 
+* [feature] (Android) Implement borders & paddings (#2 - only Android part)
 * [fix] (Android) Getting a Random crash (#6)
 * [fix] (Android) NullPointer Exception (#4)
 * [chore] Update to React Native 0.42.3
