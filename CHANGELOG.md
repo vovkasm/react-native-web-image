@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.0.5 (not released)
+
+* [fix] (Android) Getting a Random crash (#6)
+* [fix] (Android) NullPointer Exception (#4)
+* [chore] Update to React Native 0.42.3
+* [chore] Update SDWebImage to 4.0.0
+* [chore] Improve SampleApp
+
 ## 0.0.4 (2017-01-15)
 
 * [feature] onError handler

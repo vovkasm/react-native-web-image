@@ -1,5 +1,6 @@
 package org.vovkasm.WebImage;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
@@ -9,6 +10,7 @@ import android.graphics.Paint;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.IntDef;
 import android.view.View;
@@ -152,7 +154,14 @@ class WebImageView extends View {
         if (uri.equals(mUri)) return;
         mUri = uri;
         ThemedReactContext ctx = getThemedReactContext();
-        Glide.with(ctx.getCurrentActivity()).load(mUri).asBitmap().into(mGlideTarget);
+        if (ctx == null) return;
+
+        // Guard against destroyed activity (see: https://github.com/bumptech/glide/issues/803)
+        final Activity activity = ctx.getCurrentActivity();
+        if (activity == null) return;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && activity.isDestroyed()) return;
+
+        Glide.with(activity).load(mUri).asBitmap().into(mGlideTarget);
     }
 
     final Uri getImageUri() {
@@ -226,14 +235,20 @@ class WebImageView extends View {
         @Override
         public void onLoadFailed(Exception e, Drawable errorDrawable) {
             super.onLoadFailed(e, errorDrawable);
-            WritableMap event = Arguments.createMap();
-            event.putString("error", e.getMessage());
-            final Uri uri = view.getImageUri();
-            if (uri != null) {
-                event.putString("uri", uri.toString());
-            }
             ThemedReactContext context = view.getThemedReactContext();
-            context.getJSModule(RCTEventEmitter.class).receiveEvent(view.getId(), "onWebImageError", event);
+            if (context != null) {
+                WritableMap event = Arguments.createMap();
+                if (e != null) {
+                    event.putString("error", e.getMessage());
+                } else {
+                    event.putString("error", "Unknown");
+                }
+                final Uri uri = view.getImageUri();
+                if (uri != null) {
+                    event.putString("uri", uri.toString());
+                }
+                context.getJSModule(RCTEventEmitter.class).receiveEvent(view.getId(), "onWebImageError", event);
+            }
         }
 
         public WebImageView getView() { return view; }
