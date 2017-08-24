@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react'
+import PropTypes from 'prop-types'
+import React from 'react'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import WebImage from 'react-native-web-image' // 'react-native-web-image' sources here
 
