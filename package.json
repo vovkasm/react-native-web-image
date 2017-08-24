@@ -30,20 +30,24 @@
   "license": "MIT",
   "devDependencies": {
     "babel-eslint": "^7.0.0",
-    "babel-preset-react-native": "^1.9.0",
-    "eslint": "^3.3.1",
-    "eslint-config-standard": "^7.0.0",
-    "eslint-config-standard-react": "^4.2.0",
+    "babel-preset-react-native": "^3.0.1",
+    "eslint": "^4.5.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-config-standard-react": "^5.0.0",
     "eslint-plugin-classes": "^0.1.1",
-    "eslint-plugin-import": "^2.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-node": "^5.1.1",
     "eslint-plugin-promise": "^3.4.0",
-    "eslint-plugin-react": "^6.8.0",
-    "eslint-plugin-react-native": "^2.0.0",
-    "eslint-plugin-standard": "^2.0.1",
-    "react": "15.4.2",
-    "react-native": "0.42.3"
+    "eslint-plugin-react": "^7.3.0",
+    "eslint-plugin-react-native": "^3.0.1",
+    "eslint-plugin-standard": "^3.0.1",
+    "react": "16.0.0-alpha.12",
+    "react-native": "0.47.1"
   },
   "peerDependencies": {
     "react-native": ">=0.40.0"
+  },
+  "dependencies": {
+    "prop-types": "^15.5.10"
   }
 }
