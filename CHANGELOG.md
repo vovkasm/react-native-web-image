@@ -1,12 +1,15 @@
 # Changelog
 
-## 0.0.5 (not released)
+## 0.0.5 (2017-09-09)
 
 * [feature] (Android) Implement borders & paddings (#2 - only Android part)
+* [fix] Migrate to prop-types
 * [fix] (Android) Getting a Random crash (#6)
 * [fix] (Android) NullPointer Exception (#4)
-* [chore] Update to React Native 0.42.3
-* [chore] Update SDWebImage to 4.0.0
+* [chore] npm can't pull submodules, so embed SDWebImage back into project (#8)
+* [chore] BREAKING: Update to React Native 0.48.2 (Sorry I don't know what minimum compatible version for now, it did work with 0.47 at least)
+* [chore] Update SDWebImage to 4.1.0
+* [chore] Update glide to 3.8.0
 * [chore] Improve SampleApp
 
 ## 0.0.4 (2017-01-15)
