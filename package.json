@@ -29,8 +29,8 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "babel-eslint": "^7.0.0",
-    "babel-preset-react-native": "^3.0.1",
+    "babel-eslint": "^8.0.0",
+    "babel-preset-react-native": "^4.0.0",
     "eslint": "^4.5.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-config-standard-react": "^5.0.0",
@@ -42,7 +42,7 @@
     "eslint-plugin-react-native": "^3.0.1",
     "eslint-plugin-standard": "^3.0.1",
     "react": "16.0.0-alpha.12",
-    "react-native": "0.48.2"
+    "react-native": "0.48.4"
   },
   "peerDependencies": {
     "react-native": ">=0.40.0"
