@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.6 (not released yet)
+
+* [fix] (iOS) Add vendored SDWebImage to Header Search Paths, should fix archive (#8)
+
 ## 0.0.5 (2017-09-09)
 
 * [feature] (Android) Implement borders & paddings (#2 - only Android part)
