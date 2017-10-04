@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.0.6 (not released yet)
+## 0.0.6 (2017-10-04)
 
 * [fix] (iOS) Add vendored SDWebImage to Header Search Paths, should fix archive (#8)
 
