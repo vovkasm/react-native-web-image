@@ -230,6 +230,15 @@ class WebImageView extends View {
         @Override
         public void onResourceReady(Bitmap bitmap, GlideAnimation<? super Bitmap> glideAnimation) {
             view.setBitmap(bitmap);
+            ThemedReactContext context = view.getThemedReactContext();
+            if (context != null) {
+				WritableMap event = Arguments.createMap();
+                final Uri uri = view.getImageUri();
+                if (uri != null) {
+                    event.putString("uri", uri.toString());
+                }
+                context.getJSModule(RCTEventEmitter.class).receiveEvent(view.getId(), "onWebImageSuccess", event);
+            }
         }
 
         @Override
