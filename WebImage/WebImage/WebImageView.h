@@ -9,6 +9,7 @@
 @interface WebImageView : UIImageView
 
 @property (nonatomic, copy) RCTDirectEventBlock onWebImageError;
+@property (nonatomic, copy) RCTDirectEventBlock onWebImageSuccess;
 @property (nonatomic) WebImageSource* source;
 
 @end
