@@ -1,10 +1,13 @@
 package org.vovkasm.WebImage;
 
 import android.graphics.Color;
-import android.net.Uri;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.load.model.LazyHeaders;
+import com.facebook.react.bridge.NoSuchKeyException;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.uimanager.BaseViewManager;
 import com.facebook.react.uimanager.PixelUtil;
@@ -53,8 +56,26 @@ class WebImageViewManager extends BaseViewManager<WebImageView, WebImageShadowNo
     public void setSrc(WebImageView view, @Nullable ReadableMap source) {
         if (source == null) return;
         final String uriProp = source.getString("uri");
-        final Uri uri = Uri.parse(uriProp);
-        view.setImageUri(uri);
+
+        // Get the headers prop and add to glideUrl
+        GlideUrl glideUrl;
+        try {
+            final ReadableMap headersMap = source.getMap("headers");
+            ReadableMapKeySetIterator headersIterator = headersMap.keySetIterator();
+            LazyHeaders.Builder headersBuilder = new LazyHeaders.Builder();
+            while (headersIterator.hasNextKey()) {
+                String key = headersIterator.nextKey();
+                String value = headersMap.getString(key);
+                headersBuilder.addHeader(key, value);
+            }
+            LazyHeaders headers = headersBuilder.build();
+            glideUrl = new GlideUrl(uriProp, headers);
+        } catch (NoSuchKeyException e) {
+            // If there is no headers object, return just the uri
+            glideUrl = new GlideUrl(uriProp);
+        }
+
+        view.setImageUri(glideUrl);
     }
 
     @ReactProp(name="resizeMode")
