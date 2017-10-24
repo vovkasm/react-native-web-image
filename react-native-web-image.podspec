@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
   s.platform     = :ios, "9.0"
 
   s.source       = { :git => "https://github.com/classpass/react-native-web-image.git", :tag => "v#{s.version}" }
-  s.source_files  = "WebImage/**/*.{h,m}"
+  s.source_files  = "WebImage/WebImage/*.{h,m}"
 
   s.dependency 'React'
   s.dependency 'SDWebImage'
