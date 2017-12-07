@@ -10,8 +10,8 @@
     
     SDWebImageManager* manager =[[SDWebImageManager alloc] init];
     [manager cachedImageExistsForURL:source.uri completion:^(BOOL inCache) {
-        if(!inCache || isCallback) return ;
-        if(_onWebImageSuccess){
+        if (!inCache || isCallback) return ;
+        if (_onWebImageSuccess) {
             _onWebImageSuccess(@{ @"uri":self->_source.uri.absoluteString, @"type" : @"cache"});
         }
         
@@ -25,10 +25,10 @@
             }
             return;
         }
-        else{
-            if(_onWebImageSuccess && !self->isCallback){
+        else {
+            if (_onWebImageSuccess && !self->isCallback) {
                 self->isCallback = YES;
-                _onWebImageSuccess(@{ @"uri":imageURL.absoluteString});
+                _onWebImageSuccess(@{@"uri":imageURL.absoluteString});
             }
         }
     }];
