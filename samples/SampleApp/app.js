@@ -2,6 +2,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import { Button, ScrollView, StyleSheet, Text, View } from 'react-native'
 
+import CallbackSamples from './callback-samples'
 import Samples from './samples'
 import TestDefault from './test-default'
 import TestCrash from './test-activity-destroy-crash'
@@ -21,7 +22,8 @@ TestCaseLink.propTypes = {
 
 const Main = ({ navigateTo }) => {
   return <ScrollView>
-    <TestCaseLink title='Samples' onPress={() => { navigateTo('/samples') }} />
+    <TestCaseLink title='Samples' onPress={() => { navigateTo('/samples/sizing') }} />
+    <TestCaseLink title='Callbacks' onPress={() => { navigateTo('/samples/callbacks') }} />
     <TestCaseLink title='Default params' onPress={() => { navigateTo('/test-default') }} />
     <TestCaseLink title='Borders Rectangle Mono' onPress={() => { navigateTo('/test-borders/rectangle/mono') }} />
     <TestCaseLink title='Borders Rectangle Color' onPress={() => { navigateTo('/test-borders/rectangle/color') }} />
@@ -37,7 +39,8 @@ Main.propTypes = {
 
 const routes = {
   '/': Main,
-  '/samples': Samples,
+  '/samples/sizing': Samples,
+  '/samples/callbacks': CallbackSamples,
   '/test-default': TestDefault,
   '/test-borders/rectangle/mono': TestBordersRectangleMono,
   '/test-borders/rectangle/color': TestBordersRectangleColor,
@@ -89,7 +92,7 @@ const s = StyleSheet.create({
   header: {
     marginTop: 15,
     marginBottom: 2,
-    marginHorizontal: 8,    
+    marginHorizontal: 8,
     flexDirection: 'row',
     alignItems: 'center'
   },
