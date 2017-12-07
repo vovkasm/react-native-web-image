@@ -1,36 +1,32 @@
 #import "WebImageView.h"
 
-@implementation WebImageView{
-    BOOL isCallback;
-}
+@implementation WebImageView
 
 - (void)setSource:(WebImageSource *)source {
     _source = source;
-     isCallback= NO;
     
-    SDWebImageManager* manager =[[SDWebImageManager alloc] init];
-    [manager cachedImageExistsForURL:source.uri completion:^(BOOL inCache) {
-        if (!inCache || isCallback) return;
-        if (_onWebImageSuccess) {
-            _onWebImageSuccess(@{@"uri":self->_source.uri.absoluteString, @"type": @"cache"});
-        }
-        
-        isCallback = YES;
-    }];
-    
+    typeof(self) __weak wSelf = self;
     [self sd_setImageWithURL:source.uri completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-        if (error) {
-            if (_onWebImageError) {
-                _onWebImageError(@{@"error":error.description, @"uri":imageURL.absoluteString});
+        dispatch_async(dispatch_get_main_queue(), ^{
+            // Perform on next cycle, otherwise onWebImageSuccess is nil :-/
+            typeof(self) self = wSelf;
+            if (self == nil) return;
+            
+            if (error) {
+                if (self.onWebImageError) {
+                    self.onWebImageError(@{@"error":error.description, @"uri":imageURL.absoluteString});
+                }
+                return;
             }
-            return;
-        }
-        else {
-            if (_onWebImageSuccess && !self->isCallback) {
-                self->isCallback = YES;
-                _onWebImageSuccess(@{@"uri":imageURL.absoluteString});
+            if (self.onWebImageSuccess) {
+                NSMutableDictionary* event = [NSMutableDictionary dictionary];
+                event[@"uri"] = imageURL.absoluteString;
+                if (cacheType != SDImageCacheTypeNone) {
+                    event[@"type"] = @"cache";
+                }
+                self.onWebImageSuccess(event);
             }
-        }
+        });
     }];
 }
 
