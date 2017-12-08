@@ -151,9 +151,9 @@ class WebImageViewManager extends BaseViewManager<WebImageView, WebImageShadowNo
         exportedEvents.put("onWebImageError", onErrorEventExport);
 
         // declare success event
-		Map<String, String> onSuccessEventExport = new HashMap<>();
-        onSuccessEventExport.put("registrationName", "onWebImageSuccess");
-        exportedEvents.put("onWebImageSuccess", onSuccessEventExport);
+		Map<String, String> onLoadEventExport = new HashMap<>();
+        onLoadEventExport.put("registrationName", "onWebImageLoad");
+        exportedEvents.put("onWebImageLoad", onLoadEventExport);
 
         return exportedEvents;
     }
