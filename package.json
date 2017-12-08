@@ -7,7 +7,8 @@
     "start": "npm run start-sample --",
     "start-sample": "node rn-wrapper.js start --projectRoots samples/SampleApp,.",
     "run-sample-android": "react-native run-android --root samples/SampleApp",
-    "run-sample-ios": "react-native run-ios --project-path samples/SampleApp/ios"
+    "run-sample-ios": "react-native run-ios --project-path samples/SampleApp/ios",
+    "lint": "eslint lib"
   },
   "keywords": [
     "react-native",
@@ -31,7 +32,7 @@
   "devDependencies": {
     "babel-eslint": "^8.0.0",
     "babel-preset-react-native": "^4.0.0",
-    "eslint": "^4.5.0",
+    "eslint": "^4.13.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-config-standard-react": "^5.0.0",
     "eslint-plugin-classes": "^0.1.1",
