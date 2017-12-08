@@ -9,16 +9,15 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.IntDef;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.ViewTarget;
-import com.bumptech.glide.load.model.GlideUrl;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.FloatUtil;
@@ -234,9 +233,9 @@ class WebImageView extends View {
             ThemedReactContext context = view.getThemedReactContext();
             if (context != null) {
 				WritableMap event = Arguments.createMap();
-                final Uri uri = view.getImageUri();
+                final GlideUrl uri = view.getImageUri();
                 if (uri != null) {
-                    event.putString("uri", uri.toString());
+                    event.putString("uri", uri.toStringUrl());
                 }
                 context.getJSModule(RCTEventEmitter.class).receiveEvent(view.getId(), "onWebImageSuccess", event);
             }
@@ -255,7 +254,7 @@ class WebImageView extends View {
                 }
                 final GlideUrl uri = view.getImageUri();
                 if (uri != null) {
-                    event.putString("uri", uri.toString());
+                    event.putString("uri", uri.toStringUrl());
                 }
                 context.getJSModule(RCTEventEmitter.class).receiveEvent(view.getId(), "onWebImageError", event);
             }
