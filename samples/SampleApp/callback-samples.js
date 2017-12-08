@@ -34,14 +34,14 @@ const CallbackSamples = (props) => {
       height={120}
       onError={(e) => { console.log('Image 1 onError handler: ', e) }}
       onLoad={(e) => { console.log('Image 1 onLoad handler: ', e.nativeEvent) }}
-      />
+    />
     <Sample
       title='image with onError handler, see logs'
       source={{uri: 'https://httpbin.org/status/404'}}
       height={100}
       onError={(e) => { console.log('Image 2 onError handler: ', e) }}
       onLoad={(e) => { console.log('Image 2 onLoad handler: ', e.nativeEvent) }}
-      />
+    />
   </ScrollView>
 }
 

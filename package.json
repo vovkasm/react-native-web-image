@@ -8,7 +8,7 @@
     "start-sample": "node rn-wrapper.js start --projectRoots samples/SampleApp,.",
     "run-sample-android": "react-native run-android --root samples/SampleApp",
     "run-sample-ios": "react-native run-ios --project-path samples/SampleApp/ios",
-    "lint": "eslint lib"
+    "lint": "eslint lib samples"
   },
   "keywords": [
     "react-native",
