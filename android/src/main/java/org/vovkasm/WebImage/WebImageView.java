@@ -233,11 +233,17 @@ class WebImageView extends View {
             ThemedReactContext context = view.getThemedReactContext();
             if (context != null) {
 				WritableMap event = Arguments.createMap();
+				WritableMap source = Arguments.createMap();
                 final GlideUrl uri = view.getImageUri();
                 if (uri != null) {
-                    event.putString("uri", uri.toStringUrl());
+                    source.putString("uri", uri.toStringUrl());
                 }
-                context.getJSModule(RCTEventEmitter.class).receiveEvent(view.getId(), "onWebImageSuccess", event);
+                if (bitmap != null) {
+                    source.putInt("width", bitmap.getWidth());
+                    source.putInt("height", bitmap.getHeight());
+                }
+                event.putMap("source", source);
+                context.getJSModule(RCTEventEmitter.class).receiveEvent(view.getId(), "onWebImageLoad", event);
             }
         }
 

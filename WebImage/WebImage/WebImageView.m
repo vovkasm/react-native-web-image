@@ -28,13 +28,14 @@
             }
             return;
         }
-        if (self.onWebImageSuccess) {
-            NSMutableDictionary* event = [NSMutableDictionary dictionary];
-            event[@"uri"] = imageURL.absoluteString;
-            if (cacheType != SDImageCacheTypeNone) {
-                event[@"type"] = @"cache";
-            }
-            self.onWebImageSuccess(event);
+        if (self.onWebImageLoad) {
+            NSDictionary *dict = @{
+                                   @"width": @(image.size.width),
+                                   @"height": @(image.size.height),
+                                   @"uri": imageURL.absoluteString,
+                                   };
+            NSDictionary* event = @{@"source": dict};
+            self.onWebImageLoad(event);
         }
     }];
 }
