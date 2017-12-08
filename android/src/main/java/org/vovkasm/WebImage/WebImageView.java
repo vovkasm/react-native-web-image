@@ -18,6 +18,7 @@ import android.view.View;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.ViewTarget;
+import com.bumptech.glide.load.model.GlideUrl;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.FloatUtil;
@@ -41,7 +42,7 @@ class WebImageView extends View {
     public static final int DEFAULT_BORDER_COLOR = Color.TRANSPARENT;
     public static final float DEFAULT_BORDER_RADIUS = 0f;
 
-    private Uri mUri;
+    private GlideUrl mUri;
     private @ScaleType int mScaleType = SCALE_CONTAIN;
 
     private BoxMetrics mBoxMetrics;
@@ -150,7 +151,7 @@ class WebImageView extends View {
         return mScaleType;
     }
 
-    void setImageUri(Uri uri) {
+    void setImageUri(GlideUrl uri) {
         if (uri.equals(mUri)) return;
         mUri = uri;
         ThemedReactContext ctx = getThemedReactContext();
@@ -164,7 +165,7 @@ class WebImageView extends View {
         Glide.with(activity).load(mUri).asBitmap().into(mGlideTarget);
     }
 
-    final Uri getImageUri() {
+    final GlideUrl getImageUri() {
         return mUri;
     }
 
@@ -252,7 +253,7 @@ class WebImageView extends View {
                 } else {
                     event.putString("error", "Unknown");
                 }
-                final Uri uri = view.getImageUri();
+                final GlideUrl uri = view.getImageUri();
                 if (uri != null) {
                     event.putString("uri", uri.toString());
                 }
