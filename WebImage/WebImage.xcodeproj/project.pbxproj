@@ -9,8 +9,8 @@
 /* Begin PBXBuildFile section */
 		A254B3E81E2AC847000BE088 /* WebImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = A254B3E71E2AC847000BE088 /* WebImageView.m */; };
 		A28797311DE0C1E90081BDFA /* WebImageViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A28797301DE0C1E90081BDFA /* WebImageViewManager.m */; };
-		A28797471DE0CAB10081BDFA /* libSDWebImage iOS static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A287973E1DE0CA5B0081BDFA /* libSDWebImage iOS static.a */; };
 		A287974A1DE0CE9B0081BDFA /* WebImageSource.m in Sources */ = {isa = PBXBuildFile; fileRef = A28797491DE0CE9B0081BDFA /* WebImageSource.m */; };
+		A296A82C1FE6D93500DA5BE7 /* libSDWebImage iOS static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A287973E1DE0CA5B0081BDFA /* libSDWebImage iOS static.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +34,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = 00733A4C1BC487C000A5A117;
 			remoteInfo = "WebImage tvOS";
+		};
+		A296A8271FE6CE8200DA5BE7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A28797341DE0CA5B0081BDFA /* SDWebImage.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 53761307155AD0D5005750A4;
+			remoteInfo = "SDWebImage iOS static";
 		};
 		A2B3BB481F83723600FB7431 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -86,7 +93,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A28797471DE0CAB10081BDFA /* libSDWebImage iOS static.a in Frameworks */,
+				A296A82C1FE6D93500DA5BE7 /* libSDWebImage iOS static.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -99,6 +106,7 @@
 				A28797331DE0CA420081BDFA /* Vendor */,
 				A287971F1DE0C0A60081BDFA /* WebImage */,
 				A287971E1DE0C0A60081BDFA /* Products */,
+				A296A8291FE6D30300DA5BE7 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -144,6 +152,13 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		A296A8291FE6D30300DA5BE7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -158,6 +173,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				A296A8281FE6CE8200DA5BE7 /* PBXTargetDependency */,
 			);
 			name = WebImage;
 			productName = WebImage;
@@ -259,6 +275,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A296A8281FE6CE8200DA5BE7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "SDWebImage iOS static";
+			targetProxy = A296A8271FE6CE8200DA5BE7 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		A28797241DE0C0A60081BDFA /* Debug */ = {
@@ -364,20 +388,32 @@
 		A28797271DE0C0A60081BDFA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				DEPLOYMENT_POSTPROCESSING = YES;
+				EXPORTED_SYMBOLS_FILE = "$(SRCROOT)/WebImage/exported-symbols.txt";
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				GENERATE_MASTER_OBJECT_FILE = YES;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/Vendor/SDWebImage";
+				MACH_O_TYPE = mh_object;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				STRIP_STYLE = "non-global";
 			};
 			name = Debug;
 		};
 		A28797281DE0C0A60081BDFA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				DEPLOYMENT_POSTPROCESSING = YES;
+				EXPORTED_SYMBOLS_FILE = "$(SRCROOT)/WebImage/exported-symbols.txt";
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				GENERATE_MASTER_OBJECT_FILE = YES;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/Vendor/SDWebImage";
+				MACH_O_TYPE = mh_object;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				STRIP_STYLE = "non-global";
 			};
 			name = Release;
 		};
