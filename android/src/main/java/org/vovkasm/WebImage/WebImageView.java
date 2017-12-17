@@ -8,7 +8,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Shader;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.IntDef;
@@ -16,13 +15,11 @@ import android.view.View;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.model.GlideUrl;
-import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.ViewTarget;
-import com.facebook.react.bridge.Arguments;
-import com.facebook.react.bridge.WritableMap;
+import com.bumptech.glide.request.transition.Transition;
 import com.facebook.react.uimanager.FloatUtil;
 import com.facebook.react.uimanager.ThemedReactContext;
-import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.facebook.yoga.YogaConstants;
 
 import java.lang.annotation.Retention;
@@ -57,12 +54,14 @@ class WebImageView extends View {
     private IBorder mBorder;
 
     private WebImageViewTarget mGlideTarget;
+    private RequestListener mGlideListener;
 
-    public WebImageView(Context context) {
+    public WebImageView(Context context, RequestListener glideListener) {
         super(context);
         mBoxMetrics = new BoxMetrics(mScaleType);
         mBitmapPaint.setAntiAlias(true);
         mGlideTarget = new WebImageViewTarget(this);
+        mGlideListener = glideListener;
         configureBounds();
     }
 
@@ -153,15 +152,10 @@ class WebImageView extends View {
     void setImageUri(GlideUrl uri) {
         if (uri.equals(mUri)) return;
         mUri = uri;
-        ThemedReactContext ctx = getThemedReactContext();
-        if (ctx == null) return;
-
-        // Guard against destroyed activity (see: https://github.com/bumptech/glide/issues/803)
-        final Activity activity = ctx.getCurrentActivity();
+        final Activity activity = getActivityForGlide();
         if (activity == null) return;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && activity.isDestroyed()) return;
 
-        Glide.with(activity).load(mUri).asBitmap().into(mGlideTarget);
+        Glide.with(activity).asBitmap().load(mUri).listener(mGlideListener).into(mGlideTarget);
     }
 
     final GlideUrl getImageUri() {
@@ -222,48 +216,32 @@ class WebImageView extends View {
                 && mBorderColors[2] == mBorderColors[3]);
     }
 
-    private static class WebImageViewTarget extends ViewTarget<WebImageView, Bitmap> {
+    private Activity getActivityForGlide () {
+        ThemedReactContext ctx = getThemedReactContext();
+        if (ctx == null) return null;
+
+        // Guard against destroyed activity (see: https://github.com/bumptech/glide/issues/803)
+        final Activity activity = ctx.getCurrentActivity();
+        if (activity != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && activity.isDestroyed())
+                return null;
+        }
+        return activity;
+    }
+
+    public void clear() {
+        final Activity activity = getActivityForGlide();
+        Glide.with(activity).clear(this);
+    }
+
+    public static class WebImageViewTarget extends ViewTarget<WebImageView, Bitmap> {
         WebImageViewTarget(WebImageView view) {
             super(view);
         }
 
         @Override
-        public void onResourceReady(Bitmap bitmap, GlideAnimation<? super Bitmap> glideAnimation) {
+        public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> transition) {
             view.setBitmap(bitmap);
-            ThemedReactContext context = view.getThemedReactContext();
-            if (context != null) {
-				WritableMap event = Arguments.createMap();
-				WritableMap source = Arguments.createMap();
-                final GlideUrl uri = view.getImageUri();
-                if (uri != null) {
-                    source.putString("uri", uri.toStringUrl());
-                }
-                if (bitmap != null) {
-                    source.putInt("width", bitmap.getWidth());
-                    source.putInt("height", bitmap.getHeight());
-                }
-                event.putMap("source", source);
-                context.getJSModule(RCTEventEmitter.class).receiveEvent(view.getId(), "onWebImageLoad", event);
-            }
-        }
-
-        @Override
-        public void onLoadFailed(Exception e, Drawable errorDrawable) {
-            super.onLoadFailed(e, errorDrawable);
-            ThemedReactContext context = view.getThemedReactContext();
-            if (context != null) {
-                WritableMap event = Arguments.createMap();
-                if (e != null) {
-                    event.putString("error", e.getMessage());
-                } else {
-                    event.putString("error", "Unknown");
-                }
-                final GlideUrl uri = view.getImageUri();
-                if (uri != null) {
-                    event.putString("uri", uri.toStringUrl());
-                }
-                context.getJSModule(RCTEventEmitter.class).receiveEvent(view.getId(), "onWebImageError", event);
-            }
         }
 
         public WebImageView getView() { return view; }

@@ -1,13 +1,18 @@
 package org.vovkasm.WebImage;
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
 
-import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
+import com.bumptech.glide.request.target.Target;
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.NoSuchKeyException;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
+import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.uimanager.BaseViewManager;
 import com.facebook.react.uimanager.PixelUtil;
@@ -15,6 +20,7 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewProps;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.annotations.ReactPropGroup;
+import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.facebook.yoga.YogaConstants;
 
 import java.util.HashMap;
@@ -26,6 +32,8 @@ import javax.annotation.Nullable;
 class WebImageViewManager extends BaseViewManager<WebImageView, WebImageShadowNode> {
     static final String REACT_CLASS = "WebImageView";
 
+    RequestListener mRequestListener = new RequestListener();
+
     @Override
     public String getName() {
         return REACT_CLASS;
@@ -33,13 +41,13 @@ class WebImageViewManager extends BaseViewManager<WebImageView, WebImageShadowNo
 
     @Override
     protected WebImageView createViewInstance(ThemedReactContext reactContext) {
-        return new WebImageView(reactContext);
+        return new WebImageView(reactContext, mRequestListener);
     }
 
     @Override
     public void onDropViewInstance(WebImageView view) {
         super.onDropViewInstance(view);
-        Glide.clear(view);
+        view.clear();
     }
 
     @Override
@@ -158,4 +166,62 @@ class WebImageViewManager extends BaseViewManager<WebImageView, WebImageShadowNo
         return exportedEvents;
     }
 
+    private static class RequestListener implements com.bumptech.glide.request.RequestListener {
+
+        @Override
+        public boolean onLoadFailed(@android.support.annotation.Nullable GlideException e, Object model, Target target, boolean isFirstResource) {
+            WebImageView view = null;
+            if (target instanceof WebImageView.WebImageViewTarget) {
+                view = ((WebImageView.WebImageViewTarget)target).getView();
+            }
+            if (view != null) {
+                ThemedReactContext context = view.getThemedReactContext();
+                if (context != null) {
+                    WritableMap event = Arguments.createMap();
+                    if (e != null) {
+                        event.putString("error", e.getMessage());
+                    } else {
+                        event.putString("error", "Unknown");
+                    }
+                    final GlideUrl uri = view.getImageUri();
+                    if (uri != null) {
+                        event.putString("uri", uri.toStringUrl());
+                    }
+                    context.getJSModule(RCTEventEmitter.class).receiveEvent(view.getId(), "onWebImageError", event);
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public boolean onResourceReady(Object resource, Object model, Target target, DataSource dataSource, boolean isFirstResource) {
+            WebImageView view = null;
+            if (target instanceof WebImageView.WebImageViewTarget) {
+                view = ((WebImageView.WebImageViewTarget)target).getView();
+            }
+            Bitmap bitmap = null;
+            if (resource instanceof Bitmap) {
+                bitmap = (Bitmap)resource;
+            }
+            if (view != null) {
+                ThemedReactContext context = view.getThemedReactContext();
+                if (context != null) {
+                    WritableMap event = Arguments.createMap();
+                    WritableMap source = Arguments.createMap();
+                    final GlideUrl uri = view.getImageUri();
+                    if (uri != null) {
+                        source.putString("uri", uri.toStringUrl());
+                    }
+                    if (bitmap != null) {
+                        source.putInt("width", bitmap.getWidth());
+                        source.putInt("height", bitmap.getHeight());
+                    }
+                    event.putMap("source", source);
+                    context.getJSModule(RCTEventEmitter.class).receiveEvent(view.getId(), "onWebImageLoad", event);
+                }
+            }
+
+            return false;
+        }
+    }
 }
