@@ -1,0 +1,31 @@
+platform :ios, '8.0'
+
+target 'TestApp' do
+  pod 'React', :path => '../../node_modules/react-native', :subspecs => [
+    'Core',
+    'CxxBridge',
+    'RCTAnimation',
+    'RCTBlob',
+    'RCTText',
+    'RCTNetwork',
+    'RCTWebSocket',
+    'DevSupport',
+  ]
+  pod 'yoga', :path => '../../node_modules/react-native/ReactCommon/yoga'
+  pod 'DoubleConversion', :podspec => '../../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
+  pod 'GLog', :podspec => '../../node_modules/react-native/third-party-podspecs/GLog.podspec'
+  pod 'Folly', :podspec => '../../node_modules/react-native/third-party-podspecs/Folly.podspec'
+
+  pod 'WebImage', :path => '../..'
+
+  target 'TestAppTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+  target 'TestAppUITests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+end
