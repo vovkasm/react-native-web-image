@@ -10,4 +10,6 @@
 @property (nonatomic, copy) RCTDirectEventBlock onWebImageLoad;
 @property (nonatomic) WebImageSource* source;
 
+- (void)didSetProps:(NSArray<NSString*>*)changedProps;
+
 @end
