@@ -23,9 +23,4 @@ target 'TestApp' do
     # Pods for testing
   end
 
-  target 'TestAppUITests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
-
 end
