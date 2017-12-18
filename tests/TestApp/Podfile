@@ -20,7 +20,8 @@ target 'TestApp' do
 
   target 'TestAppTests' do
     inherit! :search_paths
-    # Pods for testing
+    
+    pod 'OCMock', '~> 3.4'
   end
 
 end
