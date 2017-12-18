@@ -1,7 +1,5 @@
 #import <UIKit/UIKit.h>
 
-#import <SDWebImage/UIImageView+WebCache.h>
-
 #import <React/RCTComponent.h>
 
 #import "WebImageSource.h"
