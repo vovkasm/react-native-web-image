@@ -34,8 +34,8 @@
     WebImageView* imageView = [[WebImageView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
     XCTAssertNil(imageView.image);
     
-    XCTKVOExpectation* expectation = [[XCTKVOExpectation alloc] initWithKeyPath:@"image" object:imageView];
-    expectation.handler = ^BOOL(id  _Nonnull observedObject, NSDictionary * _Nonnull change) {
+    XCTKVOExpectation* imageSettled = [[XCTKVOExpectation alloc] initWithKeyPath:@"image" object:imageView];
+    imageSettled.handler = ^BOOL(id  _Nonnull observedObject, NSDictionary * _Nonnull change) {
         WebImageView* imageView = observedObject;
         if ([change[NSKeyValueChangeKindKey] unsignedIntegerValue] == NSKeyValueChangeSetting) {
             if (imageView.image != nil) {
@@ -50,7 +50,7 @@
     imageView.source = [[WebImageSource alloc] initWithURIString:@"http://fake/favicon.png"];
     [imageView didSetProps:@[@"source"]];
 
-    [self waitForExpectations:@[expectation] timeout:2.0];
+    [self waitForExpectations:@[imageSettled] timeout:2.0];
 }
 
 - (void)testShouldLoadImage {
