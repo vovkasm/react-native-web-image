@@ -104,10 +104,10 @@
     [self waitForExpectations:@[imageSettled] timeout:2.0];
 }
 
-- (void)testShouldLoadImage {
-    XCTestExpectation* expectLoad = [[XCTestExpectation alloc] initWithDescription:@"onLoad called"];
-    expectLoad.expectedFulfillmentCount = 1;
-    expectLoad.assertForOverFulfill = YES;
+- (void)testShouldCallOnLoad {
+    XCTestExpectation* onLoadCalled = [[XCTestExpectation alloc] initWithDescription:@"onLoad called"];
+    onLoadCalled.expectedFulfillmentCount = 1;
+    onLoadCalled.assertForOverFulfill = YES;
     
     WebImageView* imageView = [[WebImageView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
     imageView.onWebImageLoad = ^(NSDictionary *body) {
@@ -119,7 +119,7 @@
                                            },
                                    };
         XCTAssertEqualObjects(body, expected);
-        [expectLoad fulfill];
+        [onLoadCalled fulfill];
     };
     imageView.onWebImageError = ^(NSDictionary *body) {
         XCTFail(@"on error should not be called");
@@ -127,7 +127,7 @@
     imageView.source = [[WebImageSource alloc] initWithURIString:@"http://fake/favicon.png"];
     [imageView didSetProps:@[@"onWebImageError", @"onWebImageLoad", @"source"]];
     
-    [self waitForExpectations:@[expectLoad] timeout:2.0];
+    [self waitForExpectations:@[onLoadCalled] timeout:2.0];
 }
 
 @end
