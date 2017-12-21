@@ -6,6 +6,7 @@
 
 @interface TestSDWebImageManager : SDWebImageManager
 @property (nonatomic) SDImageCacheType cacheType;
+@property (nonatomic) NSError* error;
 @end
 
 @interface TestSDWebImageOperation : NSObject <SDWebImageOperation>
@@ -122,12 +123,37 @@
         [onLoadCalled fulfill];
     };
     imageView.onWebImageError = ^(NSDictionary *body) {
-        XCTFail(@"on error should not be called");
+        XCTFail(@"onError should not be called");
     };
     imageView.source = [[WebImageSource alloc] initWithURIString:@"http://fake/favicon.png"];
     [imageView didSetProps:@[@"onWebImageError", @"onWebImageLoad", @"source"]];
     
     [self waitForExpectations:@[onLoadCalled] timeout:2.0];
+}
+
+- (void)testShouldCallOnError {
+    self.sdManager.error = [NSError errorWithDomain:@"test" code:1 userInfo:@{NSLocalizedDescriptionKey: @"test error"}];
+    
+    XCTestExpectation* onErrorCalled = [[XCTestExpectation alloc] initWithDescription:@"onError called"];
+    onErrorCalled.expectedFulfillmentCount = 1;
+    onErrorCalled.assertForOverFulfill = YES;
+    
+    WebImageView* imageView = [[WebImageView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
+    imageView.onWebImageLoad = ^(NSDictionary *body) {
+        XCTFail(@"onLoad should not be called");
+    };
+    imageView.onWebImageError = ^(NSDictionary *body) {
+        NSDictionary* expected = @{
+                                   @"uri": @"http://fake/error.png",
+                                   @"error": @"Error Domain=test Code=1 \"test error\" UserInfo={NSLocalizedDescription=test error}",
+                                   };
+        XCTAssertEqualObjects(body, expected);
+        [onErrorCalled fulfill];
+    };
+    imageView.source = [[WebImageSource alloc] initWithURIString:@"http://fake/error.png"];
+    [imageView didSetProps:@[@"onWebImageError", @"onWebImageLoad", @"source"]];
+    
+    [self waitForExpectations:@[onErrorCalled] timeout:2.0];
 }
 
 @end
@@ -138,6 +164,7 @@
     self = [super init];
     if (self) {
         _cacheType = SDImageCacheTypeNone;
+        _error = nil;
     }
     return self;
 }
@@ -148,9 +175,12 @@
     NSData* data = [[NSData alloc] initWithBase64EncodedString:sampleBase64 options:0];
     UIImage* image = [UIImage imageWithData:data];
     SDImageCacheType cacheType = self.cacheType;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        completedBlock(image, data, nil, cacheType, YES, url);
-    });
+    NSError* error = [self.error copy];
+    if (error) {
+        dispatch_async(dispatch_get_main_queue(), ^{ completedBlock(nil, nil, error, cacheType, YES, url); });
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{ completedBlock(image, data, nil, cacheType, YES, url); });
+    }
     return [[TestSDWebImageOperation alloc] init];
 }
 
