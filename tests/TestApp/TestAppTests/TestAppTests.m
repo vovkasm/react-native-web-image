@@ -12,15 +12,48 @@
 @end
 
 @interface WebImageViewSpec : XCTestCase
+@property (nonatomic) TestSDWebImageManager* testSDManager;
+@property (nonatomic) id sdManagerMock;
 @end
 
 @implementation WebImageViewSpec
 
-- (void)testShouldLoadImage {
-    TestSDWebImageManager* sdMan = [[TestSDWebImageManager alloc] init];
-    id sdMock = OCMClassMock([SDWebImageManager class]);
-    OCMStub([sdMock sharedManager]).andReturn(sdMan);
+- (void)setUp {
+    self.testSDManager = [[TestSDWebImageManager alloc] init];
+    self.sdManagerMock = OCMClassMock([SDWebImageManager class]);
+    OCMStub([self.sdManagerMock sharedManager]).andReturn(self.testSDManager);
+}
+
+- (void)tearDown {
+    [self.sdManagerMock stopMocking];
+    self.sdManagerMock = nil;
+    self.testSDManager = nil;
+}
+
+- (void)testSimpleLoad {
+    WebImageView* imageView = [[WebImageView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
+    XCTAssertNil(imageView.image);
     
+    XCTKVOExpectation* expectation = [[XCTKVOExpectation alloc] initWithKeyPath:@"image" object:imageView];
+    expectation.handler = ^BOOL(id  _Nonnull observedObject, NSDictionary * _Nonnull change) {
+        WebImageView* imageView = observedObject;
+        if ([change[NSKeyValueChangeKindKey] unsignedIntegerValue] == NSKeyValueChangeSetting) {
+            if (imageView.image != nil) {
+                XCTAssertEqualWithAccuracy(imageView.image.size.width, 64, 0.001);
+                XCTAssertEqualWithAccuracy(imageView.image.size.height, 64, 0.001);
+                return YES;
+            }
+        }
+        return NO;
+    };
+    
+    imageView.source = [[WebImageSource alloc] initWithURIString:@"http://fake/favicon.png"];
+    [imageView didSetProps:@[@"source"]];
+
+    [self waitForExpectations:@[expectation] timeout:2.0];
+}
+
+- (void)testShouldLoadImage {
     XCTestExpectation* expectLoad = [[XCTestExpectation alloc] initWithDescription:@"onLoad called"];
     expectLoad.expectedFulfillmentCount = 1;
     expectLoad.assertForOverFulfill = YES;
