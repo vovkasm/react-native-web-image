@@ -2,6 +2,7 @@ package org.vovkasm.WebImage;
 
 import android.graphics.Bitmap;
 
+import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.CatalystInstance;
@@ -100,6 +101,21 @@ public class RequestListenerTest {
         expectedEvent.putMap("source", expectedSource);
 
         verify(mEventEmitter).receiveEvent(-1, "onWebImageLoad", expectedEvent);
+    }
+
+    @Test
+    public void testOnErrorEventEmitted () {
+        verify(mEventEmitter, never()).receiveEvent(anyInt(), anyString(), any(WritableMap.class));
+
+        WebImageViewTarget target = new WebImageViewTarget(mImageView);
+
+        mViewManager.mRequestListener.onLoadFailed(new GlideException("some error"), null, target, true);
+
+        WritableMap expectedEvent = Arguments.createMap();
+        expectedEvent.putString("uri", "http://fake/favicon.png");
+        expectedEvent.putString("error", "some error");
+
+        verify(mEventEmitter).receiveEvent(-1, "onWebImageError", expectedEvent);
     }
 
     public CatalystInstance createMockCatalystInstance() {
