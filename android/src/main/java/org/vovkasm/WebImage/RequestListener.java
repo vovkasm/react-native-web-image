@@ -16,8 +16,8 @@ class RequestListener implements com.bumptech.glide.request.RequestListener {
     @Override
     public boolean onLoadFailed(@android.support.annotation.Nullable GlideException e, Object model, Target target, boolean isFirstResource) {
         WebImageView view = null;
-        if (target instanceof WebImageView.WebImageViewTarget) {
-            view = ((WebImageView.WebImageViewTarget) target).getView();
+        if (target instanceof WebImageViewTarget) {
+            view = ((WebImageViewTarget) target).getView();
         }
         if (view != null) {
             ThemedReactContext context = view.getThemedReactContext();
@@ -41,8 +41,8 @@ class RequestListener implements com.bumptech.glide.request.RequestListener {
     @Override
     public boolean onResourceReady(Object resource, Object model, Target target, DataSource dataSource, boolean isFirstResource) {
         WebImageView view = null;
-        if (target instanceof WebImageView.WebImageViewTarget) {
-            view = ((WebImageView.WebImageViewTarget) target).getView();
+        if (target instanceof WebImageViewTarget) {
+            view = ((WebImageViewTarget) target).getView();
         }
         Bitmap bitmap = null;
         if (resource instanceof Bitmap) {

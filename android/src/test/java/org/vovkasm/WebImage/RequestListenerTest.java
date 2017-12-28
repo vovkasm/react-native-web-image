@@ -86,7 +86,7 @@ public class RequestListenerTest {
 
         verify(eventEmitter, never()).receiveEvent(anyInt(), anyString(), any(WritableMap.class));
 
-        WebImageView.WebImageViewTarget target = new WebImageView.WebImageViewTarget(imageView);
+        WebImageViewTarget target = new WebImageViewTarget(imageView);
         Bitmap bitmap = Bitmap.createBitmap(64, 64, Bitmap.Config.ARGB_8888);
 
         viewManager.mRequestListener.onResourceReady(bitmap, null, target, null, true);
