@@ -1,6 +1,0 @@
-_OBJC_CLASS_$_WebImageSource
-_OBJC_CLASS_$_WebImageView
-_OBJC_CLASS_$_WebImageViewManager
-_OBJC_METACLASS_$_WebImageSource
-_OBJC_METACLASS_$_WebImageView
-_OBJC_METACLASS_$_WebImageViewManager
