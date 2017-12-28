@@ -48,10 +48,11 @@ public class RequestListenerTest {
     @Rule
     public PowerMockRule rule = new PowerMockRule();
 
-    private ReactApplicationContext appContext;
-    private ThemedReactContext themedReactContext;
-    private RCTEventEmitter eventEmitter;
-    private WebImageViewManager viewManager;
+    private RCTEventEmitter mEventEmitter;
+    private ReactApplicationContext mApplicationContext;
+    private ThemedReactContext mThemedReactContext;
+    private WebImageViewManager mViewManager;
+    private WebImageView mImageView;
 
     @Before
     public void setUp () {
@@ -70,26 +71,26 @@ public class RequestListenerTest {
             }
         });
 
-        eventEmitter = mock(RCTEventEmitter.class);
+        mEventEmitter = mock(RCTEventEmitter.class);
 
-        appContext = new ReactApplicationContext(RuntimeEnvironment.application);
-        appContext.initializeWithInstance(createMockCatalystInstance());
+        mApplicationContext = new ReactApplicationContext(RuntimeEnvironment.application);
+        mApplicationContext.initializeWithInstance(createMockCatalystInstance());
 
-        themedReactContext = new ThemedReactContext(appContext, appContext);
-        viewManager = new WebImageViewManager();
+        mThemedReactContext = new ThemedReactContext(mApplicationContext, mApplicationContext);
+        mViewManager = new WebImageViewManager();
+
+        mImageView = mViewManager.createViewInstance(mThemedReactContext);
+        mImageView.setImageUri(new GlideUrl("http://fake/favicon.png"));
     }
 
     @Test
-    public void testRequestListenerOnLoad () {
-        WebImageView imageView = viewManager.createViewInstance(themedReactContext);
-        imageView.setImageUri(new GlideUrl("http://fake/favicon.png"));
+    public void testOnLoadEventEmitted () {
+        verify(mEventEmitter, never()).receiveEvent(anyInt(), anyString(), any(WritableMap.class));
 
-        verify(eventEmitter, never()).receiveEvent(anyInt(), anyString(), any(WritableMap.class));
-
-        WebImageViewTarget target = new WebImageViewTarget(imageView);
+        WebImageViewTarget target = new WebImageViewTarget(mImageView);
         Bitmap bitmap = Bitmap.createBitmap(64, 64, Bitmap.Config.ARGB_8888);
 
-        viewManager.mRequestListener.onResourceReady(bitmap, null, target, null, true);
+        mViewManager.mRequestListener.onResourceReady(bitmap, null, target, null, true);
 
         WritableMap expectedSource = Arguments.createMap();
         expectedSource.putString("uri", "http://fake/favicon.png");
@@ -98,7 +99,7 @@ public class RequestListenerTest {
         WritableMap expectedEvent = Arguments.createMap();
         expectedEvent.putMap("source", expectedSource);
 
-        verify(eventEmitter).receiveEvent(-1, "onWebImageLoad", expectedEvent);
+        verify(mEventEmitter).receiveEvent(-1, "onWebImageLoad", expectedEvent);
     }
 
     public CatalystInstance createMockCatalystInstance() {
@@ -120,7 +121,7 @@ public class RequestListenerTest {
         when(reactInstance.getNativeModule(UIManagerModule.class))
                 .thenReturn(mock(UIManagerModule.class));
         when(reactInstance.getJSModule(RCTEventEmitter.class))
-                .thenReturn(eventEmitter);
+                .thenReturn(mEventEmitter);
 
         return reactInstance;
     }
