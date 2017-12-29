@@ -39,6 +39,10 @@ class Item extends React.PureComponent {
 }
 
 class Browser extends React.Component {
+  static propTypes = {
+    dataSource: PropTypes.func.isRequired
+  }
+
   constructor (props, ctx) {
     super(props, ctx)
 
@@ -47,8 +51,9 @@ class Browser extends React.Component {
       items: undefined,
     }
   }
+
   componentDidMount () {
-    loadNasaImages().then((items) => {
+    this.props.dataSource().then((items) => {
       this.setState({
         loading: false,
         items,
@@ -64,6 +69,7 @@ class Browser extends React.Component {
       data={this.state.items}
       renderItem={this._renderItem}
       keyExtractor={this._keyExtractor}
+      initialNumToRender={10} // this can save some memory... why?
     />
   }
   _renderItem = ({ item }) => {
@@ -72,27 +78,6 @@ class Browser extends React.Component {
   _keyExtractor = (item, index) => {
     return item.id
   }
-}
-
-function loadNasaImages () {
-  return fetch('https://images-api.nasa.gov/search?media_type=image&q=earth')
-    .then((res) => {
-      return res.json()
-    })
-    .then((data) => {
-      if (!data || !data.collection || !data.collection.items) return []
-      const dataItems = data.collection.items
-      const items = []
-      for (const dataItem of dataItems) {
-        const item = {
-          id: dataItem.data[0].nasa_id,
-          title: dataItem.data[0].title,
-          uri: dataItem.links[0].href,
-        }
-        items.push(item)
-      }
-      return items
-    })
 }
 
 export default Browser
