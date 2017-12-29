@@ -1,5 +1,7 @@
 #import "WebImageView.h"
 
+#import <SDWebImage/UIImageView+WebCache.h>
+
 @interface WebImageView ()
 
 @property (nonatomic) BOOL needsImageUpdate;

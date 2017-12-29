@@ -4,11 +4,12 @@
   "description": "An image component for react-native with persistent disk and memory caching",
   "main": "lib/index.js",
   "scripts": {
-    "start": "npm run start-sample --",
-    "start-sample": "node rn-wrapper.js start --projectRoots samples/SampleApp,.",
+    "start": "react-native start",
     "run-sample-android": "react-native run-android --root samples/SampleApp",
     "run-sample-ios": "react-native run-ios --project-path samples/SampleApp/ios",
-    "lint": "eslint lib samples"
+    "lint": "eslint lib samples",
+    "test:android": "./gradlew check",
+    "test:ios": "xcodebuild test -workspace tests/TestApp/TestApp.xcworkspace -scheme TestApp -destination 'platform=iOS Simulator,name=iPhone 8'"
   },
   "keywords": [
     "react-native",

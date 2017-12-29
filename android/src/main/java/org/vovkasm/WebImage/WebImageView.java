@@ -16,8 +16,6 @@ import android.view.View;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.ViewTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.facebook.react.uimanager.FloatUtil;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.yoga.YogaConstants;
@@ -234,16 +232,4 @@ class WebImageView extends View {
         Glide.with(activity).clear(this);
     }
 
-    public static class WebImageViewTarget extends ViewTarget<WebImageView, Bitmap> {
-        WebImageViewTarget(WebImageView view) {
-            super(view);
-        }
-
-        @Override
-        public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> transition) {
-            view.setBitmap(bitmap);
-        }
-
-        public WebImageView getView() { return view; }
-    }
 }

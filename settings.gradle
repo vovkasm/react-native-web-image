@@ -1,0 +1,7 @@
+rootProject.name = 'master'
+
+include ':react-native-web-image'
+project(':react-native-web-image').projectDir = new File(rootProject.projectDir, 'android')
+
+include ':sample'
+project(':sample').projectDir = new File(rootProject.projectDir, 'samples/SampleApp/android/app')
