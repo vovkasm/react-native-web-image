@@ -8,8 +8,8 @@
     "run-sample-android": "react-native run-android --root samples/SampleApp",
     "run-sample-ios": "react-native run-ios --project-path samples/SampleApp/ios",
     "lint": "eslint lib samples",
-    "test:unit:android": "./gradlew react-native-web-image:test",
-    "test:unit:ios": "xcodebuild test -workspace tests/TestApp/TestApp.xcworkspace -scheme TestApp -destination 'platform=iOS Simulator,name=iPhone 8'"
+    "test:android": "./gradlew check",
+    "test:ios": "xcodebuild test -workspace tests/TestApp/TestApp.xcworkspace -scheme TestApp -destination 'platform=iOS Simulator,name=iPhone 8'"
   },
   "keywords": [
     "react-native",
