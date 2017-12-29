@@ -11,6 +11,9 @@ import TestBordersRectangleColor from './test-borders-rectangle-color'
 import TestBordersRoundMono from './test-borders-round-mono'
 import TestBordersRoundColor from './test-borders-round-color'
 import BenchNoDecor from './bench-no-decor'
+import Browser from './image-browser'
+import loadNasaImages from './loadNasaImages';
+import loadBigImages from './loadBigImages';
 
 const TestCaseLink = ({ title, onPress }) => {
   return <View style={s.testItem}><Button title={title} onPress={onPress} /></View>
@@ -22,6 +25,8 @@ TestCaseLink.propTypes = {
 
 const Main = ({ navigateTo }) => {
   return <ScrollView>
+    <TestCaseLink title='Browse Earth' onPress={() => { navigateTo('/browser/nasa') }} />
+    <TestCaseLink title='Browse big images' onPress={() => { navigateTo('/browser/big') }} />
     <TestCaseLink title='Samples' onPress={() => { navigateTo('/samples/sizing') }} />
     <TestCaseLink title='Callbacks' onPress={() => { navigateTo('/samples/callbacks') }} />
     <TestCaseLink title='Default params' onPress={() => { navigateTo('/test-default') }} />
@@ -39,6 +44,8 @@ Main.propTypes = {
 
 const routes = {
   '/': Main,
+  '/browser/nasa': () => <Browser dataSource={loadNasaImages}/>,
+  '/browser/big': () => <Browser dataSource={loadBigImages}/>,
   '/samples/sizing': Samples,
   '/samples/callbacks': CallbackSamples,
   '/test-default': TestDefault,
