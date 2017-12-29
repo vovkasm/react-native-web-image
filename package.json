@@ -4,8 +4,7 @@
   "description": "An image component for react-native with persistent disk and memory caching",
   "main": "lib/index.js",
   "scripts": {
-    "start": "npm run start-sample --",
-    "start-sample": "node rn-wrapper.js start --projectRoots samples/SampleApp,.",
+    "start": "react-native start",
     "run-sample-android": "react-native run-android --root samples/SampleApp",
     "run-sample-ios": "react-native run-ios --project-path samples/SampleApp/ios",
     "lint": "eslint lib samples",

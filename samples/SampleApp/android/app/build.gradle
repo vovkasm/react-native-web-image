@@ -72,6 +72,11 @@ import com.android.build.OutputFile
  * ]
  */
 
+project.ext.react = [
+    cliPath: '../../node_modules/react-native/local-cli/cli.js',
+    root: '../..'
+]
+
 apply from: "../../../../node_modules/react-native/react.gradle"
 
 /**
