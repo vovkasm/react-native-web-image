@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "jsx": "react-native",
+    "importHelpers": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "outDir": "dist",
+    "preserveSymlinks": true,
+    "strict": true,
+    "target": "esnext",
+    "types": ["react", "react-native"],
+    "baseUrl": "lib",
+    "paths": {
+      "react-native/Libraries/Image/resolveAssetSource": ["resolveAssetSource.d.ts"]
+    }
+  },
+  "include": [
+    "lib/*"
+  ]
+}
