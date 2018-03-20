@@ -1,8 +1,8 @@
 Pod::Spec.new do |s|
   s.name = 'SDWebImage'
-  s.version = '4.2.3'
+  s.version = '4.3.3'
 
-  s.osx.deployment_target = '10.8'
+  s.osx.deployment_target = '10.9'
   s.ios.deployment_target = '7.0'
   s.tvos.deployment_target = '9.0'
   s.watchos.deployment_target = '2.0'
@@ -33,7 +33,7 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'MapKit' do |mk|
-    mk.osx.deployment_target = '10.8'
+    mk.osx.deployment_target = '10.9'
     mk.ios.deployment_target = '7.0'
     mk.tvos.deployment_target = '9.0'
     mk.source_files = 'SDWebImage/MKAnnotationView+WebCache.*'
@@ -62,6 +62,6 @@ Pod::Spec.new do |s|
       'USER_HEADER_SEARCH_PATHS' => '$(inherited) $(SRCROOT)/libwebp/src'
     }
     webp.dependency 'SDWebImage/Core'
-    webp.dependency 'libwebp'
+    webp.dependency 'libwebp', '~> 0.5'
   end
 end
