@@ -34,6 +34,7 @@ FOUNDATION_EXPORT const unsigned char WebImageVersionString[];
 #import <SDWebImage/UIImage+MultiFormat.h>
 #import <SDWebImage/SDWebImageOperation.h>
 #import <SDWebImage/SDWebImageDownloader.h>
+#import <SDWebImage/SDWebImageTransition.h>
 
 #if SD_MAC || SD_UIKIT
     #import <SDWebImage/MKAnnotationView+WebCache.h>
@@ -53,6 +54,8 @@ FOUNDATION_EXPORT const unsigned char WebImageVersionString[];
 
 #if SD_MAC
     #import <SDWebImage/NSImage+WebCache.h>
+    #import <SDWebImage/NSButton+WebCache.h>
+    #import <SDWebImage/SDAnimatedImageRep.h>
 #endif
 
 #if SD_UIKIT
