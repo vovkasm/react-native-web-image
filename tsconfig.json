@@ -3,7 +3,7 @@
     "allowSyntheticDefaultImports": true,
     "declaration": true,
     "esModuleInterop": true,
-    "jsx": "react-native",
+    "jsx": "react",
     "importHelpers": true,
     "module": "commonjs",
     "moduleResolution": "node",
@@ -12,7 +12,7 @@
     "outDir": "dist",
     "preserveSymlinks": true,
     "strict": true,
-    "target": "esnext",
+    "target": "es6",
     "types": ["react", "react-native"],
     "baseUrl": "lib",
     "paths": {

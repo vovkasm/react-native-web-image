@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import { requireNativeComponent, View, ViewProperties } from 'react-native'
+import { NativeSyntheticEvent, requireNativeComponent, View, ViewProperties } from 'react-native'
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource'
 
 const URISourcePropType = PropTypes.shape({
@@ -10,17 +10,13 @@ const SourcePropType = PropTypes.oneOfType([URISourcePropType, PropTypes.number]
 
 export type WebImageSource = {uri: string} | number
 
-export interface IImageLoadEvent {
-  nativeEvent: {
-    uri: string,
-    width: number,
-    height: number,
-  }
-}
-
-export interface IImageErrorEvent {
-  error: string
+export interface IImageLoadEventData {
   uri: string
+  width: number
+  height: number
+}
+export interface IImageErrorEventData {
+  error: string
 }
 
 export interface IWebImageProps extends ViewProperties {
@@ -47,14 +43,14 @@ export interface IWebImageProps extends ViewProperties {
   resizeMode?: 'cover'|'contain'|'stretch'|'center'
 
   /**
-   * Callback called on error. With event object with props:
+   * Callback called on error.
    */
-  onError?: (e: IImageErrorEvent) => void
+  onError?: (e: NativeSyntheticEvent<IImageErrorEventData>) => void
 
   /**
-   * Callback called on success. With event object with props:
+   * Callback called on success.
    */
-  onLoad?: (event: IImageLoadEvent) => void
+  onLoad?: (e: NativeSyntheticEvent<IImageLoadEventData>) => void
 }
 
 interface IResolvedSource {
@@ -63,10 +59,26 @@ interface IResolvedSource {
 interface INativeProps extends ViewProperties {
   source: IResolvedSource
   resizeMode?: 'cover'|'contain'|'stretch'|'center'
-  onWebImageError?: (e: IImageErrorEvent) => void
-  onWebImageLoad?: (e: IImageLoadEvent) => void
+  onWebImageError?: (e: NativeSyntheticEvent<IImageErrorEventData>) => void
+  onWebImageLoad?: (e: NativeSyntheticEvent<IImageLoadEventData>) => void
 }
 const NativeWebImage = requireNativeComponent<INativeProps>('WebImageView')
+
+const OMIT_PROPS_FOR_NATIVE: { [x: string]: boolean } = {
+  children: true,
+  onError: true,
+  onLoad: true,
+  source: true,
+}
+function omitPropsForNative (props: any): any {
+  const native: any = {}
+  const keys = Object.keys(props)
+  for (const key of keys) {
+    if (OMIT_PROPS_FOR_NATIVE[key]) continue
+    native[key] = props[key]
+  }
+  return native
+}
 
 class WebImage extends React.Component<IWebImageProps> {
   static propTypes = {
@@ -82,23 +94,21 @@ class WebImage extends React.Component<IWebImageProps> {
     resizeMode: 'contain',
   }
 
-  render () {
-    const { source, ...props } = this.props
-    const resolvedSource = resolveAssetSource(source)
+  render (): React.ReactNode {
+    const nativeProps: INativeProps = omitPropsForNative(this.props)
+    nativeProps.source = resolveAssetSource(this.props.source)
 
-    return <NativeWebImage
-      {...props}
-      source={resolvedSource}
-      onWebImageError={this._onError}
-      onWebImageLoad={this._onLoad}
-    />
+    if (this.props.onLoad) nativeProps.onWebImageLoad = this._onLoad
+    if (this.props.onError) nativeProps.onWebImageError = this._onError
+
+    return React.createElement(NativeWebImage, nativeProps)
   }
 
-  _onLoad = (e: IImageLoadEvent) => {
+  private _onLoad = (e: NativeSyntheticEvent<IImageLoadEventData>) => {
     if (this.props.onLoad) this.props.onLoad(e)
   }
 
-  _onError = (e: IImageErrorEvent) => {
+  private _onError = (e: NativeSyntheticEvent<IImageErrorEventData>) => {
     if (this.props.onError) this.props.onError(e)
   }
 }

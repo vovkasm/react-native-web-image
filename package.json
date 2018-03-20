@@ -2,7 +2,8 @@
   "name": "react-native-web-image",
   "version": "0.0.6",
   "description": "An image component for react-native with persistent disk and memory caching",
-  "main": "lib/index.js",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "prestart": "npm run build",
@@ -47,6 +48,7 @@
     "react-native": ">=0.40.0"
   },
   "dependencies": {
-    "prop-types": "^15.5.10"
+    "prop-types": "^15.5.10",
+    "tslib": "^1.9.0"
   }
 }
