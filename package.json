@@ -2,12 +2,15 @@
   "name": "react-native-web-image",
   "version": "0.0.6",
   "description": "An image component for react-native with persistent disk and memory caching",
-  "main": "lib/index.js",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
+    "build": "tsc",
+    "prestart": "npm run build",
     "start": "react-native start",
     "run-sample-android": "react-native run-android --root samples/SampleApp",
     "run-sample-ios": "react-native run-ios --project-path samples/SampleApp/ios",
-    "lint": "eslint lib samples",
+    "lint:js": "tslint -p tsconfig.json",
     "test:android": "./gradlew check",
     "test:ios": "xcodebuild test -workspace tests/TestApp/TestApp.xcworkspace -scheme TestApp -destination 'platform=iOS Simulator,name=iPhone 8'"
   },
@@ -31,25 +34,21 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "babel-eslint": "^8.0.0",
+    "@types/prop-types": "^15.5.2",
+    "@types/react": "^16.0.34",
+    "@types/react-native": "^0.52.18",
+    "@vovkasm/tslint-config": "1.0.0",
     "babel-preset-react-native": "^4.0.0",
-    "eslint": "^4.13.1",
-    "eslint-config-standard": "^10.2.1",
-    "eslint-config-standard-react": "^5.0.0",
-    "eslint-plugin-classes": "^0.1.1",
-    "eslint-plugin-import": "^2.7.0",
-    "eslint-plugin-node": "^5.1.1",
-    "eslint-plugin-promise": "^3.4.0",
-    "eslint-plugin-react": "^7.3.0",
-    "eslint-plugin-react-native": "^3.0.1",
-    "eslint-plugin-standard": "^3.0.1",
     "react": "16.3.0-alpha.2",
-    "react-native": "0.54.2"
+    "react-native": "0.54.2",
+    "tslint": "^5.9.1",
+    "typescript": "^2.7.2"
   },
   "peerDependencies": {
     "react-native": ">=0.40.0"
   },
   "dependencies": {
-    "prop-types": "^15.5.10"
+    "prop-types": "^15.5.10",
+    "tslib": "^1.9.0"
   }
 }
