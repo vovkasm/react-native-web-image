@@ -11,12 +11,15 @@ const SourcePropType = PropTypes.oneOfType([URISourcePropType, PropTypes.number]
 export type WebImageSource = {uri: string} | number
 
 export interface IImageLoadEventData {
-  uri: string
-  width: number
-  height: number
+  source: {
+    height: number,
+    uri: string,
+    width: number,
+  }
 }
 export interface IImageErrorEventData {
   error: string
+  uri: string
 }
 
 export interface IWebImageProps extends ViewProperties {
