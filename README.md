@@ -82,6 +82,7 @@ const styles = StyleSheet.create({
 | source.uri | String   | (**Required**) URL of the image |
 | resizeMode | Enum{'cover','contain','stretch','center'} | Determine resize mode for image. Default: 'contain' |
 | onError    | Function | Will be called on error |
+| onLoad     | Function | Will be called when loading of image completed |
 
 #### Resize modes
 
@@ -99,8 +100,14 @@ const styles = StyleSheet.create({
 
 #### onError(event)
 
-* `event.error` - String representation of error (platform dependent)
-* `event.uri` - URI which leads to error
+* `event.nativeEvent.error` - String representation of error (platform dependent)
+* `event.nativeEvent.uri` - URI which leads to error
+
+#### onLoad(event)
+
+* `event.nativeEvent.source.uri` - URI of the loaded image
+* `event.nativeEvent.source.width` - width of the loaded image
+* `event.nativeEvent.source.height` - height of the loaded image
 
 ## Author
 
