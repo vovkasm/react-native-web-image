@@ -48,7 +48,7 @@ class WebImage extends react_1.default.Component {
         return react_1.default.createElement(NativeWebImage, nativeProps);
     }
 }
-WebImage.propTypes = Object.assign({}, react_native_1.View.propTypes, { resizeMode: prop_types_1.default.oneOf(['cover', 'contain', 'stretch', 'center']), source: SourcePropType.isRequired, onError: prop_types_1.default.func, onLoad: prop_types_1.default.func });
+WebImage.propTypes = Object.assign({}, react_native_1.ViewPropTypes, { resizeMode: prop_types_1.default.oneOf(['cover', 'contain', 'stretch', 'center']), source: SourcePropType.isRequired, onError: prop_types_1.default.func, onLoad: prop_types_1.default.func });
 WebImage.defaultProps = {
     resizeMode: 'contain',
 };
