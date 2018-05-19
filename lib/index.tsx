@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import { NativeSyntheticEvent, requireNativeComponent, View, ViewProperties } from 'react-native'
+import { NativeSyntheticEvent, requireNativeComponent, ViewProperties, ViewPropTypes } from 'react-native'
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource'
 
 const URISourcePropType = PropTypes.shape({
@@ -85,7 +85,7 @@ function omitPropsForNative (props: any): any {
 
 class WebImage extends React.Component<IWebImageProps> {
   static propTypes = {
-    ...View.propTypes,
+    ...ViewPropTypes,
     resizeMode: PropTypes.oneOf(['cover', 'contain', 'stretch', 'center']),
     source: SourcePropType.isRequired,
 

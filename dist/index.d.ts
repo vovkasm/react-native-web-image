@@ -1,5 +1,4 @@
 /// <reference types="react" />
-/// <reference types="react-native" />
 import PropTypes from 'prop-types';
 import React from 'react';
 import { NativeSyntheticEvent, ViewProperties } from 'react-native';
@@ -54,49 +53,7 @@ declare class WebImage extends React.Component<IWebImageProps> {
         source: PropTypes.Validator<any>;
         onError: PropTypes.Requireable<any>;
         onLoad: PropTypes.Requireable<any>;
-    } | {
-        resizeMode: PropTypes.Requireable<any>;
-        source: PropTypes.Validator<any>;
-        onError: PropTypes.Requireable<any>;
-        onLoad: PropTypes.Requireable<any>;
-        hitSlop?: ((object: ViewProperties, key: string, componentName: string, ...rest: any[]) => Error | null) | undefined;
-        onLayout?: ((object: ViewProperties, key: string, componentName: string, ...rest: any[]) => Error | null) | undefined;
-        pointerEvents?: ((object: ViewProperties, key: string, componentName: string, ...rest: any[]) => Error | null) | undefined;
-        removeClippedSubviews?: ((object: ViewProperties, key: string, componentName: string, ...rest: any[]) => Error | null) | undefined;
-        style?: ((object: ViewProperties, key: string, componentName: string, ...rest: any[]) => Error | null) | undefined;
-        testID?: ((object: ViewProperties, key: string, componentName: string, ...rest: any[]) => Error | null) | undefined;
-        collapsable?: ((object: ViewProperties, key: string, componentName: string, ...rest: any[]) => Error | null) | undefined;
-        needsOffscreenAlphaCompositing?: ((object: ViewProperties, key: string, componentName: string, ...rest: any[]) => Error | null) | undefined;
-        renderToHardwareTextureAndroid?: ((object: ViewProperties, key: string, componentName: string, ...rest: any[]) => Error | null) | undefined;
-        accessibilityViewIsModal?: ((object: ViewProperties, key: string, componentName: string, ...rest: any[]) => Error | null) | undefined;
-        accessibilityActions?: ((object: ViewProperties, key: string, componentName: string, ...rest: any[]) => Error | null) | undefined;
-        onAccessibilityAction?: ((object: ViewProperties, key: string, componentName: string, ...rest: any[]) => Error | null) | undefined;
-        shouldRasterizeIOS?: ((object: ViewProperties, key: string, componentName: string, ...rest: any[]) => Error | null) | undefined;
-        onStartShouldSetResponder?: ((object: ViewProperties, key: string, componentName: string, ...rest: any[]) => Error | null) | undefined;
-        onMoveShouldSetResponder?: ((object: ViewProperties, key: string, componentName: string, ...rest: any[]) => Error | null) | undefined;
-        onResponderEnd?: ((object: ViewProperties, key: string, componentName: string, ...rest: any[]) => Error | null) | undefined;
-        onResponderGrant?: ((object: ViewProperties, key: string, componentName: string, ...rest: any[]) => Error | null) | undefined;
-        onResponderReject?: ((object: ViewProperties, key: string, componentName: string, ...rest: any[]) => Error | null) | undefined;
-        onResponderMove?: ((object: ViewProperties, key: string, componentName: string, ...rest: any[]) => Error | null) | undefined;
-        onResponderRelease?: ((object: ViewProperties, key: string, componentName: string, ...rest: any[]) => Error | null) | undefined;
-        onResponderStart?: ((object: ViewProperties, key: string, componentName: string, ...rest: any[]) => Error | null) | undefined;
-        onResponderTerminationRequest?: ((object: ViewProperties, key: string, componentName: string, ...rest: any[]) => Error | null) | undefined;
-        onResponderTerminate?: ((object: ViewProperties, key: string, componentName: string, ...rest: any[]) => Error | null) | undefined;
-        onStartShouldSetResponderCapture?: ((object: ViewProperties, key: string, componentName: string, ...rest: any[]) => Error | null) | undefined;
-        onMoveShouldSetResponderCapture?: ((object: ViewProperties, key: string, componentName: string, ...rest: any[]) => Error | null) | undefined;
-        onTouchStart?: ((object: ViewProperties, key: string, componentName: string, ...rest: any[]) => Error | null) | undefined;
-        onTouchMove?: ((object: ViewProperties, key: string, componentName: string, ...rest: any[]) => Error | null) | undefined;
-        onTouchEnd?: ((object: ViewProperties, key: string, componentName: string, ...rest: any[]) => Error | null) | undefined;
-        onTouchCancel?: ((object: ViewProperties, key: string, componentName: string, ...rest: any[]) => Error | null) | undefined;
-        onTouchEndCapture?: ((object: ViewProperties, key: string, componentName: string, ...rest: any[]) => Error | null) | undefined;
-        accessible?: ((object: ViewProperties, key: string, componentName: string, ...rest: any[]) => Error | null) | undefined;
-        accessibilityLabel?: ((object: ViewProperties, key: string, componentName: string, ...rest: any[]) => Error | null) | undefined;
-        accessibilityComponentType?: ((object: ViewProperties, key: string, componentName: string, ...rest: any[]) => Error | null) | undefined;
-        accessibilityLiveRegion?: ((object: ViewProperties, key: string, componentName: string, ...rest: any[]) => Error | null) | undefined;
-        importantForAccessibility?: ((object: ViewProperties, key: string, componentName: string, ...rest: any[]) => Error | null) | undefined;
-        accessibilityTraits?: ((object: ViewProperties, key: string, componentName: string, ...rest: any[]) => Error | null) | undefined;
-        onAcccessibilityTap?: ((object: ViewProperties, key: string, componentName: string, ...rest: any[]) => Error | null) | undefined;
-        onMagicTap?: ((object: ViewProperties, key: string, componentName: string, ...rest: any[]) => Error | null) | undefined;
+        isRequired: (object: any, key: string, componentName: string, ...rest: any[]) => Error | null;
     };
     static defaultProps: {
         resizeMode: string;
