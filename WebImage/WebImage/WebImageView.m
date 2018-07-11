@@ -6,7 +6,7 @@
     _source = source;
     [self sd_setImageWithURL:source.uri completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         if (error) {
-            if (_onWebImageError) {
+            if (_onWebImageError && imageURL) {
                 _onWebImageError(@{@"error":error.description, @"uri":imageURL.absoluteString});
             }
             return;
