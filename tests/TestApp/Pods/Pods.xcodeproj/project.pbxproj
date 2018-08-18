@@ -4217,30 +4217,6 @@
 			};
 			name = Debug;
 		};
-		23AF3AA48852ADA58D76D7A003C14248 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = F9C253C1A71F5706289099615DC81D07 /* react-native-web-image.xcconfig */;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				GCC_PREFIX_HEADER = "Target Support Files/react-native-web-image/react-native-web-image-prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PRIVATE_HEADERS_FOLDER_PATH = "";
-				PRODUCT_MODULE_NAME = react_native_web_image;
-				PRODUCT_NAME = "react-native-web-image";
-				PUBLIC_HEADERS_FOLDER_PATH = "";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
 		425B7CD3C6508321C481F3FCA9E158CA /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 065E1D6ECAC002F15AB3B710348526EA /* DoubleConversion.xcconfig */;
@@ -4264,29 +4240,6 @@
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
-		};
-		458EAF66E2E2D9DECB68C0C412BDAF09 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = F9C253C1A71F5706289099615DC81D07 /* react-native-web-image.xcconfig */;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				GCC_PREFIX_HEADER = "Target Support Files/react-native-web-image/react-native-web-image-prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PRIVATE_HEADERS_FOLDER_PATH = "";
-				PRODUCT_MODULE_NAME = react_native_web_image;
-				PRODUCT_NAME = "react-native-web-image";
-				PUBLIC_HEADERS_FOLDER_PATH = "";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
 		};
 		638F3CBEA06587C1600DE7E225718FE9 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -4333,6 +4286,30 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
+		};
+		87192768BA1E1E91F74AB2B16194B601 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F9C253C1A71F5706289099615DC81D07 /* react-native-web-image.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				GCC_PREFIX_HEADER = "Target Support Files/react-native-web-image/react-native-web-image-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_MODULE_NAME = RNWebImage;
+				PRODUCT_NAME = "react-native-web-image";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
 		};
 		8BE2D2CCF0C1CC8D6663EC3E74AF82D5 /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -4553,6 +4530,29 @@
 			};
 			name = Debug;
 		};
+		D8B6D666DFCEDB474F760B4B94FCE71D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F9C253C1A71F5706289099615DC81D07 /* react-native-web-image.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				GCC_PREFIX_HEADER = "Target Support Files/react-native-web-image/react-native-web-image-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_MODULE_NAME = RNWebImage;
+				PRODUCT_NAME = "react-native-web-image";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
 		E822C113B82865F0797B55250A2F6A60 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 811394A4CE93F21D21C406509C827255 /* Folly.xcconfig */;
@@ -4747,8 +4747,8 @@
 		9D99DC8F6718DDECAC57B4BBA1E9392C /* Build configuration list for PBXNativeTarget "react-native-web-image" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				458EAF66E2E2D9DECB68C0C412BDAF09 /* Debug */,
-				23AF3AA48852ADA58D76D7A003C14248 /* Release */,
+				D8B6D666DFCEDB474F760B4B94FCE71D /* Debug */,
+				87192768BA1E1E91F74AB2B16194B601 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

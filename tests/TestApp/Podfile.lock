@@ -98,7 +98,7 @@ SPEC CHECKSUMS:
   glog: b3b0330915eccea41c5cc9731a77cf564a9be5ea
   OCMock: ebe9ee1dca7fbed0ff9193ac0b3e2d8862ea56f6
   React: 1fe0eb13d90b625d94c3b117c274dcfd2e760e11
-  react-native-web-image: 03d1bb109d9d06283f90b27886fa1a452bdb96c0
+  react-native-web-image: e8da76c90075c49eca1b654fe5cab6a3f5841b3c
   SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
   yoga: b1ce48b6cf950b98deae82838f5173ea7cf89e85
 
