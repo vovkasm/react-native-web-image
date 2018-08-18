@@ -1,12 +1,5 @@
-import PropTypes from 'prop-types'
 import React from 'react'
-import { NativeSyntheticEvent, requireNativeComponent, ViewProperties, ViewPropTypes } from 'react-native'
-import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource'
-
-const URISourcePropType = PropTypes.shape({
-  uri: PropTypes.string,
-})
-const SourcePropType = PropTypes.oneOfType([URISourcePropType, PropTypes.number])
+import { Image, NativeSyntheticEvent, requireNativeComponent, ViewProperties } from 'react-native'
 
 export type WebImageSource = {uri: string} | number
 
@@ -84,22 +77,13 @@ function omitPropsForNative (props: any): any {
 }
 
 class WebImage extends React.Component<IWebImageProps> {
-  static propTypes = {
-    ...ViewPropTypes,
-    resizeMode: PropTypes.oneOf(['cover', 'contain', 'stretch', 'center']),
-    source: SourcePropType.isRequired,
-
-    onError: PropTypes.func,
-    onLoad: PropTypes.func,
-  }
-
   static defaultProps = {
     resizeMode: 'contain',
   }
 
   render (): React.ReactNode {
     const nativeProps: INativeProps = omitPropsForNative(this.props)
-    nativeProps.source = resolveAssetSource(this.props.source)
+    nativeProps.source = Image.resolveAssetSource(this.props.source)
 
     if (this.props.onLoad) nativeProps.onWebImageLoad = this._onLoad
     if (this.props.onError) nativeProps.onWebImageError = this._onError
