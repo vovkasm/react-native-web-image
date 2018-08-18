@@ -1,5 +1,5 @@
 {
-  "name": "WebImage",
+  "name": "react-native-web-image",
   "version": "0.0.6",
   "homepage": "https://github.com/vovkasm/react-native-web-image",
   "summary": "An image component for react-native with persistent disk and memory caching",
@@ -15,7 +15,7 @@
     "tag": "v0.0.6"
   },
   "source_files": "WebImage/WebImage/*.{h,m}",
-  "preserve_paths": "lib/*.js",
+  "preserve_paths": "dist/*",
   "frameworks": [
     "Foundation",
     "UIKit"
