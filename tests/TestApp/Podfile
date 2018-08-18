@@ -1,7 +1,12 @@
-platform :ios, '8.0'
+require 'pathname'
+
+platform :ios, '9.0'
+
+podfile_dir = Pathname.new(__FILE__).dirname.realpath
+root_dir = podfile_dir.ascend.find {|p| p.join('package.json').exist? }
 
 target 'TestApp' do
-  pod 'React', :path => '../../node_modules/react-native', :subspecs => [
+  pod 'React', :path => root_dir + 'node_modules/react-native', :subspecs => [
     'Core',
     'CxxBridge',
     'RCTAnimation',
@@ -11,12 +16,12 @@ target 'TestApp' do
     'RCTWebSocket',
     'DevSupport',
   ]
-  pod 'yoga', :path => '../../node_modules/react-native/ReactCommon/yoga'
-  pod 'DoubleConversion', :podspec => '../../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
-  pod 'glog', :podspec => '../../node_modules/react-native/third-party-podspecs/glog.podspec'
-  pod 'Folly', :podspec => '../../node_modules/react-native/third-party-podspecs/Folly.podspec'
+  pod 'yoga', :path => root_dir + 'node_modules/react-native/ReactCommon/yoga'
+  pod 'DoubleConversion', :podspec => root_dir + 'node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
+  pod 'glog', :podspec => root_dir + 'node_modules/react-native/third-party-podspecs/glog.podspec'
+  pod 'Folly', :podspec => root_dir + 'node_modules/react-native/third-party-podspecs/Folly.podspec'
 
-  pod 'WebImage', :path => '../..'
+  pod 'react-native-web-image', :path => root_dir
 
   target 'TestAppTests' do
     inherit! :search_paths
@@ -24,4 +29,17 @@ target 'TestApp' do
     pod 'OCMock', '~> 3.4'
   end
 
+end
+
+post_install do |installer|
+  # Disable some shitty RN stuff (I can't see degradation in functional)
+  installer.pods_project.targets.each do |target|
+    if target.name == 'React'
+      target.build_configurations.each do |config|
+        config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= ['$(inherited)']
+        config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] << 'RCT_ENABLE_INSPECTOR=0'
+        config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] << 'ENABLE_PACKAGER_CONNECTION=0'
+      end
+    end
+  end
 end
