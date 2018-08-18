@@ -1,5 +1,3 @@
-/// <reference types="react" />
-import PropTypes from 'prop-types';
 import React from 'react';
 import { NativeSyntheticEvent, ViewProperties } from 'react-native';
 export declare type WebImageSource = {
@@ -48,13 +46,6 @@ export interface IWebImageProps extends ViewProperties {
     onLoad?: (e: NativeSyntheticEvent<IImageLoadEventData>) => void;
 }
 declare class WebImage extends React.Component<IWebImageProps> {
-    static propTypes: {
-        resizeMode: PropTypes.Requireable<any>;
-        source: PropTypes.Validator<any>;
-        onError: PropTypes.Requireable<any>;
-        onLoad: PropTypes.Requireable<any>;
-        isRequired: (object: any, key: string, componentName: string, ...rest: any[]) => Error | null;
-    };
     static defaultProps: {
         resizeMode: string;
     };
