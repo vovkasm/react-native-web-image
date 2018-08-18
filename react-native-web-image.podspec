@@ -10,6 +10,8 @@ Pod::Spec.new do |s|
   s.author          = { 'Vladimir Timofeev' => 'vovkasm@gmail.com' }
   s.ios.deployment_target = '8.0'
   s.source          = { :git => 'https://github.com/vovkasm/react-native-web-image.git', :tag => "v#{s.version}" }
+
+  s.header_dir      = 'RNWebImage'
   s.source_files    = 'WebImage/WebImage/*.{h,m}'
   s.preserve_paths  = 'dist/*'
   s.frameworks      = 'Foundation', 'UIKit'
