@@ -2,7 +2,7 @@
 #import <OCMock/OCMock.h>
 
 #import <SDWebImage/SDWebImageManager.h>
-#import <WebImage/WebImageView.h>
+#import <RNWebImage/WebImageView.h>
 
 @interface TestSDWebImageManager : SDWebImageManager
 @property (nonatomic) SDImageCacheType cacheType;
