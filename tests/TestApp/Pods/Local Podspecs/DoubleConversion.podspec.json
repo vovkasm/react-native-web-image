@@ -15,7 +15,7 @@
   "module_name": "DoubleConversion",
   "source_files": "double-conversion/*.{h,cc}",
   "platforms": {
-    "ios": "8.0",
+    "ios": "9.0",
     "tvos": "9.2"
   }
 }

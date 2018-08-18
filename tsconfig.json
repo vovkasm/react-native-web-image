@@ -5,20 +5,17 @@
     "esModuleInterop": true,
     "jsx": "react-native",
     "importHelpers": true,
+    "lib": ["es6"],
     "module": "commonjs",
     "moduleResolution": "node",
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "outDir": "dist",
     "preserveSymlinks": true,
-    "skipLibCheck": true,
     "strict": true,
     "target": "es6",
     "types": ["react", "react-native"],
     "baseUrl": "lib",
-    "paths": {
-      "react-native/Libraries/Image/resolveAssetSource": ["resolveAssetSource.d.ts"]
-    }
   },
   "include": [
     "lib/*"

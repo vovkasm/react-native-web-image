@@ -43,12 +43,12 @@
     expect(decodedImage).to.equal(animatedImage);
 }
 
-- (void)test04ThatDecodedImageWithImageDoesNotDecodeImagesWithAlpha {
+- (void)test04ThatDecodedImageWithImageWorksWithAlphaImages {
     NSString * testImagePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"TestImage" ofType:@"png"];
     UIImage *image = [UIImage imageWithContentsOfFile:testImagePath];
     UIImage *decodedImage = [UIImage decodedImageWithImage:image];
     expect(decodedImage).toNot.beNil();
-    expect(decodedImage).to.equal(image);
+    expect(decodedImage).toNot.equal(image);
 }
 
 - (void)test05ThatDecodedImageWithImageWorksEvenWithMonochromeImage {
@@ -80,20 +80,6 @@
     expect(decodedImage).toNot.equal(image);
     expect(decodedImage.size.width).to.equal(image.size.width);
     expect(decodedImage.size.height).to.equal(image.size.height);
-}
-
-- (void)test08ImageOrientationFromImageDataWithInvalidData {
-    // sync download image
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wundeclared-selector"
-    SEL selector = @selector(sd_imageOrientationFromImageData:);
-#pragma clang diagnostic pop
-    
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-    UIImageOrientation orientation = (UIImageOrientation)[[SDWebImageImageIOCoder class] performSelector:selector withObject:nil];
-#pragma clang diagnostic pop
-    expect(orientation).to.equal(UIImageOrientationUp);
 }
 
 - (void)test09ThatStaticWebPCoderWorks {
