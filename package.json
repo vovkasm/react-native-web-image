@@ -34,17 +34,16 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.47",
-    "@types/react": "^16.4.0",
-    "@types/react-native": "^0.56.0",
+    "@types/react": "^16.7.6",
+    "@types/react-native": "^0.57.10",
     "@vovkasm/tslint-config": "1.0.0",
     "babel-core": "7.0.0-bridge.0",
-    "babel-preset-react-native": "^5.0.2",
-    "react": "16.4.1",
-    "react-native": "0.56.0",
-    "react-native-typescript-transformer": "^1.2.10",
+    "metro-react-native-babel-preset": "0.48.1",
+    "react": "16.6.1",
+    "react-native": "0.57.5",
+    "react-native-typescript-transformer": "^1.2.0",
     "tslint": "^5.11.0",
-    "typescript": "^3.0.1"
+    "typescript": "^3.1.6"
   },
   "peerDependencies": {
     "react-native": ">=0.55.0"
