@@ -58,7 +58,7 @@ interface INativeProps extends ViewProperties {
   onWebImageError?: (e: NativeSyntheticEvent<IImageErrorEventData>) => void
   onWebImageLoad?: (e: NativeSyntheticEvent<IImageLoadEventData>) => void
 }
-const NativeWebImage = requireNativeComponent<INativeProps>('WebImageView')
+const NativeWebImage = requireNativeComponent('WebImageView') as React.ComponentType<INativeProps>
 
 const OMIT_PROPS_FOR_NATIVE: { [x: string]: boolean } = {
   children: true,
@@ -66,7 +66,7 @@ const OMIT_PROPS_FOR_NATIVE: { [x: string]: boolean } = {
   onLoad: true,
   source: true,
 }
-function omitPropsForNative (props: any): any {
+function omitPropsForNative(props: any): any {
   const native: any = {}
   const keys = Object.keys(props)
   for (const key of keys) {
@@ -81,7 +81,7 @@ class WebImage extends React.Component<IWebImageProps> {
     resizeMode: 'contain',
   }
 
-  render (): React.ReactNode {
+  render(): React.ReactNode {
     const nativeProps: INativeProps = omitPropsForNative(this.props)
     nativeProps.source = Image.resolveAssetSource(this.props.source)
 
