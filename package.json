@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc",
     "prestart": "npm run build",
-    "start": "react-native start",
+    "start": "react-native start --projectRoot samples/SampleApp",
     "run-sample-android": "react-native run-android --root samples/SampleApp",
     "run-sample-ios": "react-native run-ios --project-path samples/SampleApp/ios",
     "lint:js": "tslint -p tsconfig.json",
