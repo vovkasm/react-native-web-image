@@ -1,25 +1,26 @@
 
 buildscript {
+  ext {
+    buildToolsVersion = "28.0.3"
+    minSdkVersion = 16
+    compileSdkVersion = 28
+    targetSdkVersion = 28
+    supportLibVersion = "28.0.0"
+  }
   repositories {
+    google()
     jcenter()
-    maven {
-      url 'https://maven.google.com/'
-      name 'Google'
-    }
   }
   dependencies {
-    classpath 'com.android.tools.build:gradle:3.0.1'
+    classpath 'com.android.tools.build:gradle:3.3.2'
   }
 }
 
 allprojects {
   repositories {
+    mavenLocal()
+    google()
     jcenter()
-    mavenCentral()
-    maven {
-      url 'https://maven.google.com/'
-      name 'Google'
-    }
     maven {
       url "$rootDir/node_modules/react-native/android"
     }

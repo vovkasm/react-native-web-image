@@ -169,8 +169,11 @@
     return self;
 }
 
-- (nullable id <SDWebImageOperation>)loadImageWithURL:(nullable NSURL *)url options:(SDWebImageOptions)options progress:(nullable SDWebImageDownloaderProgressBlock)progressBlock
- completed:(nullable SDInternalCompletionBlock)completedBlock {
+- (nullable SDWebImageCombinedOperation *)loadImageWithURL:(nullable NSURL *)url
+                                                   options:(SDWebImageOptions)options
+                                                   context:(nullable SDWebImageContext *)context
+                                                  progress:(nullable SDImageLoaderProgressBlock)progressBlock
+                                                 completed:(nonnull SDInternalCompletionBlock)completedBlock {
     NSString* sampleBase64 = @"iVBORw0KGgoAAAANSUhEUgAAAEAAAABAAgMAAADXB5lNAAAACVBMVEUAzAD///9mZmaF427XAAAAMElEQVQ4y2NYFYoKGcgQQOOvIkdgMLmDAQrgtpAoADYICuC2kCgw6o7B647R/AKHAAPjfpCz9iukAAAAAElFTkSuQmCC";
     NSData* data = [[NSData alloc] initWithBase64EncodedString:sampleBase64 options:0];
     UIImage* image = [UIImage imageWithData:data];
@@ -181,7 +184,8 @@
     } else {
         dispatch_async(dispatch_get_main_queue(), ^{ completedBlock(image, data, nil, cacheType, YES, url); });
     }
-    return [[TestSDWebImageOperation alloc] init];
+    // hack
+    return (SDWebImageCombinedOperation*)[[TestSDWebImageOperation alloc] init];
 }
 
 @end
