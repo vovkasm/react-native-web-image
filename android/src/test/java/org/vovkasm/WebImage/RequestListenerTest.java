@@ -4,9 +4,7 @@ import android.graphics.Bitmap;
 
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.model.GlideUrl;
-import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.CatalystInstance;
-import com.facebook.react.bridge.JavaOnlyArray;
 import com.facebook.react.bridge.JavaOnlyMap;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.WritableMap;
@@ -20,35 +18,25 @@ import com.facebook.react.uimanager.UIManagerModule;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
-import org.robolectric.annotation.Config;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(manifest= Config.NONE)
-@PowerMockIgnore({ "org.mockito.*", "org.robolectric.*", "android.*" })
-@PrepareForTest(Arguments.class)
 public class RequestListenerTest {
-    @Rule
-    public PowerMockRule rule = new PowerMockRule();
-
     private RCTEventEmitter mEventEmitter;
     private ReactApplicationContext mApplicationContext;
     private ThemedReactContext mThemedReactContext;
@@ -57,21 +45,6 @@ public class RequestListenerTest {
 
     @Before
     public void setUp () {
-        PowerMockito.mockStatic(Arguments.class);
-
-        PowerMockito.when(Arguments.createArray()).thenAnswer(new Answer<Object>() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                return new JavaOnlyArray();
-            }
-        });
-        PowerMockito.when(Arguments.createMap()).thenAnswer(new Answer<Object>() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                return new JavaOnlyMap();
-            }
-        });
-
         mEventEmitter = mock(RCTEventEmitter.class);
 
         mApplicationContext = new ReactApplicationContext(RuntimeEnvironment.application);
@@ -79,6 +52,13 @@ public class RequestListenerTest {
 
         mThemedReactContext = new ThemedReactContext(mApplicationContext, mApplicationContext);
         mViewManager = new WebImageViewManager();
+        mViewManager.mRequestListener = spy(mViewManager.mRequestListener);
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) {
+                return new JavaOnlyMap();
+            }
+        }).when(mViewManager.mRequestListener).createMap();
 
         mImageView = mViewManager.createViewInstance(mThemedReactContext);
         mImageView.setImageUri(new GlideUrl("http://fake/favicon.png"));
@@ -93,11 +73,11 @@ public class RequestListenerTest {
 
         mViewManager.mRequestListener.onResourceReady(bitmap, null, target, null, true);
 
-        WritableMap expectedSource = Arguments.createMap();
+        WritableMap expectedSource = new JavaOnlyMap();
         expectedSource.putString("uri", "http://fake/favicon.png");
         expectedSource.putInt("width", 64);
         expectedSource.putInt("height", 64);
-        WritableMap expectedEvent = Arguments.createMap();
+        WritableMap expectedEvent = new JavaOnlyMap();
         expectedEvent.putMap("source", expectedSource);
 
         verify(mEventEmitter).receiveEvent(-1, "onWebImageLoad", expectedEvent);
@@ -111,7 +91,7 @@ public class RequestListenerTest {
 
         mViewManager.mRequestListener.onLoadFailed(new GlideException("some error"), null, target, true);
 
-        WritableMap expectedEvent = Arguments.createMap();
+        WritableMap expectedEvent = new JavaOnlyMap();
         expectedEvent.putString("uri", "http://fake/favicon.png");
         expectedEvent.putString("error", "some error");
 

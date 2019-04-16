@@ -22,7 +22,7 @@ class RequestListener implements com.bumptech.glide.request.RequestListener {
         if (view != null) {
             ThemedReactContext context = view.getThemedReactContext();
             if (context != null) {
-                WritableMap event = Arguments.createMap();
+                WritableMap event = createMap();
                 if (e != null) {
                     event.putString("error", e.getMessage());
                 } else {
@@ -51,8 +51,8 @@ class RequestListener implements com.bumptech.glide.request.RequestListener {
         if (view != null) {
             ThemedReactContext context = view.getThemedReactContext();
             if (context != null) {
-                WritableMap event = Arguments.createMap();
-                WritableMap source = Arguments.createMap();
+                WritableMap event = createMap();
+                WritableMap source = createMap();
                 final GlideUrl uri = view.getImageUri();
                 if (uri != null) {
                     source.putString("uri", uri.toStringUrl());
@@ -67,5 +67,9 @@ class RequestListener implements com.bumptech.glide.request.RequestListener {
         }
 
         return false;
+    }
+
+    WritableMap createMap() {
+        return Arguments.createMap();
     }
 }
