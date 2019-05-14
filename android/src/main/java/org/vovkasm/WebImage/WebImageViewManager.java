@@ -1,7 +1,12 @@
 package org.vovkasm.WebImage;
 
+import android.app.Activity;
 import android.graphics.Color;
+import android.os.Build;
+import android.support.annotation.NonNull;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.facebook.react.bridge.NoSuchKeyException;
@@ -28,17 +33,24 @@ class WebImageViewManager extends BaseViewManager<WebImageView, WebImageShadowNo
     RequestListener mRequestListener = new RequestListener();
 
     @Override
-    public String getName() {
+    public @NonNull String getName() {
         return REACT_CLASS;
     }
 
     @Override
-    protected WebImageView createViewInstance(ThemedReactContext reactContext) {
-        return new WebImageView(reactContext, mRequestListener);
+    protected @NonNull WebImageView createViewInstance(@NonNull ThemedReactContext reactContext) {
+        RequestManager requestManager;
+        Activity activity = getActivityForGlide(reactContext);
+        if (activity != null) {
+            requestManager = Glide.with(activity);
+        } else {
+            requestManager = Glide.with(reactContext);
+        }
+        return new WebImageView(reactContext, mRequestListener, requestManager);
     }
 
     @Override
-    public void onDropViewInstance(WebImageView view) {
+    public void onDropViewInstance(@NonNull WebImageView view) {
         super.onDropViewInstance(view);
         view.clear();
     }
@@ -67,7 +79,7 @@ class WebImageViewManager extends BaseViewManager<WebImageView, WebImageShadowNo
             while (headersIterator.hasNextKey()) {
                 String key = headersIterator.nextKey();
                 String value = headersMap.getString(key);
-                headersBuilder.addHeader(key, value);
+                if (value != null) headersBuilder.addHeader(key, value);
             }
             LazyHeaders headers = headersBuilder.build();
             glideUrl = new GlideUrl(uriProp, headers);
@@ -136,7 +148,7 @@ class WebImageViewManager extends BaseViewManager<WebImageView, WebImageShadowNo
     }
 
     @Override
-    public void updateExtraData(WebImageView view, Object extraData) {
+    public void updateExtraData(@NonNull WebImageView view, Object extraData) {
         if (extraData instanceof ShadowBoxMetrics) {
             ShadowBoxMetrics bm = (ShadowBoxMetrics) extraData;
             view.setBoxMetrics(bm);
@@ -157,6 +169,16 @@ class WebImageViewManager extends BaseViewManager<WebImageView, WebImageShadowNo
         exportedEvents.put("onWebImageLoad", onLoadEventExport);
 
         return exportedEvents;
+    }
+
+    private Activity getActivityForGlide(@NonNull ThemedReactContext ctx) {
+        // Guard against destroyed activity (see: https://github.com/bumptech/glide/issues/803)
+        final Activity activity = ctx.getCurrentActivity();
+        if (activity != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && activity.isDestroyed())
+                return null;
+        }
+        return activity;
     }
 
 }

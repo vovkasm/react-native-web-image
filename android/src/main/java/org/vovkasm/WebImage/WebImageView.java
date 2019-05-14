@@ -1,6 +1,5 @@
 package org.vovkasm.WebImage;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
@@ -8,13 +7,12 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Shader;
-import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.view.View;
 
-import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.request.RequestListener;
 import com.facebook.react.uimanager.FloatUtil;
@@ -54,13 +52,15 @@ class WebImageView extends View {
 
     private WebImageViewTarget mGlideTarget;
     private RequestListener mGlideListener;
+    private RequestManager mRequestManager;
 
-    public WebImageView(Context context, RequestListener glideListener) {
+    public WebImageView(Context context, RequestListener glideListener, RequestManager requestManager) {
         super(context);
         mBoxMetrics = new BoxMetrics(mScaleType);
         mBitmapPaint.setAntiAlias(true);
         mGlideTarget = new WebImageViewTarget(this);
         mGlideListener = glideListener;
+        mRequestManager = requestManager;
         configureBounds();
     }
 
@@ -157,10 +157,7 @@ class WebImageView extends View {
     void setImageUri(GlideUrl uri) {
         if (uri.equals(mUri)) return;
         mUri = uri;
-        final Activity activity = getActivityForGlide();
-        if (activity == null) return;
-
-        Glide.with(activity).asBitmap().load(mUri).listener(mGlideListener).into(mGlideTarget);
+        mRequestManager.asBitmap().load(mUri).listener(mGlideListener).into(mGlideTarget);
     }
 
     final GlideUrl getImageUri() {
@@ -221,22 +218,8 @@ class WebImageView extends View {
                 && mBorderColors[2] == mBorderColors[3]);
     }
 
-    private Activity getActivityForGlide () {
-        ThemedReactContext ctx = getThemedReactContext();
-        if (ctx == null) return null;
-
-        // Guard against destroyed activity (see: https://github.com/bumptech/glide/issues/803)
-        final Activity activity = ctx.getCurrentActivity();
-        if (activity != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && activity.isDestroyed())
-                return null;
-        }
-        return activity;
-    }
-
     public void clear() {
-        final Activity activity = getActivityForGlide();
-        Glide.with(activity).clear(this);
+        mRequestManager.clear(this);
     }
 
 }
