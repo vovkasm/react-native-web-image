@@ -20,6 +20,10 @@ android {
     consumerProguardFiles 'proguard-rules.pro'
   }
 
+  if (safeExtGet("excludeWebImageAppGlideModule", false)) {
+    sourceSets.main.java.exclude "**/WebImageAppGlideModule.java"
+  }
+
   testOptions {
     unitTests.includeAndroidResources = true
   }
