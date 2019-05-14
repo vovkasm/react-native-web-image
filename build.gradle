@@ -26,3 +26,7 @@ allprojects {
     }
   }
 }
+
+wrapper {
+  distributionType = Wrapper.DistributionType.ALL
+}
