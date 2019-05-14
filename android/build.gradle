@@ -4,6 +4,8 @@ def safeExtGet(prop, fallback) {
   return rootProject.ext.hasProperty(prop) ? rootProject.ext.get(prop) : fallback
 }
 
+def glideVersion = safeExtGet("glideVersion", "4.9.0")
+
 android {
   compileSdkVersion safeExtGet('compileSdkVersion', 28)
 
@@ -15,6 +17,11 @@ android {
     lintOptions {
       abortOnError false
     }
+    consumerProguardFiles 'proguard-rules.pro'
+  }
+
+  if (safeExtGet("excludeWebImageAppGlideModule", false)) {
+    sourceSets.main.java.exclude "**/WebImageAppGlideModule.java"
   }
 
   testOptions {
@@ -22,13 +29,16 @@ android {
   }
 }
 
+
 dependencies {
-  implementation("com.github.bumptech.glide:glide:${safeExtGet("glideVersion", "4.9.0")}") {
+  implementation("com.github.bumptech.glide:glide:${glideVersion}") {
     exclude group: "com.android.support"
   }
-  implementation "com.github.bumptech.glide:annotations:${safeExtGet("glideVersion", "4.9.0")}"
+  implementation "com.github.bumptech.glide:annotations:${glideVersion}"
+  implementation "com.github.bumptech.glide:okhttp3-integration:${glideVersion}"
   implementation 'com.facebook.react:react-native:+'
   implementation "com.android.support:support-fragment:${safeExtGet("supportLibVersion", "28.0.0")}"
+  annotationProcessor "com.github.bumptech.glide:compiler:${glideVersion}"
   testImplementation 'junit:junit:4.12'
   testImplementation 'org.mockito:mockito-core:2.27.0'
   testImplementation 'org.robolectric:robolectric:4.2.1'
