@@ -11,6 +11,7 @@ import android.graphics.Shader;
 import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.IntDef;
+import android.support.annotation.Nullable;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
@@ -63,11 +64,17 @@ class WebImageView extends View {
         configureBounds();
     }
 
-    void setBitmap(Bitmap bitmap) {
+    void setBitmap(@Nullable Bitmap bitmap) {
         mBitmap = bitmap;
-        mBitmapShader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
-        mBitmapPaint.setShader(mBitmapShader);
-        mBoxMetrics.setImageSize(mBitmap.getWidth(), mBitmap.getHeight());
+        if (mBitmap != null) {
+            mBitmapShader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+            mBitmapPaint.setShader(mBitmapShader);
+            mBoxMetrics.setImageSize(mBitmap.getWidth(), mBitmap.getHeight());
+        } else {
+            mBitmapShader = null;
+            mBitmapPaint.setShader(null);
+            mBoxMetrics.setImageSize(0, 0);
+        }
         configureBounds();
         requestLayout();
         invalidate();
