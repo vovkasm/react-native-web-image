@@ -73,7 +73,7 @@ import com.android.build.OutputFile
  */
 
 def root = rootProject.projectDir
-println("ROOT PROJECT DIR: ${root}")
+// println("ROOT PROJECT DIR: ${root}")
 
 project.ext.react = [
     entryFile: "index.android.js",
@@ -161,4 +161,6 @@ dependencies {
     implementation project(':react-native-web-image')
 }
 
-apply from: file("${root}/node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+// dont use autolink
+// apply from: file("${root}/node_modules/@react-native-community/cli-platform-android/native_modules.gradle");
+// applyNativeModulesAppBuildGradle(project, root)
