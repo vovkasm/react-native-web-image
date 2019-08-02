@@ -1,7 +1,5 @@
 rootProject.name = 'master'
-
-include ':react-native-web-image'
-project(':react-native-web-image').projectDir = new File(rootProject.projectDir, 'android')
-
+apply from: file("${rootProject.projectDir}/node_modules/@react-native-community/cli-platform-android/native_modules.gradle");
+applyNativeModulesSettingsGradle(settings)
 include ':sample'
 project(':sample').projectDir = new File(rootProject.projectDir, 'samples/SampleApp/android/app')
