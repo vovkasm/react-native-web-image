@@ -41,6 +41,6 @@ dependencies {
   implementation "androidx.fragment:fragment:1.0.0"
   implementation 'com.facebook.react:react-native:+'
   testImplementation 'junit:junit:4.12'
-  testImplementation 'org.mockito:mockito-core:2.27.0'
-  testImplementation 'org.robolectric:robolectric:4.2.1'
+  testImplementation 'org.mockito:mockito-core:3.0.0'
+  testImplementation 'org.robolectric:robolectric:4.3'
 }
