@@ -7,9 +7,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Shader;
-import android.support.annotation.ColorInt;
-import android.support.annotation.IntDef;
-import android.support.annotation.Nullable;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.IntDef;
+import androidx.annotation.Nullable;
+
 import android.view.View;
 
 import com.bumptech.glide.RequestManager;
@@ -26,7 +28,9 @@ class WebImageView extends View {
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({SCALE_CONTAIN, SCALE_COVER, SCALE_STRETCH, SCALE_CENTER})
-    @interface ScaleType {}
+    @interface ScaleType {
+    }
+
     public static final int SCALE_CONTAIN = 0;
     public static final int SCALE_COVER = 1;
     public static final int SCALE_STRETCH = 2;
@@ -36,11 +40,14 @@ class WebImageView extends View {
     public static final float DEFAULT_BORDER_RADIUS = 0f;
 
     private GlideUrl mUri;
-    private @ScaleType int mScaleType = SCALE_CONTAIN;
+    private @ScaleType
+    int mScaleType = SCALE_CONTAIN;
 
     private BoxMetrics mBoxMetrics;
-    private @ColorInt int mBorderColor = DEFAULT_BORDER_COLOR;
-    private @ColorInt int[] mBorderColors = new int[]{DEFAULT_BORDER_COLOR, DEFAULT_BORDER_COLOR, DEFAULT_BORDER_COLOR, DEFAULT_BORDER_COLOR};
+    private @ColorInt
+    int mBorderColor = DEFAULT_BORDER_COLOR;
+    private @ColorInt
+    int[] mBorderColors = new int[]{DEFAULT_BORDER_COLOR, DEFAULT_BORDER_COLOR, DEFAULT_BORDER_COLOR, DEFAULT_BORDER_COLOR};
     private float mBorderRadius = DEFAULT_BORDER_RADIUS;
     private float[] mBorderRadii = new float[]{YogaConstants.UNDEFINED, YogaConstants.UNDEFINED, YogaConstants.UNDEFINED, YogaConstants.UNDEFINED};
 
@@ -109,7 +116,7 @@ class WebImageView extends View {
             if (hasMonoBorder()) {
                 MonoBorder monoBorder = null;
                 if (mBorder instanceof MonoBorder)
-                    monoBorder = (MonoBorder)mBorder;
+                    monoBorder = (MonoBorder) mBorder;
                 if (monoBorder == null) {
                     monoBorder = new MonoBorder();
                 }
@@ -150,7 +157,8 @@ class WebImageView extends View {
         invalidate();
     }
 
-    public @ScaleType int getScaleType() {
+    public @ScaleType
+    int getScaleType() {
         return mScaleType;
     }
 
@@ -177,7 +185,7 @@ class WebImageView extends View {
     }
 
     public void setBorderRadius(float radius) {
-        if (FloatUtil.floatsEqual(mBorderRadius,radius)) return;
+        if (FloatUtil.floatsEqual(mBorderRadius, radius)) return;
         mBorderRadius = radius;
         invalidate();
     }

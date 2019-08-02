@@ -1,6 +1,6 @@
 package org.vovkasm.WebImage;
 
-import android.support.annotation.IntDef;
+import androidx.annotation.IntDef;
 
 import com.facebook.react.uimanager.FloatUtil;
 
@@ -16,7 +16,9 @@ class Radii {
             BOTTOM_LEFT_WIDTH, BOTTOM_LEFT_HEIGHT,
             BOTTOM_RIGHT_WIDTH, BOTTOM_RIGHT_HEIGHT
     })
-    @interface Corner {}
+    @interface Corner {
+    }
+
     static final int TOP_LEFT_WIDTH = 0;
     static final int TOP_LEFT_HEIGHT = 1;
     static final int TOP_RIGHT_WIDTH = 2;

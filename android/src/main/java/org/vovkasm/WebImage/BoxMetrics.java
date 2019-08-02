@@ -22,7 +22,8 @@ class BoxMetrics {
 
     private int imageWidth = 0;
     private int imageHeight = 0;
-    private @WebImageView.ScaleType int scaleType;
+    private @WebImageView.ScaleType
+    int scaleType;
 
     private Radii borderRadii = new Radii();
     private Radii paddingRadii = new Radii();
@@ -39,7 +40,7 @@ class BoxMetrics {
     private Path borderPath = new Path();
     private Path contentPath = new Path();
 
-    BoxMetrics (@WebImageView.ScaleType int scaleType) {
+    BoxMetrics(@WebImageView.ScaleType int scaleType) {
         this.scaleType = scaleType;
     }
 
@@ -97,7 +98,7 @@ class BoxMetrics {
             paddingRadii.set(borderRadii);
             paddingRadii.shrink(borderLeft, borderTop, borderRight, borderBottom);
             contentRadii.set(paddingRadii);
-            contentRadii.shrink(paddingLeft, paddingTop, paddingRight,paddingBottom);
+            contentRadii.shrink(paddingLeft, paddingTop, paddingRight, paddingBottom);
 
             borderPath.rewind();
             borderPath.addRoundRect(borderRect, borderRadii.asArray(), Path.Direction.CW);

@@ -2,6 +2,8 @@ package org.vovkasm.WebImage;
 
 import android.graphics.Bitmap;
 
+import androidx.annotation.Nullable;
+
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.model.GlideUrl;
@@ -14,7 +16,7 @@ import com.facebook.react.uimanager.events.RCTEventEmitter;
 class RequestListener implements com.bumptech.glide.request.RequestListener {
 
     @Override
-    public boolean onLoadFailed(@android.support.annotation.Nullable GlideException e, Object model, Target target, boolean isFirstResource) {
+    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target target, boolean isFirstResource) {
         WebImageView view = null;
         if (target instanceof WebImageViewTarget) {
             view = ((WebImageViewTarget) target).getView();
