@@ -31,14 +31,15 @@ android {
 
 
 dependencies {
+  annotationProcessor "com.github.bumptech.glide:compiler:${glideVersion}"
   implementation("com.github.bumptech.glide:glide:${glideVersion}") {
     exclude group: "com.android.support"
   }
   implementation "com.github.bumptech.glide:annotations:${glideVersion}"
   implementation "com.github.bumptech.glide:okhttp3-integration:${glideVersion}"
+  annotationProcessor 'androidx.annotation:annotation:1.1.0'
+  implementation "androidx.fragment:fragment:1.0.0"
   implementation 'com.facebook.react:react-native:+'
-  implementation "com.android.support:support-fragment:${safeExtGet("supportLibVersion", "28.0.0")}"
-  annotationProcessor "com.github.bumptech.glide:compiler:${glideVersion}"
   testImplementation 'junit:junit:4.12'
   testImplementation 'org.mockito:mockito-core:2.27.0'
   testImplementation 'org.robolectric:robolectric:4.2.1'
