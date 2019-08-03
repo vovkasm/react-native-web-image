@@ -1,5 +1,4 @@
-
-export default function loadNasaImages () {
+export default function loadNasaImages() {
   return fetch('https://images-api.nasa.gov/search?media_type=image&q=earth')
     .then((res) => {
       return res.json()
@@ -7,7 +6,7 @@ export default function loadNasaImages () {
     .then((data) => {
       if (!data || !data.collection || !data.collection.items) return []
       const dataItems = data.collection.items
-      const items = []
+      const items: IItem[] = []
       for (const dataItem of dataItems) {
         const item = {
           id: dataItem.data[0].nasa_id,
@@ -18,4 +17,10 @@ export default function loadNasaImages () {
       }
       return items
     })
+}
+
+export interface IItem {
+  id: string
+  title: string
+  uri: string
 }

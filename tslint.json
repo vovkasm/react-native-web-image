@@ -1,6 +1,9 @@
 {
     "defaultSeverity": "error",
-    "extends": [
-        "@vovkasm/tslint-config"
-    ]
+    "extends": ["@vovkasm/tslint-config"],
+    "rulesDirectory": ["tslint-plugin-prettier"],
+    "rules": {
+    "max-line-length": [true, { "limit": 120, "ignore-pattern": "// " }],
+    "prettier": true
+    }    
 }

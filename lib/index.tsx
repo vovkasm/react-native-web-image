@@ -1,13 +1,13 @@
 import React from 'react'
 import { Image, NativeSyntheticEvent, requireNativeComponent, ViewProperties } from 'react-native'
 
-export type WebImageSource = {uri: string} | number
+export type WebImageSource = { uri: string } | number
 
 export interface IImageLoadEventData {
   source: {
-    height: number,
-    uri: string,
-    width: number,
+    height: number
+    uri: string
+    width: number
   }
 }
 export interface IImageErrorEventData {
@@ -36,7 +36,7 @@ export interface IWebImageProps extends ViewProperties {
    * if bigger than the area of the view.
    * The image will not be scaled up.
    */
-  resizeMode?: 'cover'|'contain'|'stretch'|'center'
+  resizeMode?: 'cover' | 'contain' | 'stretch' | 'center'
 
   /**
    * Callback called on error.
@@ -54,7 +54,7 @@ interface IResolvedSource {
 }
 interface INativeProps extends ViewProperties {
   source: IResolvedSource
-  resizeMode?: 'cover'|'contain'|'stretch'|'center'
+  resizeMode?: 'cover' | 'contain' | 'stretch' | 'center'
   onWebImageError?: (e: NativeSyntheticEvent<IImageErrorEventData>) => void
   onWebImageLoad?: (e: NativeSyntheticEvent<IImageLoadEventData>) => void
 }
