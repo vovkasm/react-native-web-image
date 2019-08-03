@@ -1,8 +1,9 @@
 package org.vovkasm.WebImage;
 
 import android.graphics.Canvas;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
 
 class MonoBorder extends BaseBorder {
 

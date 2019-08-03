@@ -15,9 +15,13 @@
     "strict": true,
     "target": "es6",
     "types": ["react", "react-native"],
-    "baseUrl": "lib",
+    "baseUrl": ".",
+    "paths": {
+      "react-native-web-image": ["lib/index.tsx"]
+    }
   },
   "include": [
-    "lib/*"
+    "lib/*",
+    "samples/SampleApp/*"
   ]
 }

@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "jsx": "react-native",
+    "importHelpers": true,
+    "lib": ["es6"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "outDir": "dist",
+    "preserveSymlinks": true,
+    "strict": true,
+    "target": "es6",
+    "types": ["react", "react-native"],
+    "baseUrl": "lib"
+  },
+  "include": ["lib/*"]
+}

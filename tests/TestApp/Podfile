@@ -6,17 +6,27 @@ podfile_dir = Pathname.new(__FILE__).dirname.realpath
 root_dir = podfile_dir.ascend.find {|p| p.join('package.json').exist? }
 
 target 'TestApp' do
-  pod 'React', :path => root_dir + 'node_modules/react-native', :subspecs => [
-    'Core',
-    'CxxBridge',
-    'RCTAnimation',
-    'RCTBlob',
-    'RCTText',
-    'RCTNetwork',
-    'RCTWebSocket',
-    'DevSupport',
-  ]
+  pod 'React', :path => root_dir + 'node_modules/react-native/'
+  pod 'React-Core', :path => root_dir + 'node_modules/react-native/React'
+  pod 'React-DevSupport', :path => root_dir + 'node_modules/react-native/React'
+  pod 'React-fishhook', :path => root_dir + 'node_modules/react-native/Libraries/fishhook'
+  pod 'React-RCTActionSheet', :path => root_dir + 'node_modules/react-native/Libraries/ActionSheetIOS'
+  pod 'React-RCTAnimation', :path => root_dir + 'node_modules/react-native/Libraries/NativeAnimation'
+  pod 'React-RCTBlob', :path => root_dir + 'node_modules/react-native/Libraries/Blob'
+  pod 'React-RCTImage', :path => root_dir + 'node_modules/react-native/Libraries/Image'
+  pod 'React-RCTLinking', :path => root_dir + 'node_modules/react-native/Libraries/LinkingIOS'
+  pod 'React-RCTNetwork', :path => root_dir + 'node_modules/react-native/Libraries/Network'
+  pod 'React-RCTSettings', :path => root_dir + 'node_modules/react-native/Libraries/Settings'
+  pod 'React-RCTText', :path => root_dir + 'node_modules/react-native/Libraries/Text'
+  pod 'React-RCTVibration', :path => root_dir + 'node_modules/react-native/Libraries/Vibration'
+  pod 'React-RCTWebSocket', :path => root_dir + 'node_modules/react-native/Libraries/WebSocket'
+
+  pod 'React-cxxreact', :path => root_dir + 'node_modules/react-native/ReactCommon/cxxreact'
+  pod 'React-jsi', :path => root_dir + 'node_modules/react-native/ReactCommon/jsi'
+  pod 'React-jsiexecutor', :path => root_dir + 'node_modules/react-native/ReactCommon/jsiexecutor'
+  pod 'React-jsinspector', :path => root_dir + 'node_modules/react-native/ReactCommon/jsinspector'
   pod 'yoga', :path => root_dir + 'node_modules/react-native/ReactCommon/yoga'
+
   pod 'DoubleConversion', :podspec => root_dir + 'node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
   pod 'glog', :podspec => root_dir + 'node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => root_dir + 'node_modules/react-native/third-party-podspecs/Folly.podspec'

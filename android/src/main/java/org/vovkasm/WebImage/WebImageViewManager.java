@@ -3,7 +3,9 @@ package org.vovkasm.WebImage;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Build;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -24,8 +26,6 @@ import com.facebook.yoga.YogaConstants;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.Nullable;
-
 @ReactModule(name = WebImageViewManager.REACT_CLASS)
 class WebImageViewManager extends BaseViewManager<WebImageView, WebImageShadowNode> {
     static final String REACT_CLASS = "WebImageView";
@@ -33,12 +33,14 @@ class WebImageViewManager extends BaseViewManager<WebImageView, WebImageShadowNo
     RequestListener mRequestListener = new RequestListener();
 
     @Override
-    public @NonNull String getName() {
+    public @NonNull
+    String getName() {
         return REACT_CLASS;
     }
 
     @Override
-    protected @NonNull WebImageView createViewInstance(@NonNull ThemedReactContext reactContext) {
+    protected @NonNull
+    WebImageView createViewInstance(@NonNull ThemedReactContext reactContext) {
         RequestManager requestManager;
         Activity activity = getActivityForGlide(reactContext);
         if (activity != null) {
@@ -65,7 +67,7 @@ class WebImageViewManager extends BaseViewManager<WebImageView, WebImageShadowNo
         return WebImageShadowNode.class;
     }
 
-    @ReactProp(name="source")
+    @ReactProp(name = "source")
     public void setSrc(WebImageView view, @Nullable ReadableMap source) {
         if (source == null) return;
         final String uriProp = source.getString("uri");
@@ -91,7 +93,7 @@ class WebImageViewManager extends BaseViewManager<WebImageView, WebImageShadowNo
         view.setImageUri(glideUrl);
     }
 
-    @ReactProp(name="resizeMode")
+    @ReactProp(name = "resizeMode")
     public void setResizeMode(WebImageView view, String resizeMode) {
         @WebImageView.ScaleType int scaleType;
 
@@ -164,7 +166,7 @@ class WebImageViewManager extends BaseViewManager<WebImageView, WebImageShadowNo
         exportedEvents.put("onWebImageError", onErrorEventExport);
 
         // declare success event
-		Map<String, String> onLoadEventExport = new HashMap<>();
+        Map<String, String> onLoadEventExport = new HashMap<>();
         onLoadEventExport.put("registrationName", "onWebImageLoad");
         exportedEvents.put("onWebImageLoad", onLoadEventExport);
 

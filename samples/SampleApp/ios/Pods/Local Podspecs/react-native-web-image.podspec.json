@@ -1,0 +1,32 @@
+{
+  "name": "react-native-web-image",
+  "version": "0.0.6",
+  "homepage": "https://github.com/vovkasm/react-native-web-image",
+  "summary": "An image component for react-native with persistent disk and memory caching",
+  "license": "MIT",
+  "authors": {
+    "Vladimir Timofeev": "vovkasm@gmail.com"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source": {
+    "git": "https://github.com/vovkasm/react-native-web-image.git",
+    "tag": "v0.0.6"
+  },
+  "header_dir": "RNWebImage",
+  "source_files": "WebImage/WebImage/*.{h,m}",
+  "preserve_paths": "dist/*",
+  "frameworks": [
+    "Foundation",
+    "UIKit"
+  ],
+  "dependencies": {
+    "React": [
+
+    ],
+    "SDWebImage": [
+
+    ]
+  }
+}

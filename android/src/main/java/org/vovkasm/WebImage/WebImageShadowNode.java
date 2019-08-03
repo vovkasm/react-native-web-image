@@ -8,7 +8,7 @@ import com.facebook.yoga.YogaConstants;
 import java.util.Arrays;
 
 class WebImageShadowNode extends LayoutShadowNode {
-    private float[] mBorderWidths = new float[Spacing.ALL+1];
+    private float[] mBorderWidths = new float[Spacing.ALL + 1];
 
     WebImageShadowNode() {
         super();
