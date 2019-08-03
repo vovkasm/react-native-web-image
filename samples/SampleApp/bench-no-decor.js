@@ -2,8 +2,10 @@ import React from 'react'
 import { ScrollView, StyleSheet, View } from 'react-native'
 import WebImage from 'react-native-web-image'
 
+import { testUrl } from './testUrl'
+
 export default function BenchNoDecor () {
-  const uri = 'https://placeholdit.imgix.net/~text?txtsize=26&txt=100x80&w=100&h=80'
+  const uri = testUrl(100, 80)
   const comps = []
   for (let i = 0; i < 200; i++) {
     comps.push(<View key={`k-${i}`} style={s.block}><WebImage source={{uri}} style={s.web} /></View>)

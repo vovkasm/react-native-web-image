@@ -3,6 +3,8 @@ import React from 'react'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import WebImage from 'react-native-web-image' // 'react-native-web-image' sources here
 
+import { testUrl } from './testUrl'
+
 const Sample = (props) => {
   const { title, width, height, ...other } = props
   const containerStyle = {}
@@ -30,47 +32,47 @@ const Samples = (props) => {
   return <ScrollView>
     <Sample
       title='[200x150] in [auto x 120] block'
-      source={{uri: 'https://placeholdit.imgix.net/~text?txtsize=33&txt=200x150&w=200&h=150'}}
+      source={{uri: testUrl(200,150)}}
       height={120}
     />
     <Sample
       title='[200x150] in [100 x 100] block'
-      source={{uri: 'https://placeholdit.imgix.net/~text?txtsize=33&txt=200x150&w=200&h=150'}}
+      source={{uri: testUrl(200,150)}}
       height={100} width={100}
     />
     <Sample
       title='[200x150] in [auto x 120] block, resizeMode=cover'
-      source={{uri: 'https://placeholdit.imgix.net/~text?txtsize=33&txt=200x150&w=200&h=150'}}
+      source={{uri: testUrl(200,150)}}
       resizeMode='cover'
       height={120}
     />
     <Sample
       title='[200x150] in [100 x 100] block, resizeMode=cover'
-      source={{uri: 'https://placeholdit.imgix.net/~text?txtsize=33&txt=200x150&w=200&h=150'}}
+      source={{uri: testUrl(200,150)}}
       resizeMode='cover'
       height={100} width={100}
     />
     <Sample
       title='[200x150] in [auto x 120] block, resizeMode=stretch'
-      source={{uri: 'https://placeholdit.imgix.net/~text?txtsize=33&txt=200x150&w=200&h=150'}}
+      source={{uri: testUrl(200,150)}}
       resizeMode='stretch'
       height={120}
     />
     <Sample
       title='[200x150] in [100 x 100] block, resizeMode=stretch'
-      source={{uri: 'https://placeholdit.imgix.net/~text?txtsize=33&txt=200x150&w=200&h=150'}}
+      source={{uri: testUrl(200,150)}}
       resizeMode='stretch'
       height={100} width={100}
     />
     <Sample
       title='[200x150] in [auto x 120] block, resizeMode=center'
-      source={{uri: 'https://placeholdit.imgix.net/~text?txtsize=33&txt=200x150&w=200&h=150'}}
+      source={{uri: testUrl(200,150)}}
       resizeMode='center'
       height={120}
     />
     <Sample
       title='[200x150] in [100 x 100] block, resizeMode=center'
-      source={{uri: 'https://placeholdit.imgix.net/~text?txtsize=33&txt=200x150&w=200&h=150'}}
+      source={{uri: testUrl(200,150)}}
       resizeMode='center'
       height={100} width={100}
     />

@@ -3,6 +3,8 @@ import React from 'react'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import WebImage from 'react-native-web-image' // 'react-native-web-image' sources here
 
+import { testUrl } from './testUrl'
+
 const Sample = (props) => {
   const { title, width, height, ...other } = props
   const containerStyle = {}
@@ -30,7 +32,7 @@ const CallbackSamples = (props) => {
   return <ScrollView>
     <Sample
       title='Image with success and error blocks'
-      source={{uri: 'https://placeholdit.imgix.net/~text?txtsize=33&txt=Sample&w=200&h=150'}}
+      source={{uri: testUrl(200, 150)}}
       height={120}
       onError={(e) => { console.log('Image 1 onError handler: ', e.nativeEvent) }}
       onLoad={(e) => { console.log('Image 1 onLoad handler: ', e.nativeEvent) }}

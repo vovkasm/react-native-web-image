@@ -1,6 +1,7 @@
 import React from 'react'
 import { Alert, Button, Linking, ScrollView, StyleSheet, Text, View } from 'react-native'
 import WebImage from 'react-native-web-image'
+import { testUrl } from './testUrl';
 
 export default class TestDefaultFlexible extends React.Component {
   constructor (props, ctx) {
@@ -24,7 +25,7 @@ export default class TestDefaultFlexible extends React.Component {
     }
   }
   render () {
-    const uri = `https://placeholdit.imgix.net/~text?txtsize=26&txt=it${this.state.iter}&w=100&h=80`
+    const uri = testUrl(100, 80, 'it' + this.state.iter)
     return <View style={s.container}>
       <ScrollView style={s.container}>
         <Text>This test will update image every second to allow test app lifecycle issues. You can background/restore app.</Text>

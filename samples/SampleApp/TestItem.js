@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import WebImage from 'react-native-web-image'
 
 export default function TestItem (props) {
-  const uri = 'https://placeholdit.imgix.net/~text?txtsize=26&txt=100x80&w=100&h=80'
+  const uri = 'https://via.placeholder.com/100x80.png?text=100x80'
   const style = {
     flex: 1,
     ...props.style
