@@ -42,7 +42,7 @@
     "metro-react-native-babel-preset": "^0.55.0",
     "prettier": "1.18.2",
     "react": "16.8.6",
-    "react-native": "0.60.4",
+    "react-native": "0.62.3",
     "tslint": "^5.15.0",
     "tslint-plugin-prettier": "^2.0.1",
     "typescript": "^3.4.3"
